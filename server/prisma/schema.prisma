@@ -1,0 +1,69 @@
+// Schema Prisma do Lúmen
+// Documentação: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Modelos ─────────────────────────────────────────────
+
+model User {
+  id               String            @id @default(uuid())
+  name             String
+  email            String            @unique
+  passwordHash     String
+  createdAt        DateTime          @default(now())
+  subjects         Subject[]
+  activities       Activity[]
+  plannerBlocks    PlannerBlock[]
+  pomodoroSessions PomodoroSession[]
+}
+
+model Subject {
+  id               String            @id @default(uuid())
+  name             String
+  color            String
+  userId           String
+  user             User              @relation(fields: [userId], references: [id])
+  createdAt        DateTime          @default(now())
+  activities       Activity[]
+  plannerBlocks    PlannerBlock[]
+  pomodoroSessions PomodoroSession[]
+}
+
+model Activity {
+  id        String    @id @default(uuid())
+  title     String
+  dueDate   DateTime?
+  status    String    @default("pending")
+  subjectId String
+  userId    String
+  subject   Subject   @relation(fields: [subjectId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+}
+
+model PlannerBlock {
+  id              String  @id @default(uuid())
+  dayOfWeek       Int
+  durationMinutes Int
+  subjectId       String
+  userId          String
+  subject         Subject @relation(fields: [subjectId], references: [id])
+  user            User    @relation(fields: [userId], references: [id])
+}
+
+model PomodoroSession {
+  id              String   @id @default(uuid())
+  durationMinutes Int
+  completedAt     DateTime @default(now())
+  subjectId       String
+  userId          String
+  subject         Subject  @relation(fields: [subjectId], references: [id])
+  user            User     @relation(fields: [userId], references: [id])
+}
