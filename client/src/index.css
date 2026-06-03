@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* ─── Tema customizado do Lúmen ─── */
 @theme {
   /* Cores primárias — Indigo (foco, confiança) */
   --color-primary-50: #eef2ff;
@@ -32,12 +31,6 @@
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* ─── Reset global ─── */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
 body {
   font-family: var(--font-sans);
