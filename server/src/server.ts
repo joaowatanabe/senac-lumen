@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes";
+import subjectRoutes from "./routes/subjectRoutes";
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(express.json());
 
 // Rotas
 app.use("/api/auth", authRoutes);
+app.use("/api/subjects", subjectRoutes);
 
 // Rota de health-check
 app.get("/health", (_req, res) => {

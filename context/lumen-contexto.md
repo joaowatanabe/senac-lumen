@@ -19,42 +19,69 @@ visibilidade do próprio progresso. O Lúmen centraliza planner, atividades e fo
 
 ## Stack Tecnológica
 
-| Camada        | Tecnologia                          |
-|---------------|-------------------------------------|
-| Front-end     | React + TypeScript + Tailwind CSS   |
-| Bundler       | Vite                                |
-| Back-end      | Node.js + Express + TypeScript      |
-| ORM           | Prisma                              |
-| Banco de dados| PostgreSQL                          |
-| Autenticação  | JWT (expiração 7 dias)              |
-| Senhas        | bcrypt hash                         |
-| Workspaces    | pnpm workspaces                     |
+| Camada         | Tecnologia                          |
+|----------------|-------------------------------------|
+| Front-end      | React + TypeScript + Tailwind CSS v4|
+| Bundler        | Vite v8                             |
+| Back-end       | Node.js + Express v5 + TypeScript   |
+| Dev runner     | tsx (watch mode)                    |
+| ORM            | Prisma v7 (prisma-client generator) |
+| Driver adapter | @prisma/adapter-pg                  |
+| Banco de dados | PostgreSQL (Postgres.app)           |
+| Autenticação   | JWT (jsonwebtoken, expiração 7 dias)|
+| Senhas         | bcryptjs (hash com salt 10)         |
+| Workspaces     | pnpm workspaces                     |
+| Roteamento     | react-router-dom v7                 |
 
 ---
 
-## Estrutura do Projeto
+## Estrutura do Projeto (atualizada)
 
 ```
-lumen/
-├── client/           ← React + TypeScript + Tailwind (Vite)
+senac-lumen/
+├── client/                  ← React + TypeScript + Tailwind v4 (Vite)
 │   ├── src/
 │   │   ├── components/
+│   │   │   └── ProtectedRoute.tsx
 │   │   ├── pages/
+│   │   │   ├── LoginPage.tsx
+│   │   │   ├── RegisterPage.tsx
+│   │   │   └── DashboardPage.tsx
 │   │   ├── hooks/
-│   │   ├── services/   ← chamadas à API (fetch)
-│   │   └── types/      ← tipos TypeScript compartilhados
+│   │   │   └── useAuth.tsx       ← Context + hook de autenticação
+│   │   ├── services/
+│   │   │   ├── api.ts            ← fetch wrapper com JWT automático
+│   │   │   └── authService.ts    ← chamadas login/register
+│   │   ├── types/
+│   │   │   └── index.ts          ← tipos compartilhados
+│   │   ├── App.tsx               ← roteamento (BrowserRouter)
+│   │   ├── main.tsx
+│   │   └── index.css             ← Tailwind v4 com @theme (indigo/amber)
 │   ├── index.html
-│   ├── vite.config.ts
-│   └── tailwind.config.ts
-├── server/           ← Express + TypeScript + Prisma
+│   └── vite.config.ts            ← plugins: react + tailwindcss
+├── server/                  ← Express v5 + TypeScript + Prisma v7
+│   ├── prisma/
+│   │   ├── schema.prisma         ← 5 modelos
+│   │   └── migrations/           ← migration "init" aplicada
+│   ├── prisma.config.ts          ← config Prisma v7 (datasource via env)
 │   ├── src/
+│   │   ├── server.ts             ← entry point Express (CORS, rotas)
+│   │   ├── lib/
+│   │   │   └── prisma.ts         ← singleton PrismaClient + adapter-pg
 │   │   ├── routes/
+│   │   │   └── authRoutes.ts
 │   │   ├── controllers/
+│   │   │   └── authController.ts
 │   │   ├── middlewares/
-│   │   └── prisma/
-│   └── tsconfig.json
+│   │   │   └── auth.ts           ← middleware JWT (authenticateToken)
+│   │   └── generated/prisma/     ← client gerado (não editar)
+│   ├── .env                      ← DATABASE_URL, JWT_SECRET, PORT
+│   └── tsconfig.json             ← strict: true
+├── context/
+│   └── lumen-contexto.md         ← ESTE ARQUIVO
 ├── .env.example
-└── package.json
+├── package.json                  ← scripts: dev, dev:client, dev:server
+└── pnpm-workspace.yaml           ← packages: client, server
 ```
 
 ---
@@ -155,7 +182,55 @@ Rotas principais:
 
 ---
 
-## Schema Prisma (referência)
+## Notas Técnicas Importantes
+
+> ⚠️ Consulte esta seção antes de fazer alterações no projeto.
+
+### Prisma v7 — Driver Adapter obrigatório
+O Prisma v7 **não aceita** `new PrismaClient()` sem opções. É obrigatório passar
+um `adapter` ou `accelerateUrl`. Usamos `@prisma/adapter-pg`:
+```ts
+import { PrismaPg } from "@prisma/adapter-pg";
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const prisma = new PrismaClient({ adapter });
+```
+
+### tsx ao invés de ts-node-dev
+`ts-node-dev` não é compatível com ESM (Prisma v7 gera `.ts` com ESM imports).
+Usamos **tsx** com `tsx watch src/server.ts` para hot-reload.
+
+### Tailwind CSS v4
+Não usa `tailwind.config.ts`. A configuração é feita via `@theme {}` dentro de
+`client/src/index.css`. As cores custom são `primary-*` (indigo) e `secondary-*` (amber).
+
+### Autenticação
+- JWT gerado com `jsonwebtoken`, expiração 7 dias
+- Token armazenado em `localStorage` (chaves: `lumen_token`, `lumen_user`)
+- `api.ts` injeta `Authorization: Bearer <token>` automaticamente em todas as requisições
+- Middleware `authenticateToken` injeta `req.userId` nas rotas protegidas
+
+### Comandos úteis
+```bash
+pnpm dev              # client (5173) + server (3333) em paralelo
+pnpm dev:client       # apenas Vite
+pnpm dev:server       # apenas Express
+npx prisma migrate dev --name <nome>   # nova migration (rodar dentro de server/)
+npx prisma generate   # regenerar client (rodar dentro de server/)
+```
+
+---
+
+## API Endpoints (implementados)
+
+| Método | Rota                  | Auth | Descrição                              |
+|--------|-----------------------|------|----------------------------------------|
+| GET    | /health               | Não  | Health-check do servidor               |
+| POST   | /api/auth/register    | Não  | Cadastro {name, email, password} → JWT |
+| POST   | /api/auth/login       | Não  | Login {email, password} → JWT + user   |
+
+---
+
+## Schema Prisma (referência — migration "init" aplicada)
 
 ```prisma
 model User {
@@ -227,9 +302,15 @@ model PomodoroSession {
 
 ### Fase 2 — Programação Web (em andamento)
 - [ ] Wireframes/protótipos (Figma)
-- [ ] Setup do projeto (Vite + React + Express + Prisma)
-- [ ] Desenvolvimento front-end (React + Tailwind)
-- [ ] Desenvolvimento back-end (Express + Prisma + PostgreSQL)
+- [x] Setup do projeto (Vite + React + Express + Prisma + pnpm workspaces)
+- [x] Schema Prisma (5 modelos) + migration inicial aplicada
+- [x] Autenticação completa (register/login/JWT/middleware/bcrypt)
+- [x] Front-end auth (login, register, dashboard placeholder, rotas protegidas)
+- [ ] CRUD de Matérias (back-end + front-end)
+- [ ] CRUD de Atividades (back-end + front-end)
+- [ ] Planner Semanal (back-end + front-end)
+- [ ] Pomodoro Timer (back-end + front-end)
+- [ ] Dashboard com dados reais
 
 ### Fase 3 — Mobile
 - [ ] Layout responsivo mobile-first com bottom navigation
