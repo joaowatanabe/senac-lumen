@@ -42,46 +42,54 @@ senac-lumen/
 ├── client/                  ← React + TypeScript + Tailwind v4 (Vite)
 │   ├── src/
 │   │   ├── components/
-│   │   │   └── ProtectedRoute.tsx
+│   │   │   ├── ProtectedRoute.tsx
+│   │   │   ├── BottomNavBar.tsx       ← nav fixa inferior (4 abas)
+│   │   │   ├── SubjectCard.tsx        ← card de matéria com chip colorido
+│   │   │   └── SubjectModal.tsx       ← modal criar/editar matéria
 │   │   ├── pages/
 │   │   │   ├── LoginPage.tsx
 │   │   │   ├── RegisterPage.tsx
-│   │   │   └── DashboardPage.tsx
+│   │   │   ├── DashboardPage.tsx
+│   │   │   └── SubjectsPage.tsx       ← CRUD de matérias
 │   │   ├── hooks/
-│   │   │   └── useAuth.tsx       ← Context + hook de autenticação
+│   │   │   ├── useAuth.tsx            ← Context + hook de autenticação
+│   │   │   └── useSubjects.ts         ← hook CRUD matérias
 │   │   ├── services/
-│   │   │   ├── api.ts            ← fetch wrapper com JWT automático
-│   │   │   └── authService.ts    ← chamadas login/register
+│   │   │   ├── api.ts                 ← fetch wrapper com JWT + suporte 204
+│   │   │   ├── authService.ts         ← chamadas login/register
+│   │   │   └── subjectService.ts      ← chamadas CRUD matérias
 │   │   ├── types/
-│   │   │   └── index.ts          ← tipos compartilhados
-│   │   ├── App.tsx               ← roteamento (BrowserRouter)
+│   │   │   └── index.ts               ← tipos compartilhados
+│   │   ├── App.tsx                    ← roteamento (BrowserRouter)
 │   │   ├── main.tsx
-│   │   └── index.css             ← Tailwind v4 com @theme (indigo/amber)
+│   │   └── index.css                  ← Tailwind v4 com @theme (indigo/amber)
 │   ├── index.html
-│   └── vite.config.ts            ← plugins: react + tailwindcss
+│   └── vite.config.ts                 ← plugins: react + tailwindcss
 ├── server/                  ← Express v5 + TypeScript + Prisma v7
 │   ├── prisma/
-│   │   ├── schema.prisma         ← 5 modelos
-│   │   └── migrations/           ← migration "init" aplicada
-│   ├── prisma.config.ts          ← config Prisma v7 (datasource via env)
+│   │   ├── schema.prisma              ← 5 modelos
+│   │   └── migrations/                ← migration "init" aplicada
+│   ├── prisma.config.ts               ← config Prisma v7 (datasource via env)
 │   ├── src/
-│   │   ├── server.ts             ← entry point Express (CORS, rotas)
+│   │   ├── server.ts                  ← entry point Express (CORS, rotas)
 │   │   ├── lib/
-│   │   │   └── prisma.ts         ← singleton PrismaClient + adapter-pg
+│   │   │   └── prisma.ts              ← singleton PrismaClient + adapter-pg
 │   │   ├── routes/
-│   │   │   └── authRoutes.ts
+│   │   │   ├── authRoutes.ts
+│   │   │   └── subjectRoutes.ts       ← CRUD matérias (autenticado)
 │   │   ├── controllers/
-│   │   │   └── authController.ts
+│   │   │   ├── authController.ts
+│   │   │   └── subjectController.ts    ← list/create/update/delete + cascade
 │   │   ├── middlewares/
-│   │   │   └── auth.ts           ← middleware JWT (authenticateToken)
-│   │   └── generated/prisma/     ← client gerado (não editar)
-│   ├── .env                      ← DATABASE_URL, JWT_SECRET, PORT
-│   └── tsconfig.json             ← strict: true
+│   │   │   └── auth.ts                ← middleware JWT (authenticateToken)
+│   │   └── generated/prisma/          ← client gerado (não editar)
+│   ├── .env                           ← DATABASE_URL, JWT_SECRET, PORT
+│   └── tsconfig.json                  ← strict: true
 ├── context/
-│   └── lumen-contexto.md         ← ESTE ARQUIVO
+│   └── lumen-contexto.md              ← ESTE ARQUIVO
 ├── .env.example
-├── package.json                  ← scripts: dev, dev:client, dev:server
-└── pnpm-workspace.yaml           ← packages: client, server
+├── package.json                       ← scripts: dev, dev:client, dev:server
+└── pnpm-workspace.yaml                ← packages: client, server
 ```
 
 ---
@@ -209,6 +217,14 @@ Não usa `tailwind.config.ts`. A configuração é feita via `@theme {}` dentro 
 - `api.ts` injeta `Authorization: Bearer <token>` automaticamente em todas as requisições
 - Middleware `authenticateToken` injeta `req.userId` nas rotas protegidas
 
+### Delete com cascade
+Ao deletar uma matéria, o controller usa `$transaction` para remover primeiro
+todos os `pomodoroSessions`, `activities` e `plannerBlocks` vinculados.
+
+### api.ts — suporte a 204 No Content
+`apiFetch` trata respostas 204 (sem body) retornando `undefined`, evitando
+erro de JSON parse em operações DELETE.
+
 ### Comandos úteis
 ```bash
 pnpm dev              # client (5173) + server (3333) em paralelo
@@ -227,6 +243,10 @@ npx prisma generate   # regenerar client (rodar dentro de server/)
 | GET    | /health               | Não  | Health-check do servidor               |
 | POST   | /api/auth/register    | Não  | Cadastro {name, email, password} → JWT |
 | POST   | /api/auth/login       | Não  | Login {email, password} → JWT + user   |
+| GET    | /api/subjects         | Sim  | Lista matérias do usuário              |
+| POST   | /api/subjects         | Sim  | Cria matéria {name, color}             |
+| PATCH  | /api/subjects/:id     | Sim  | Edita matéria (verifica ownership)     |
+| DELETE | /api/subjects/:id     | Sim  | Deleta matéria + cascade (ownership)   |
 
 ---
 
@@ -306,14 +326,15 @@ model PomodoroSession {
 - [x] Schema Prisma (5 modelos) + migration inicial aplicada
 - [x] Autenticação completa (register/login/JWT/middleware/bcrypt)
 - [x] Front-end auth (login, register, dashboard placeholder, rotas protegidas)
-- [ ] CRUD de Matérias (back-end + front-end)
+- [x] CRUD de Matérias (back-end + front-end + cascade delete)
+- [x] BottomNavBar com 4 abas (Dashboard, Matérias, Planner, Pomodoro)
 - [ ] CRUD de Atividades (back-end + front-end)
 - [ ] Planner Semanal (back-end + front-end)
 - [ ] Pomodoro Timer (back-end + front-end)
 - [ ] Dashboard com dados reais
 
 ### Fase 3 — Mobile
-- [ ] Layout responsivo mobile-first com bottom navigation
+- [x] BottomNavBar mobile-first com 4 abas fixas
 - [ ] Adaptações de UX para touch (targets mínimos 44px)
 
 ---

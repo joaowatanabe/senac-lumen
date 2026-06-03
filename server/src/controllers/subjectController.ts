@@ -103,7 +103,13 @@ export async function deleteSubject(req: Request, res: Response): Promise<void> 
       return;
     }
 
-    await prisma.subject.delete({ where: { id } });
+    // Deleta em cascata: registros dependentes primeiro, depois a matéria
+    await prisma.$transaction([
+      prisma.pomodoroSession.deleteMany({ where: { subjectId: id } }),
+      prisma.activity.deleteMany({ where: { subjectId: id } }),
+      prisma.plannerBlock.deleteMany({ where: { subjectId: id } }),
+      prisma.subject.delete({ where: { id } }),
+    ]);
 
     res.status(204).send();
   } catch (error) {

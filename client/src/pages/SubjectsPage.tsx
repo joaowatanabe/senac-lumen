@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSubjects } from "../hooks/useSubjects";
 import SubjectCard from "../components/SubjectCard";
 import SubjectModal from "../components/SubjectModal";
+import BottomNavBar from "../components/BottomNavBar";
 import type { Subject } from "../types";
 
 export default function SubjectsPage() {
@@ -55,7 +56,7 @@ export default function SubjectsPage() {
       </header>
 
       {/* Conteúdo */}
-      <main className="max-w-2xl mx-auto px-4 py-6">
+      <main className="max-w-2xl mx-auto px-4 py-6 pb-24">
         {/* Loading */}
         {isLoading && (
           <div className="flex justify-center py-20">
@@ -151,6 +152,8 @@ export default function SubjectsPage() {
           </div>
         </div>
       )}
+
+      <BottomNavBar />
     </div>
   );
 }

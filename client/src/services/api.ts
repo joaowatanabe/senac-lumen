@@ -29,5 +29,10 @@ export async function apiFetch<T>(
     throw new Error(error.message || `Erro na requisição: ${response.status}`);
   }
 
+  // 204 No Content (ex: DELETE) — não tem body
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
   return response.json();
 }

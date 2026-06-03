@@ -1,4 +1,5 @@
 import { useAuth } from "../hooks/useAuth";
+import BottomNavBar from "../components/BottomNavBar";
 
 export default function DashboardPage() {
   const { user, logout } = useAuth();
@@ -32,7 +33,7 @@ export default function DashboardPage() {
       </header>
 
       {/* Conteúdo principal */}
-      <main className="max-w-5xl mx-auto px-4 py-8">
+      <main className="max-w-5xl mx-auto px-4 py-8 pb-24">
         {/* Greeting */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-white">
@@ -106,6 +107,8 @@ export default function DashboardPage() {
           </p>
         </div>
       </main>
+
+      <BottomNavBar />
     </div>
   );
 }
