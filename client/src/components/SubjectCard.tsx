@@ -1,6 +1,5 @@
 import type { Subject } from "../types";
 
-// Mapa de cores para classes Tailwind
 const colorMap: Record<string, { bg: string; border: string; text: string; chip: string }> = {
   indigo:  { bg: "bg-indigo-500/10",  border: "border-indigo-400/30",  text: "text-indigo-300",  chip: "bg-indigo-500" },
   sky:     { bg: "bg-sky-500/10",     border: "border-sky-400/30",     text: "text-sky-300",     chip: "bg-sky-500" },
@@ -58,5 +57,4 @@ export default function SubjectCard({ subject, onEdit, onDelete }: SubjectCardPr
   );
 }
 
-// Exporta o mapa de cores para uso em outros componentes (ex: modal)
 export { colorMap };
