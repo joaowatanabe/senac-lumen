@@ -5,6 +5,8 @@ import authRoutes from "./routes/authRoutes";
 import subjectRoutes from "./routes/subjectRoutes";
 import activityRoutes from "./routes/activityRoutes";
 import pomodoroRoutes from "./routes/pomodoroRoutes";
+import plannerRoutes from "./routes/plannerRoutes";
+import dashboardRoutes from "./routes/dashboardRoutes";
 
 const app = express();
 
@@ -17,6 +19,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/subjects", subjectRoutes);
 app.use("/api/activities", activityRoutes);
 app.use("/api/pomodoro", pomodoroRoutes);
+app.use("/api/planner", plannerRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 // Rota de health-check
 app.get("/health", (_req, res) => {

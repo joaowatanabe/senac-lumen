@@ -7,6 +7,7 @@ import DashboardPage from "./pages/DashboardPage";
 import SubjectsPage from "./pages/SubjectsPage";
 import ActivitiesPage from "./pages/ActivitiesPage";
 import PomodoroPage from "./pages/PomodoroPage";
+import PlannerPage from "./pages/PlannerPage";
 
 function App() {
   return (
@@ -47,6 +48,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <PomodoroPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/planner"
+            element={
+              <ProtectedRoute>
+                <PlannerPage />
               </ProtectedRoute>
             }
           />

@@ -335,7 +335,7 @@ model PomodoroSession {
 - [x] CRUD de Matérias (back-end + front-end + cascade delete)
 - [x] BottomNavBar com 4 abas (Dashboard, Matérias, Planner, Pomodoro)
 - [x] CRUD de Atividades (back-end + front-end)
-- [ ] Planner Semanal (back-end + front-end)
+- [x] Planner Semanal (back-end + front-end)
 - [x] Pomodoro Timer (back-end + front-end)
 - [ ] Dashboard com dados reais
 
