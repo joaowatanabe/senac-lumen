@@ -1,3 +1,5 @@
 node_modules
 .DS_Store
 .env
+token.txt
+context/lumen-contexto.md

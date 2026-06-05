@@ -247,6 +247,12 @@ npx prisma generate   # regenerar client (rodar dentro de server/)
 | POST   | /api/subjects         | Sim  | Cria matéria {name, color}             |
 | PATCH  | /api/subjects/:id     | Sim  | Edita matéria (verifica ownership)     |
 | DELETE | /api/subjects/:id     | Sim  | Deleta matéria + cascade (ownership)   |
+| GET    | /api/activities       | Sim  | Lista atividades (query opcional)      |
+| POST   | /api/activities       | Sim  | Cria atividade {title, subjectId...}   |
+| PATCH  | /api/activities/:id   | Sim  | Edita atividade / marca como concluída |
+| DELETE | /api/activities/:id   | Sim  | Deleta atividade                       |
+| POST   | /api/pomodoro/sessions| Sim  | Registra sessão {subjectId, duration}  |
+| GET    | /api/pomodoro/today   | Sim  | Retorna sessões de hoje                |
 
 ---
 
@@ -328,9 +334,9 @@ model PomodoroSession {
 - [x] Front-end auth (login, register, dashboard placeholder, rotas protegidas)
 - [x] CRUD de Matérias (back-end + front-end + cascade delete)
 - [x] BottomNavBar com 4 abas (Dashboard, Matérias, Planner, Pomodoro)
-- [ ] CRUD de Atividades (back-end + front-end)
+- [x] CRUD de Atividades (back-end + front-end)
 - [ ] Planner Semanal (back-end + front-end)
-- [ ] Pomodoro Timer (back-end + front-end)
+- [x] Pomodoro Timer (back-end + front-end)
 - [ ] Dashboard com dados reais
 
 ### Fase 3 — Mobile

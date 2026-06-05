@@ -4,6 +4,7 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes";
 import subjectRoutes from "./routes/subjectRoutes";
 import activityRoutes from "./routes/activityRoutes";
+import pomodoroRoutes from "./routes/pomodoroRoutes";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/subjects", subjectRoutes);
 app.use("/api/activities", activityRoutes);
+app.use("/api/pomodoro", pomodoroRoutes);
 
 // Rota de health-check
 app.get("/health", (_req, res) => {
