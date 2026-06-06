@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { usePlanner } from "../hooks/usePlanner";
 import { useSubjects } from "../hooks/useSubjects";
 import { colorMap } from "../components/SubjectCard";
@@ -110,167 +111,189 @@ export default function PlannerPage() {
 
         {!isLoading && !error && (
           <>
-            {/* layout Mobile (menor que md) */}
-            <div className="md:hidden flex flex-col w-full">
-              {/* Tabs horizontais */}
-              <div className="flex bg-white/5 p-1 rounded-full border border-white/10 w-full overflow-x-auto justify-between no-scrollbar gap-1">
-                {DAYS.map((d) => (
-                  <button
-                    key={d.value}
-                    onClick={() => setActiveDay(d.value)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer flex-grow text-center min-w-[44px] ${
-                      activeDay === d.value
-                        ? "bg-primary-600 text-white shadow-md font-semibold"
-                        : "text-primary-300 hover:text-white hover:bg-white/5"
-                    }`}
-                  >
-                    {d.label}
-                  </button>
-                ))}
-              </div>
-
-              {/* Blocos do dia ativo */}
-              <div className="mt-6 flex flex-col gap-3">
-                {getBlocksForDay(activeDay).length === 0 ? (
-                  /* Empty state */
-                  <div className="flex flex-col items-center justify-center text-center p-8 bg-white/5 rounded-2xl border border-white/5">
-                    <span className="text-3xl mb-2">📅</span>
-                    <h4 className="text-sm font-semibold text-white">
-                      Nenhum bloco planejado para este dia.
-                    </h4>
-                    <p className="text-xs text-primary-300 mt-1 max-w-xs">
-                      Adicione matérias para organizar sua semana.
-                    </p>
-                  </div>
-                ) : (
-                  getBlocksForDay(activeDay).map((block) => {
-                    const colors =
-                      colorMap[block.subject?.color || "indigo"] || colorMap.indigo;
-                    return (
-                      <div
-                        key={block.id}
-                        className={`flex items-center justify-between gap-3 px-4 py-3 border rounded-xl transition-all duration-200 ${colors.bg} ${colors.border}`}
-                      >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <div className={`w-2.5 h-2.5 rounded-full ${colors.chip} shrink-0`} />
-                          <span className={`text-sm font-medium ${colors.text} truncate`}>
-                            {block.subject?.name}
-                          </span>
-                          <span className="text-xs text-white/50 shrink-0 font-medium">
-                            {block.durationMinutes}min
-                          </span>
-                        </div>
-                        <button
-                          onClick={() => handleDeleteBlock(block.id)}
-                          className="p-1 rounded hover:bg-white/10 text-white/40 hover:text-white transition-colors cursor-pointer shrink-0"
-                          title="Remover bloco"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                            className="w-4 h-4"
-                          >
-                            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-                          </svg>
-                        </button>
-                      </div>
-                    );
-                  })
-                )}
-
-                {/* Botão de adicionar bloco */}
-                <button
-                  onClick={() => handleOpenModal(activeDay)}
-                  className="mt-2 w-full py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-primary-200 hover:text-white text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
+            {subjects.length === 0 ? (
+              <div className="text-center py-16 max-w-sm mx-auto">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-500/10 border border-primary-400/20 mb-4">
+                  <span className="text-3xl">📚</span>
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  Nenhuma matéria cadastrada
+                </h3>
+                <p className="text-primary-300 text-sm mb-6">
+                  Crie uma matéria antes de planejar sua semana.
+                </p>
+                <Link
+                  to="/subjects"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold transition-all duration-200 cursor-pointer"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                  </svg>
-                  Adicionar bloco
-                </button>
+                  Criar matéria
+                </Link>
               </div>
-            </div>
+            ) : (
+              <>
+                {/* layout Mobile (menor que md) */}
+                <div className="md:hidden flex flex-col w-full">
+                  {/* Tabs horizontais */}
+                  <div className="flex bg-white/5 p-1 rounded-full border border-white/10 w-full overflow-x-auto justify-between no-scrollbar gap-1">
+                    {DAYS.map((d) => (
+                      <button
+                        key={d.value}
+                        onClick={() => setActiveDay(d.value)}
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer flex-grow text-center min-w-[44px] ${
+                          activeDay === d.value
+                            ? "bg-primary-600 text-white shadow-md font-semibold"
+                            : "text-primary-300 hover:text-white hover:bg-white/5"
+                        }`}
+                      >
+                        {d.label}
+                      </button>
+                    ))}
+                  </div>
 
-            {/* layout Desktop (a partir de md) */}
-            <div className="hidden md:grid md:grid-cols-7 gap-4 items-start w-full">
-              {DAYS.map((day) => {
-                const dayBlocks = getBlocksForDay(day.value);
-                return (
-                  <div
-                    key={day.value}
-                    className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col min-h-[360px] shadow-sm"
-                  >
-                    <h3 className="text-sm font-bold text-white text-center border-b border-white/10 pb-2 mb-3">
-                      {day.label}
-                    </h3>
-
-                    <div className="flex flex-col gap-2.5 flex-grow">
-                      {dayBlocks.length === 0 ? (
-                        <div className="flex-grow flex flex-col items-center justify-center text-center py-12 px-2 border border-dashed border-white/10 rounded-xl">
-                          <p className="text-xs font-semibold text-white/40">Livre</p>
-                        </div>
-                      ) : (
-                        dayBlocks.map((block) => {
-                          const colors =
-                            colorMap[block.subject?.color || "indigo"] ||
-                            colorMap.indigo;
-                          return (
-                            <div
-                              key={block.id}
-                              className={`flex items-center justify-between gap-2 px-3 py-2 border rounded-xl transition-all duration-200 hover:scale-[1.02] ${colors.bg} ${colors.border}`}
-                            >
-                              <div className="flex flex-col min-w-0">
-                                <span className={`text-xs font-bold ${colors.text} truncate`}>
-                                  {block.subject?.name}
-                                </span>
-                                <span className="text-[10px] text-white/50 font-medium mt-0.5">
-                                  {block.durationMinutes}min
-                                </span>
-                              </div>
-                              <button
-                                onClick={() => handleDeleteBlock(block.id)}
-                                className="p-1 rounded hover:bg-white/10 text-white/40 hover:text-white transition-colors cursor-pointer shrink-0"
-                                title="Remover bloco"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                  className="w-3.5 h-3.5"
-                                >
-                                  <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-                                </svg>
-                              </button>
+                  {/* Blocos do dia ativo */}
+                  <div className="mt-6 flex flex-col gap-3">
+                    {getBlocksForDay(activeDay).length === 0 ? (
+                      /* Empty state */
+                      <div className="flex flex-col items-center justify-center text-center p-8 bg-white/5 rounded-2xl border border-white/5">
+                        <span className="text-3xl mb-2">📅</span>
+                        <h4 className="text-sm font-semibold text-white">
+                          Nenhum bloco planejado para este dia.
+                        </h4>
+                        <p className="text-xs text-primary-300 mt-1 max-w-xs">
+                          Adicione matérias para organizar sua semana.
+                        </p>
+                      </div>
+                    ) : (
+                      getBlocksForDay(activeDay).map((block) => {
+                        const colors =
+                          colorMap[block.subject?.color || "indigo"] || colorMap.indigo;
+                        return (
+                          <div
+                            key={block.id}
+                            className={`flex items-center justify-between gap-3 px-4 py-3 border rounded-xl transition-all duration-200 ${colors.bg} ${colors.border}`}
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <div className={`w-2.5 h-2.5 rounded-full ${colors.chip} shrink-0`} />
+                              <span className={`text-sm font-medium ${colors.text} truncate`}>
+                                {block.subject?.name}
+                              </span>
+                              <span className="text-xs text-white/50 shrink-0 font-medium">
+                                {block.durationMinutes}min
+                              </span>
                             </div>
-                          );
-                        })
-                      )}
-                    </div>
+                            <button
+                              onClick={() => handleDeleteBlock(block.id)}
+                              className="p-1 rounded hover:bg-white/10 text-white/40 hover:text-white transition-colors cursor-pointer shrink-0"
+                              title="Remover bloco"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                className="w-4 h-4"
+                              >
+                                <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                              </svg>
+                            </button>
+                          </div>
+                        );
+                      })
+                    )}
 
+                    {/* Botão de adicionar bloco */}
                     <button
-                      onClick={() => handleOpenModal(day.value)}
-                      className="mt-4 w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 text-primary-200 hover:text-white text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5"
+                      onClick={() => handleOpenModal(activeDay)}
+                      className="mt-2 w-full py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-primary-200 hover:text-white text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 20 20"
                         fill="currentColor"
-                        className="w-3.5 h-3.5"
+                        className="w-4 h-4"
                       >
                         <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
                       </svg>
-                      Adicionar
+                      Adicionar bloco
                     </button>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+
+                {/* layout Desktop (a partir de md) */}
+                <div className="hidden md:grid md:grid-cols-7 gap-4 items-start w-full">
+                  {DAYS.map((day) => {
+                    const dayBlocks = getBlocksForDay(day.value);
+                    return (
+                      <div
+                        key={day.value}
+                        className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col min-h-[360px] shadow-sm"
+                      >
+                        <h3 className="text-sm font-bold text-white text-center border-b border-white/10 pb-2 mb-3">
+                          {day.label}
+                        </h3>
+
+                        <div className="flex flex-col gap-2.5 flex-grow">
+                          {dayBlocks.length === 0 ? (
+                            <div className="flex-grow flex flex-col items-center justify-center text-center py-12 px-2 border border-dashed border-white/10 rounded-xl">
+                              <p className="text-xs font-semibold text-white/40">Livre</p>
+                            </div>
+                          ) : (
+                            dayBlocks.map((block) => {
+                              const colors =
+                                colorMap[block.subject?.color || "indigo"] ||
+                                colorMap.indigo;
+                              return (
+                                <div
+                                  key={block.id}
+                                  className={`flex items-center justify-between gap-2 px-3 py-2 border rounded-xl transition-all duration-200 hover:scale-[1.02] ${colors.bg} ${colors.border}`}
+                                >
+                                  <div className="flex flex-col min-w-0">
+                                    <span className={`text-xs font-bold ${colors.text} truncate`}>
+                                      {block.subject?.name}
+                                    </span>
+                                    <span className="text-[10px] text-white/50 font-medium mt-0.5">
+                                      {block.durationMinutes}min
+                                    </span>
+                                  </div>
+                                  <button
+                                    onClick={() => handleDeleteBlock(block.id)}
+                                    className="p-1 rounded hover:bg-white/10 text-white/40 hover:text-white transition-colors cursor-pointer shrink-0"
+                                    title="Remover bloco"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      viewBox="0 0 20 20"
+                                      fill="currentColor"
+                                      className="w-3.5 h-3.5"
+                                    >
+                                      <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              );
+                            })
+                          )}
+                        </div>
+
+                        <button
+                          onClick={() => handleOpenModal(day.value)}
+                          className="mt-4 w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 text-primary-200 hover:text-white text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            className="w-3.5 h-3.5"
+                          >
+                            <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                          </svg>
+                          Adicionar
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
           </>
         )}
       </main>

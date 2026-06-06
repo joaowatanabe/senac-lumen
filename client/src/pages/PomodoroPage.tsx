@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { usePomodoro } from "../hooks/usePomodoro";
 import { useSubjects } from "../hooks/useSubjects";
 import BottomNavBar from "../components/BottomNavBar";
@@ -76,20 +77,34 @@ export default function PomodoroPage() {
         {/* Seleção de matéria (escondido no modo foco) */}
         {!isFocusMode && (
           <div className="w-full max-w-xs mt-6 mx-auto transition-opacity">
-            <select
-              id="pomodoro-subject"
-              value={selectedSubject}
-              onChange={(e) => setSelectedSubject(e.target.value)}
-              disabled={isRunning}
-              className="w-full px-4 py-3 rounded-xl bg-indigo-800/50 border border-indigo-600/50 text-white outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50 cursor-pointer text-center text-sm"
-            >
-              <option value="" className="bg-primary-900">Selecione uma matéria</option>
-              {!subjectsLoading && subjects.map((s) => (
-                <option key={s.id} value={s.id} className="bg-primary-900">
-                  {s.name}
-                </option>
-              ))}
-            </select>
+            {subjects.length === 0 ? (
+              <div className="text-center">
+                <p className="text-sm text-amber-400 bg-amber-400/10 px-4 py-3 rounded-xl border border-amber-400/20 mb-3 font-medium">
+                  Crie uma matéria para iniciar um ciclo de foco.
+                </p>
+                <Link
+                  to="/subjects"
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-xs font-bold transition-all duration-200 cursor-pointer shadow-md"
+                >
+                  Criar matéria
+                </Link>
+              </div>
+            ) : (
+              <select
+                id="pomodoro-subject"
+                value={selectedSubject}
+                onChange={(e) => setSelectedSubject(e.target.value)}
+                disabled={isRunning}
+                className="w-full px-4 py-3 rounded-xl bg-indigo-800/50 border border-indigo-600/50 text-white outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50 cursor-pointer text-center text-sm"
+              >
+                <option value="" className="bg-primary-900">Selecione uma matéria</option>
+                {!subjectsLoading && subjects.map((s) => (
+                  <option key={s.id} value={s.id} className="bg-primary-900">
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
         )}
 
@@ -164,9 +179,9 @@ export default function PomodoroPage() {
 
           <button
             onClick={toggleTimer}
-            disabled={phase === "focus" && !selectedSubject && !isRunning}
+            disabled={(phase === "focus" && !selectedSubject && !isRunning) || subjects.length === 0}
             className={`w-16 h-16 flex items-center justify-center rounded-full shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105 active:scale-95 ${
-              phase === "focus" && !selectedSubject && !isRunning
+              (phase === "focus" && !selectedSubject && !isRunning) || subjects.length === 0
                 ? "bg-indigo-950/40 text-white/30 border border-white/5 cursor-not-allowed"
                 : isRunning
                   ? "bg-red-500/15 text-red-400 border border-red-500/30 shadow-red-500/10 hover:bg-red-500/25"
@@ -198,7 +213,7 @@ export default function PomodoroPage() {
         </div>
 
         {/* Alerta caso tente iniciar foco sem matéria */}
-        {!isRunning && phase === "focus" && !selectedSubject && (
+        {!isRunning && phase === "focus" && !selectedSubject && subjects.length > 0 && (
           <p className="mt-6 text-sm text-amber-400 bg-amber-400/10 px-4 py-2 rounded-lg border border-amber-400/20">
             Selecione uma matéria antes de iniciar o foco.
           </p>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useActivities } from "../hooks/useActivities";
 import { useSubjects } from "../hooks/useSubjects";
 import ActivityCard from "../components/ActivityCard";
@@ -66,8 +67,29 @@ export default function ActivitiesPage() {
           </div>
         )}
 
+        {/* Empty state específico para quando não há matérias */}
+        {!isLoading && !error && subjects.length === 0 && (
+          <div className="text-center py-16">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-500/10 border border-primary-400/20 mb-4">
+              <span className="text-3xl">📚</span>
+            </div>
+            <h3 className="text-lg font-semibold text-white mb-2">
+              Nenhuma matéria cadastrada
+            </h3>
+            <p className="text-primary-300 text-sm max-w-sm mx-auto mb-6">
+              Você precisa criar uma matéria antes de adicionar atividades.
+            </p>
+            <Link
+              to="/subjects"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold transition-all duration-200 cursor-pointer"
+            >
+              Criar matéria
+            </Link>
+          </div>
+        )}
+
         {/* Empty state global */}
-        {!isLoading && !error && !hasAny && (
+        {!isLoading && !error && subjects.length > 0 && !hasAny && (
           <div className="text-center py-16">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-secondary-500/10 border border-secondary-400/20 mb-4">
               <span className="text-3xl">📋</span>

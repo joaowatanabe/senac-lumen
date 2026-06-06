@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useSubjects } from "../hooks/useSubjects";
 import SubjectCard from "../components/SubjectCard";
 import SubjectModal from "../components/SubjectModal";
@@ -41,11 +42,29 @@ export default function SubjectsPage() {
     <div className="min-h-screen bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800">
       {/* Header */}
       <header className="border-b border-white/10 bg-white/5 backdrop-blur-lg sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-lg font-bold text-white">Matérias</h1>
+        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center gap-3">
+          <Link to="/dashboard" className="text-primary-300 hover:text-white transition-colors cursor-pointer" title="Voltar ao início">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+              <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
+            </svg>
+          </Link>
+          <span className="text-sm font-bold text-white uppercase tracking-wider">Configurações</span>
+        </div>
+      </header>
+
+      {/* Conteúdo */}
+      <main className="max-w-2xl mx-auto px-4 py-8 pb-24">
+        {/* Título administrativo com descrição */}
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-white tracking-tight">Gerenciar Matérias</h1>
+            <p className="mt-1.5 text-primary-300 text-sm max-w-md">
+              Cadastre e organize as matérias usadas para rastrear suas atividades, planejar sua grade semanal e registrar sessões Pomodoro.
+            </p>
+          </div>
           <button
             onClick={handleOpenCreate}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold transition-all duration-200 cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 px-4.5 py-3 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold transition-all duration-200 cursor-pointer shadow-lg shadow-primary-950/20 whitespace-nowrap self-start sm:self-center"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
               <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
@@ -53,10 +72,7 @@ export default function SubjectsPage() {
             Nova matéria
           </button>
         </div>
-      </header>
 
-      {/* Conteúdo */}
-      <main className="max-w-2xl mx-auto px-4 py-6 pb-24">
         {/* Loading */}
         {isLoading && (
           <div className="flex justify-center py-20">
@@ -73,7 +89,7 @@ export default function SubjectsPage() {
 
         {/* Empty state */}
         {!isLoading && !error && subjects.length === 0 && (
-          <div className="text-center py-16">
+          <div className="text-center py-16 bg-white/5 border border-white/5 rounded-2xl p-6">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-500/10 border border-primary-400/20 mb-4">
               <span className="text-3xl">📚</span>
             </div>
@@ -98,7 +114,7 @@ export default function SubjectsPage() {
 
         {/* Lista de matérias */}
         {!isLoading && subjects.length > 0 && (
-          <div className="space-y-3">
+          <div className="space-y-3.5">
             {subjects.map((subject) => (
               <SubjectCard
                 key={subject.id}
@@ -107,7 +123,7 @@ export default function SubjectsPage() {
                 onDelete={setDeleteConfirm}
               />
             ))}
-            <p className="text-center text-xs text-primary-500 pt-2">
+            <p className="text-center text-xs text-primary-500 pt-2 font-medium">
               {subjects.length} {subjects.length === 1 ? "matéria cadastrada" : "matérias cadastradas"}
             </p>
           </div>

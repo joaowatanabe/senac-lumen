@@ -177,6 +177,25 @@ export default function DashboardPage() {
               </Link>
             </div>
 
+            {/* Gerenciar matérias card */}
+            <Link
+              to="/subjects"
+              className="flex items-center justify-between gap-3 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-4 hover:bg-white/10 hover:border-white/20 transition-all duration-200 hover:scale-[1.02] shadow-sm cursor-pointer"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center">
+                  <span className="text-xl">📚</span>
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white">Gerenciar matérias</h4>
+                  <p className="text-[10px] text-primary-300 font-medium">Organize suas disciplinas e cores</p>
+                </div>
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-primary-400">
+                <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
+              </svg>
+            </Link>
+
             {/* Hoje no Planner */}
             <section className="bg-white/5 border border-white/10 rounded-2xl p-5 shadow-sm">
               <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
