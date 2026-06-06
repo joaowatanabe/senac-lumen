@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useOutletContext } from "react-router-dom";
 import { usePomodoro } from "../hooks/usePomodoro";
 import { useSubjects } from "../hooks/useSubjects";
-import BottomNavBar from "../components/BottomNavBar";
 
 const PHASE_NAMES = {
   focus: "Foco",
@@ -43,9 +42,21 @@ export default function PomodoroPage() {
   } = usePomodoro();
 
   const { subjects, isLoading: subjectsLoading } = useSubjects();
+  const { setIsFocusMode } = useOutletContext<{ setIsFocusMode: (val: boolean) => void }>() || {};
 
   // Esconder nav se estiver em foco E rodando
   const isFocusMode = phase === "focus" && isRunning;
+
+  useEffect(() => {
+    if (setIsFocusMode) {
+      setIsFocusMode(isFocusMode);
+    }
+    return () => {
+      if (setIsFocusMode) {
+        setIsFocusMode(false);
+      }
+    };
+  }, [isFocusMode, setIsFocusMode]);
 
   // Calculo do progresso para o anel SVG
   const totalDuration = TOTAL_DURATIONS[phase];
@@ -55,20 +66,16 @@ export default function PomodoroPage() {
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
-    <div className={`min-h-screen transition-colors duration-500 flex flex-col justify-center ${
-      isFocusMode 
-        ? "bg-black" 
-        : "bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800"
-    }`}>
+    <div className={`min-h-screen transition-colors duration-500 flex flex-col justify-center bg-transparent`}>
       
-      <main className="w-full max-w-md mx-auto px-4 pt-6 pb-24 flex flex-col items-center justify-center flex-grow">
+      <main className="w-full max-w-md lg:max-w-3xl mx-auto px-4 pt-6 pb-24 flex flex-col items-center justify-center flex-grow">
         
         {/* Título, Subtítulo e Badge */}
         {!isFocusMode && (
-          <div className="flex flex-col items-center text-center">
-            <h1 className="text-xl font-semibold text-white">Pomodoro</h1>
-            <p className="text-sm opacity-70 text-white mt-0.5">{PHASE_NAMES[phase]}</p>
-            <div className="inline-flex items-center gap-1 bg-white/10 px-3 py-1 rounded-full border border-white/5 mt-1 text-sm text-white font-medium shadow-sm">
+          <div className="flex flex-col items-center text-center space-y-1">
+            <h1 className="text-xl font-bold text-white tracking-tight">Pomodoro</h1>
+            <p className="text-sm text-primary-300 font-semibold">{PHASE_NAMES[phase]}</p>
+            <div className="inline-flex items-center gap-1.5 bg-white/5 px-3 py-1 rounded-full border border-white/10 text-xs text-white font-bold shadow-sm">
               🔥 {cycles} {cycles === 1 ? "ciclo hoje" : "ciclos hoje"}
             </div>
           </div>
@@ -76,15 +83,15 @@ export default function PomodoroPage() {
 
         {/* Seleção de matéria (escondido no modo foco) */}
         {!isFocusMode && (
-          <div className="w-full max-w-xs mt-6 mx-auto transition-opacity">
+          <div className="w-full max-w-xs mt-6 mx-auto transition-all">
             {subjects.length === 0 ? (
-              <div className="text-center">
-                <p className="text-sm text-amber-400 bg-amber-400/10 px-4 py-3 rounded-xl border border-amber-400/20 mb-3 font-medium">
+              <div className="text-center p-5 bg-white/5 border border-white/10 rounded-2xl shadow-sm shadow-black/5">
+                <p className="text-xs text-amber-400 font-semibold mb-3 leading-relaxed">
                   Crie uma matéria para iniciar um ciclo de foco.
                 </p>
                 <Link
                   to="/subjects"
-                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-xs font-bold transition-all duration-200 cursor-pointer shadow-md"
+                  className="h-9 px-4 inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary-600 hover:bg-primary-500 text-white text-xs font-bold transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer shadow-md shadow-primary-950/20"
                 >
                   Criar matéria
                 </Link>
@@ -95,11 +102,11 @@ export default function PomodoroPage() {
                 value={selectedSubject}
                 onChange={(e) => setSelectedSubject(e.target.value)}
                 disabled={isRunning}
-                className="w-full px-4 py-3 rounded-xl bg-indigo-800/50 border border-indigo-600/50 text-white outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50 cursor-pointer text-center text-sm"
+                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white outline-none transition-all duration-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20 disabled:opacity-50 cursor-pointer text-center text-sm font-semibold"
               >
-                <option value="" className="bg-primary-900">Selecione uma matéria</option>
+                <option value="" className="bg-primary-950 text-white">Selecione uma matéria</option>
                 {!subjectsLoading && subjects.map((s) => (
-                  <option key={s.id} value={s.id} className="bg-primary-900">
+                  <option key={s.id} value={s.id} className="bg-primary-950 text-white">
                     {s.name}
                   </option>
                 ))}
@@ -110,15 +117,15 @@ export default function PomodoroPage() {
 
         {/* Fases Tabs (escondido no modo foco) */}
         {!isFocusMode && (
-          <div className="flex bg-white/5 p-1 rounded-full mt-4 border border-white/10 shadow-inner">
+          <div className="flex bg-white/5 p-1 rounded-full mt-6 border border-white/10 shadow-inner max-w-xs w-full justify-between gap-1">
             {(["focus", "shortBreak", "longBreak"] as const).map((p) => (
               <button
                 key={p}
                 onClick={() => setPhase(p)}
-                className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer ${
+                className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer flex-1 text-center ${
                   phase === p 
-                    ? "bg-white/15 text-white shadow-sm" 
-                    : "text-white/60 hover:text-white hover:bg-white/5"
+                    ? "bg-primary-600 text-white shadow-md" 
+                    : "text-primary-300 hover:text-white hover:bg-white/5"
                 }`}
               >
                 {PHASE_NAMES[p]}
@@ -137,7 +144,7 @@ export default function PomodoroPage() {
               r={radius}
               strokeWidth="8"
               fill="transparent"
-              className="stroke-indigo-800"
+              className="stroke-indigo-950/40"
             />
             {/* Círculo de progresso */}
             <circle
@@ -154,11 +161,11 @@ export default function PomodoroPage() {
           </svg>
           
           <div className="absolute flex flex-col items-center justify-center pointer-events-none">
-            <span className="text-6xl font-bold tracking-tight tabular-nums text-white">
+            <span className="text-6xl font-extrabold tracking-tight tabular-nums text-white">
               {formatTime(timeLeft)}
             </span>
             {isFocusMode && (
-              <span className="text-xs font-semibold text-indigo-300 mt-2 tracking-widest uppercase animate-pulse">
+              <span className="text-[10px] font-bold text-indigo-300 mt-2 tracking-widest uppercase animate-pulse">
                 Foco Profundo
               </span>
             )}
@@ -169,7 +176,7 @@ export default function PomodoroPage() {
         <div className="flex items-center gap-6 mt-8">
           <button
             onClick={resetTimer}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-white opacity-70 hover:opacity-100 hover:bg-white/10 transition-all cursor-pointer"
+            className="w-11 h-11 flex items-center justify-center rounded-xl bg-white/5 text-white opacity-70 hover:opacity-100 hover:bg-white/10 transition-all cursor-pointer shadow-sm border border-white/5"
             title="Reiniciar"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -180,7 +187,7 @@ export default function PomodoroPage() {
           <button
             onClick={toggleTimer}
             disabled={(phase === "focus" && !selectedSubject && !isRunning) || subjects.length === 0}
-            className={`w-16 h-16 flex items-center justify-center rounded-full shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105 active:scale-95 ${
+            className={`w-16 h-16 flex items-center justify-center rounded-2xl shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105 active:scale-95 ${
               (phase === "focus" && !selectedSubject && !isRunning) || subjects.length === 0
                 ? "bg-indigo-950/40 text-white/30 border border-white/5 cursor-not-allowed"
                 : isRunning
@@ -203,7 +210,7 @@ export default function PomodoroPage() {
 
           <button
             onClick={skipPhase}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-white opacity-70 hover:opacity-100 hover:bg-white/10 transition-all cursor-pointer"
+            className="w-11 h-11 flex items-center justify-center rounded-xl bg-white/5 text-white opacity-70 hover:opacity-100 hover:bg-white/10 transition-all cursor-pointer shadow-sm border border-white/5"
             title="Pular Fase"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -214,14 +221,11 @@ export default function PomodoroPage() {
 
         {/* Alerta caso tente iniciar foco sem matéria */}
         {!isRunning && phase === "focus" && !selectedSubject && subjects.length > 0 && (
-          <p className="mt-6 text-sm text-amber-400 bg-amber-400/10 px-4 py-2 rounded-lg border border-amber-400/20">
+          <p className="mt-6 text-xs text-amber-400 bg-amber-400/10 px-4.5 py-2.5 rounded-xl border border-amber-400/20 font-bold text-center max-w-xs shadow-sm">
             Selecione uma matéria antes de iniciar o foco.
           </p>
         )}
       </main>
-
-      {/* Esconde a bottom nav no modo foco */}
-      {!isFocusMode && <BottomNavBar />}
     </div>
   );
 }

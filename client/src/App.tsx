@@ -9,6 +9,8 @@ import ActivitiesPage from "./pages/ActivitiesPage";
 import PomodoroPage from "./pages/PomodoroPage";
 import PlannerPage from "./pages/PlannerPage";
 
+import AppLayout from "./components/AppLayout";
+
 function App() {
   return (
     <BrowserRouter>
@@ -18,49 +20,22 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          {/* Rotas protegidas */}
+          {/* Rotas protegidas sob o Layout Comum */}
           <Route
-            path="/dashboard"
             element={
               <ProtectedRoute>
-                <DashboardPage />
+                <AppLayout />
               </ProtectedRoute>
             }
-          />
-          <Route
-            path="/subjects"
-            element={
-              <ProtectedRoute>
-                <SubjectsPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/activities"
-            element={
-              <ProtectedRoute>
-                <ActivitiesPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/pomodoro"
-            element={
-              <ProtectedRoute>
-                <PomodoroPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/planner"
-            element={
-              <ProtectedRoute>
-                <PlannerPage />
-              </ProtectedRoute>
-            }
-          />
+          >
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/subjects" element={<SubjectsPage />} />
+            <Route path="/activities" element={<ActivitiesPage />} />
+            <Route path="/pomodoro" element={<PomodoroPage />} />
+            <Route path="/planner" element={<PlannerPage />} />
+          </Route>
 
-          {/* Redireciona raiz para dashboard (ou login se não autenticado) */}
+          {/* Redireciona raiz para dashboard */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </AuthProvider>

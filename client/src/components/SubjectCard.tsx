@@ -22,21 +22,21 @@ export default function SubjectCard({ subject, onEdit, onDelete }: SubjectCardPr
 
   return (
     <div
-      className={`${colors.bg} border ${colors.border} rounded-2xl p-4 flex items-center justify-between gap-3 transition-all duration-200 hover:scale-[1.02]`}
+      className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center justify-between gap-3 transition-all duration-300 hover:scale-[1.01] hover:bg-white/[0.07] shadow-sm hover:shadow"
     >
       <div className="flex items-center gap-3 min-w-0">
         {/* Chip de cor */}
-        <div className={`w-4 h-4 rounded-full ${colors.chip} shrink-0`} />
-        <span className={`font-medium ${colors.text} truncate`}>
+        <div className={`w-3.5 h-3.5 rounded-full ${colors.chip} shrink-0 ring-4 ring-white/10`} />
+        <span className="font-semibold text-white truncate text-sm">
           {subject.name}
         </span>
       </div>
 
       {/* Ações */}
-      <div className="flex items-center gap-1 shrink-0">
+      <div className="flex items-center gap-1.5 shrink-0">
         <button
           onClick={() => onEdit(subject)}
-          className="p-2 rounded-lg hover:bg-white/10 text-primary-400 hover:text-white transition-colors cursor-pointer"
+          className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 text-primary-300 hover:bg-white/10 hover:text-white transition-all cursor-pointer"
           title="Editar"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
@@ -45,7 +45,7 @@ export default function SubjectCard({ subject, onEdit, onDelete }: SubjectCardPr
         </button>
         <button
           onClick={() => onDelete(subject)}
-          className="p-2 rounded-lg hover:bg-red-500/15 text-primary-400 hover:text-red-400 transition-colors cursor-pointer"
+          className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 text-primary-400 hover:bg-red-500/10 hover:text-red-400 transition-all cursor-pointer"
           title="Excluir"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
@@ -58,3 +58,4 @@ export default function SubjectCard({ subject, onEdit, onDelete }: SubjectCardPr
 }
 
 export { colorMap };
+

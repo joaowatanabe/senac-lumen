@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useActivities } from "../hooks/useActivities";
 import { useSubjects } from "../hooks/useSubjects";
 import ActivityCard from "../components/ActivityCard";
 import ActivityModal from "../components/ActivityModal";
-import BottomNavBar from "../components/BottomNavBar";
 import type { Activity } from "../types";
 
 export default function ActivitiesPage() {
   const { pending, completed, isLoading, error, createActivity, updateActivity, toggleStatus, deleteActivity } = useActivities();
   const { subjects } = useSubjects();
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<Activity | null>(null);
@@ -25,11 +25,21 @@ export default function ActivitiesPage() {
     setIsModalOpen(true);
   }
 
+  useEffect(() => {
+    if (searchParams.get("create") === "true") {
+      handleOpenCreate();
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
   async function handleSave(data: { title: string; subjectId: string; dueDate?: string | null }) {
+    const formattedData = {
+      ...data,
+      dueDate: data.dueDate || undefined,
+    };
     if (editingActivity) {
-      await updateActivity(editingActivity.id, data);
+      await updateActivity(editingActivity.id, formattedData);
     } else {
-      await createActivity(data);
+      await createActivity(formattedData);
     }
   }
 
@@ -43,16 +53,16 @@ export default function ActivitiesPage() {
   const hasAny = pending.length > 0 || completed.length > 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800">
-      {/* Header */}
-      <header className="border-b border-white/10 bg-white/5 backdrop-blur-lg sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 py-4">
-          <h1 className="text-lg font-bold text-white">Atividades</h1>
+    <div className="min-h-screen bg-transparent">
+      {/* Header (Móvel apenas) */}
+      <header className="border-b border-white/10 bg-white/5 backdrop-blur-lg sticky top-0 z-10 lg:hidden">
+        <div className="max-w-md mx-auto px-4 py-4">
+          <h1 className="text-lg font-bold text-white tracking-tight">Atividades</h1>
         </div>
       </header>
 
       {/* Conteúdo */}
-      <main className="max-w-2xl mx-auto px-4 py-6 pb-24">
+      <main className="max-w-md lg:max-w-5xl mx-auto px-4 py-6 pb-24 lg:pb-8 lg:py-8">
         {/* Loading */}
         {isLoading && (
           <div className="flex justify-center py-20">
@@ -69,19 +79,19 @@ export default function ActivitiesPage() {
 
         {/* Empty state específico para quando não há matérias */}
         {!isLoading && !error && subjects.length === 0 && (
-          <div className="text-center py-16">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-500/10 border border-primary-400/20 mb-4">
+          <div className="text-center py-10 bg-white/5 border border-white/10 rounded-2xl p-6 shadow-sm shadow-black/5">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-500/10 border border-primary-500/20 mb-4">
               <span className="text-3xl">📚</span>
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">
+            <h3 className="text-lg font-bold text-white mb-2">
               Nenhuma matéria cadastrada
             </h3>
-            <p className="text-primary-300 text-sm max-w-sm mx-auto mb-6">
+            <p className="text-primary-300/80 text-sm max-w-sm mx-auto mb-6 leading-relaxed">
               Você precisa criar uma matéria antes de adicionar atividades.
             </p>
             <Link
               to="/subjects"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold transition-all duration-200 cursor-pointer"
+              className="h-11 px-5 inline-flex items-center justify-center gap-2 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
             >
               Criar matéria
             </Link>
@@ -90,20 +100,20 @@ export default function ActivitiesPage() {
 
         {/* Empty state global */}
         {!isLoading && !error && subjects.length > 0 && !hasAny && (
-          <div className="text-center py-16">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-secondary-500/10 border border-secondary-400/20 mb-4">
+          <div className="text-center py-10 bg-white/5 border border-white/10 rounded-2xl p-6 shadow-sm shadow-black/5">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-secondary-500/10 border border-secondary-500/20 mb-4">
               <span className="text-3xl">📋</span>
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">
+            <h3 className="text-lg font-bold text-white mb-2">
               Nenhuma atividade cadastrada
             </h3>
-            <p className="text-primary-300 text-sm max-w-sm mx-auto mb-6">
+            <p className="text-primary-300/80 text-sm max-w-sm mx-auto mb-6 leading-relaxed">
               Crie suas atividades acadêmicas vinculadas às matérias. Acompanhe
               prazos e marque como concluídas conforme avança.
             </p>
             <button
               onClick={handleOpenCreate}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold transition-all duration-200 cursor-pointer"
+              className="h-11 px-5 inline-flex items-center justify-center gap-2 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                 <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
@@ -115,11 +125,11 @@ export default function ActivitiesPage() {
 
         {/* Seção Pendentes */}
         {!isLoading && pending.length > 0 && (
-          <section className="mb-8">
-            <h2 className="text-sm font-semibold text-primary-300 uppercase tracking-wider mb-3">
+          <section className="mb-6">
+            <h2 className="text-xs font-bold text-primary-200 uppercase tracking-widest mb-3">
               Pendentes ({pending.length})
             </h2>
-            <div className="space-y-2.5">
+            <div className="space-y-3">
               {pending.map((activity) => (
                 <ActivityCard
                   key={activity.id}
@@ -136,10 +146,10 @@ export default function ActivitiesPage() {
         {/* Seção Concluídas */}
         {!isLoading && completed.length > 0 && (
           <section>
-            <h2 className="text-sm font-semibold text-primary-500 uppercase tracking-wider mb-3">
+            <h2 className="text-xs font-bold text-primary-400 uppercase tracking-widest mb-3">
               Concluídas ({completed.length})
             </h2>
-            <div className="space-y-2.5">
+            <div className="space-y-3">
               {completed.map((activity) => (
                 <ActivityCard
                   key={activity.id}
@@ -158,7 +168,7 @@ export default function ActivitiesPage() {
       {!isLoading && hasAny && (
         <button
           onClick={handleOpenCreate}
-          className="fixed right-5 bottom-22 z-30 w-14 h-14 rounded-2xl bg-primary-600 hover:bg-primary-500 text-white shadow-lg shadow-primary-900/50 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+          className="fixed right-6 bottom-24 z-30 w-14 h-14 rounded-2xl bg-primary-600 hover:bg-primary-500 text-white shadow-lg shadow-primary-950/40 flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
           title="Nova atividade"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7">
@@ -189,13 +199,13 @@ export default function ActivitiesPage() {
             <div className="flex gap-3">
               <button
                 onClick={() => setDeleteConfirm(null)}
-                className="flex-1 py-2.5 px-4 rounded-xl bg-white/5 border border-white/10 text-primary-300 font-medium hover:bg-white/10 transition-all cursor-pointer"
+                className="flex-1 h-11 rounded-xl bg-white/5 border border-white/10 text-primary-300 text-sm font-semibold hover:bg-white/10 transition-all cursor-pointer"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="flex-1 py-2.5 px-4 rounded-xl bg-red-600 hover:bg-red-500 text-white font-semibold transition-all cursor-pointer"
+                className="flex-1 h-11 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-semibold transition-all cursor-pointer"
               >
                 Excluir
               </button>
@@ -203,8 +213,6 @@ export default function ActivitiesPage() {
           </div>
         </div>
       )}
-
-      <BottomNavBar />
     </div>
   );
 }

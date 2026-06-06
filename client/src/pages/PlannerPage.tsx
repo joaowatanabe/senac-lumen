@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { usePlanner } from "../hooks/usePlanner";
 import { useSubjects } from "../hooks/useSubjects";
 import { colorMap } from "../components/SubjectCard";
-import BottomNavBar from "../components/BottomNavBar";
 
 const DAYS = [
   { label: "Dom", value: 0 },
@@ -29,6 +28,7 @@ export default function PlannerPage() {
   const { getBlocksForDay, addBlock, removeBlock, isLoading, error } = usePlanner();
   const { subjects } = useSubjects();
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activeDay, setActiveDay] = useState(new Date().getDay());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalDay, setModalDay] = useState(0);
@@ -36,6 +36,13 @@ export default function PlannerPage() {
   const [modalDuration, setModalDuration] = useState(45);
   const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("create") === "true") {
+      handleOpenModal(new Date().getDay());
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   function handleOpenModal(day: number) {
     setModalDay(day);
@@ -85,16 +92,16 @@ export default function PlannerPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800">
-      {/* Header */}
-      <header className="border-b border-white/10 bg-white/5 backdrop-blur-lg sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <h1 className="text-lg font-bold text-white">Planner Semanal</h1>
+    <div className="min-h-screen bg-transparent">
+      {/* Header (Móvel apenas) */}
+      <header className="border-b border-white/10 bg-white/5 backdrop-blur-lg sticky top-0 z-10 lg:hidden">
+        <div className="max-w-md md:max-w-6xl mx-auto px-4 py-4">
+          <h1 className="text-lg font-bold text-white tracking-tight">Planner Semanal</h1>
         </div>
       </header>
 
       {/* Conteúdo */}
-      <main className="max-w-6xl mx-auto px-4 py-6 pb-24">
+      <main className="max-w-md lg:max-w-6xl mx-auto px-4 py-6 pb-24 lg:pb-8 lg:py-8">
         {/* Loading */}
         {isLoading && (
           <div className="flex justify-center py-20">
@@ -112,19 +119,19 @@ export default function PlannerPage() {
         {!isLoading && !error && (
           <>
             {subjects.length === 0 ? (
-              <div className="text-center py-16 max-w-sm mx-auto">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-500/10 border border-primary-400/20 mb-4">
+              <div className="text-center py-10 bg-white/5 border border-white/10 rounded-2xl p-6 shadow-sm shadow-black/5 max-w-sm mx-auto">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-500/10 border border-primary-500/20 mb-4">
                   <span className="text-3xl">📚</span>
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">
+                <h3 className="text-lg font-bold text-white mb-2">
                   Nenhuma matéria cadastrada
                 </h3>
-                <p className="text-primary-300 text-sm mb-6">
+                <p className="text-primary-300/80 text-sm mb-6 leading-relaxed">
                   Crie uma matéria antes de planejar sua semana.
                 </p>
                 <Link
                   to="/subjects"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold transition-all duration-200 cursor-pointer"
+                  className="h-11 px-5 inline-flex items-center justify-center gap-2 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
                 >
                   Criar matéria
                 </Link>
@@ -134,14 +141,14 @@ export default function PlannerPage() {
                 {/* layout Mobile (menor que md) */}
                 <div className="md:hidden flex flex-col w-full">
                   {/* Tabs horizontais */}
-                  <div className="flex bg-white/5 p-1 rounded-full border border-white/10 w-full overflow-x-auto justify-between no-scrollbar gap-1">
+                  <div className="flex bg-white/5 p-1 rounded-full border border-white/10 w-full overflow-x-auto justify-between no-scrollbar gap-1 shadow-inner">
                     {DAYS.map((d) => (
                       <button
                         key={d.value}
                         onClick={() => setActiveDay(d.value)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer flex-grow text-center min-w-[44px] ${
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer flex-grow text-center min-w-[44px] ${
                           activeDay === d.value
-                            ? "bg-primary-600 text-white shadow-md font-semibold"
+                            ? "bg-primary-600 text-white shadow-md"
                             : "text-primary-300 hover:text-white hover:bg-white/5"
                         }`}
                       >
@@ -154,13 +161,13 @@ export default function PlannerPage() {
                   <div className="mt-6 flex flex-col gap-3">
                     {getBlocksForDay(activeDay).length === 0 ? (
                       /* Empty state */
-                      <div className="flex flex-col items-center justify-center text-center p-8 bg-white/5 rounded-2xl border border-white/5">
-                        <span className="text-3xl mb-2">📅</span>
-                        <h4 className="text-sm font-semibold text-white">
-                          Nenhum bloco planejado para este dia.
+                      <div className="flex flex-col items-center justify-center text-center p-8 bg-white/5 rounded-2xl border border-white/10 shadow-sm">
+                        <span className="text-3xl mb-3">📅</span>
+                        <h4 className="text-sm font-bold text-white">
+                          Nenhum bloco planejado
                         </h4>
-                        <p className="text-xs text-primary-300 mt-1 max-w-xs">
-                          Adicione matérias para organizar sua semana.
+                        <p className="text-xs text-primary-300/85 mt-1 max-w-xs leading-relaxed">
+                          Adicione matérias para organizar sua semana de estudos.
                         </p>
                       </div>
                     ) : (
@@ -170,20 +177,20 @@ export default function PlannerPage() {
                         return (
                           <div
                             key={block.id}
-                            className={`flex items-center justify-between gap-3 px-4 py-3 border rounded-xl transition-all duration-200 ${colors.bg} ${colors.border}`}
+                            className={`flex items-center justify-between gap-3 px-4 py-3 border rounded-xl bg-white/5 ${colors.border} transition-all duration-200 hover:scale-[1.01]`}
                           >
                             <div className="flex items-center gap-2.5 min-w-0">
-                              <div className={`w-2.5 h-2.5 rounded-full ${colors.chip} shrink-0`} />
-                              <span className={`text-sm font-medium ${colors.text} truncate`}>
+                              <div className={`w-2.5 h-2.5 rounded-full ${colors.chip} shrink-0 ring-4 ring-white/10`} />
+                              <span className="text-sm font-bold text-white truncate">
                                 {block.subject?.name}
                               </span>
-                              <span className="text-xs text-white/50 shrink-0 font-medium">
+                              <span className="text-xs text-white/50 shrink-0 font-semibold">
                                 {block.durationMinutes}min
                               </span>
                             </div>
                             <button
                               onClick={() => handleDeleteBlock(block.id)}
-                              className="p-1 rounded hover:bg-white/10 text-white/40 hover:text-white transition-colors cursor-pointer shrink-0"
+                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 text-primary-400 hover:bg-red-500/10 hover:text-red-400 transition-all cursor-pointer shrink-0"
                               title="Remover bloco"
                             >
                               <svg
@@ -203,7 +210,7 @@ export default function PlannerPage() {
                     {/* Botão de adicionar bloco */}
                     <button
                       onClick={() => handleOpenModal(activeDay)}
-                      className="mt-2 w-full py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-primary-200 hover:text-white text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
+                      className="mt-2 w-full h-11 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-primary-200 hover:text-white text-sm font-semibold transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2 shadow-sm"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -225,16 +232,16 @@ export default function PlannerPage() {
                     return (
                       <div
                         key={day.value}
-                        className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col min-h-[360px] shadow-sm"
+                        className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col min-h-[380px] shadow-sm shadow-black/5"
                       >
-                        <h3 className="text-sm font-bold text-white text-center border-b border-white/10 pb-2 mb-3">
+                        <h3 className="text-sm font-bold text-white text-center border-b border-white/10 pb-2 mb-3 tracking-wide">
                           {day.label}
                         </h3>
 
                         <div className="flex flex-col gap-2.5 flex-grow">
                           {dayBlocks.length === 0 ? (
-                            <div className="flex-grow flex flex-col items-center justify-center text-center py-12 px-2 border border-dashed border-white/10 rounded-xl">
-                              <p className="text-xs font-semibold text-white/40">Livre</p>
+                            <div className="flex-grow flex flex-col items-center justify-center text-center py-12 px-2 border border-dashed border-white/10 rounded-xl bg-white/[0.01]">
+                              <p className="text-xs font-semibold text-white/30 uppercase tracking-wider">Livre</p>
                             </div>
                           ) : (
                             dayBlocks.map((block) => {
@@ -244,19 +251,19 @@ export default function PlannerPage() {
                               return (
                                 <div
                                   key={block.id}
-                                  className={`flex items-center justify-between gap-2 px-3 py-2 border rounded-xl transition-all duration-200 hover:scale-[1.02] ${colors.bg} ${colors.border}`}
+                                  className={`flex items-center justify-between gap-2 px-3 py-2.5 border rounded-xl transition-all duration-300 hover:scale-[1.02] bg-white/5 ${colors.border}`}
                                 >
                                   <div className="flex flex-col min-w-0">
-                                    <span className={`text-xs font-bold ${colors.text} truncate`}>
+                                    <span className="text-xs font-bold text-white truncate">
                                       {block.subject?.name}
                                     </span>
-                                    <span className="text-[10px] text-white/50 font-medium mt-0.5">
+                                    <span className="text-[10px] text-white/55 font-semibold mt-0.5">
                                       {block.durationMinutes}min
                                     </span>
                                   </div>
                                   <button
                                     onClick={() => handleDeleteBlock(block.id)}
-                                    className="p-1 rounded hover:bg-white/10 text-white/40 hover:text-white transition-colors cursor-pointer shrink-0"
+                                    className="w-7 h-7 flex items-center justify-center rounded-md bg-white/5 text-primary-400 hover:bg-red-500/10 hover:text-red-400 transition-all cursor-pointer shrink-0"
                                     title="Remover bloco"
                                   >
                                     <svg
@@ -276,7 +283,7 @@ export default function PlannerPage() {
 
                         <button
                           onClick={() => handleOpenModal(day.value)}
-                          className="mt-4 w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 text-primary-200 hover:text-white text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5"
+                          className="mt-4 w-full h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 text-primary-200 hover:text-white text-xs font-semibold transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -377,14 +384,14 @@ export default function PlannerPage() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-primary-300 font-medium hover:bg-white/10 hover:text-white transition-all duration-200 cursor-pointer"
+                  className="flex-1 h-11 rounded-xl bg-white/5 border border-white/10 text-primary-300 text-sm font-semibold hover:bg-white/10 hover:text-white transition-all duration-200 cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting || subjects.length === 0}
-                  className="flex-1 py-3 px-4 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  className="flex-1 h-11 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {isSubmitting ? "Salvando..." : "Salvar"}
                 </button>
@@ -393,8 +400,6 @@ export default function PlannerPage() {
           </div>
         </div>
       )}
-
-      <BottomNavBar />
     </div>
   );
 }
