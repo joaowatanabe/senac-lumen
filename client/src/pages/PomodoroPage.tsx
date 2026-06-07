@@ -1,7 +1,8 @@
-import { useEffect } from "react";
-import { Link, useOutletContext } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import { usePomodoro } from "../hooks/usePomodoro";
 import { useSubjects } from "../hooks/useSubjects";
+import { usePlanner } from "../hooks/usePlanner";
 
 const PHASE_NAMES = {
   focus: "Foco",
@@ -9,16 +10,21 @@ const PHASE_NAMES = {
   longBreak: "Pausa Longa",
 };
 
-const PHASE_COLORS = {
-  focus: "stroke-indigo-400 text-indigo-400",
-  shortBreak: "stroke-emerald-400 text-emerald-400",
-  longBreak: "stroke-sky-400 text-sky-400",
-};
-
 const TOTAL_DURATIONS = {
   focus: 25 * 60,
   shortBreak: 5 * 60,
   longBreak: 15 * 60,
+};
+
+const badgeColorMap: Record<string, string> = {
+  indigo: "bg-indigo-100 text-indigo-700",
+  sky: "bg-sky-100 text-sky-700",
+  emerald: "bg-emerald-100 text-emerald-700",
+  amber: "bg-amber-100 text-amber-700",
+  rose: "bg-rose-100 text-rose-700",
+  violet: "bg-violet-100 text-violet-700",
+  orange: "bg-orange-100 text-orange-700",
+  teal: "bg-teal-100 text-teal-700",
 };
 
 function formatTime(seconds: number) {
@@ -42,188 +48,242 @@ export default function PomodoroPage() {
   } = usePomodoro();
 
   const { subjects, isLoading: subjectsLoading } = useSubjects();
+  const { getBlocksForDay } = usePlanner();
   const { setIsFocusMode } = useOutletContext<{ setIsFocusMode: (val: boolean) => void }>() || {};
 
-  // Esconder nav se estiver em foco E rodando
-  const isFocusMode = phase === "focus" && isRunning;
+  const [isManuallyFocused, setIsManuallyFocused] = useState(false);
+
+  // Focus mode is active if focus timer is running OR if the user manually maximized
+  const activeFocus = (phase === "focus" && isRunning) || isManuallyFocused;
 
   useEffect(() => {
     if (setIsFocusMode) {
-      setIsFocusMode(isFocusMode);
+      setIsFocusMode(activeFocus);
     }
     return () => {
       if (setIsFocusMode) {
         setIsFocusMode(false);
       }
     };
-  }, [isFocusMode, setIsFocusMode]);
+  }, [activeFocus, setIsFocusMode]);
 
-  // Calculo do progresso para o anel SVG
+  // Handle focus mode exit
+  const handleExitFocus = () => {
+    setIsManuallyFocused(false);
+  };
+
+  // SVG circular progress calculation
   const totalDuration = TOTAL_DURATIONS[phase];
   const progress = (timeLeft / totalDuration) * 100;
-  const radius = 120;
+  const radius = 90;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
-  return (
-    <div className={`min-h-screen transition-colors duration-500 flex flex-col justify-center bg-transparent`}>
-      
-      <main className="w-full max-w-md lg:max-w-3xl mx-auto px-4 pt-6 pb-24 flex flex-col items-center justify-center flex-grow">
-        
-        {/* Título, Subtítulo e Badge */}
-        {!isFocusMode && (
-          <div className="flex flex-col items-center text-center space-y-1">
-            <h1 className="text-xl font-bold text-white tracking-tight">Pomodoro</h1>
-            <p className="text-sm text-primary-300 font-semibold">{PHASE_NAMES[phase]}</p>
-            <div className="inline-flex items-center gap-1.5 bg-white/5 px-3 py-1 rounded-full border border-white/10 text-xs text-white font-bold shadow-sm">
-              🔥 {cycles} {cycles === 1 ? "ciclo hoje" : "ciclos hoje"}
-            </div>
-          </div>
-        )}
+  // Retrieve today's scheduled planner blocks
+  const todayDayOfWeek = new Date().getDay();
+  const todayBlocks = getBlocksForDay(todayDayOfWeek);
 
-        {/* Seleção de matéria (escondido no modo foco) */}
-        {!isFocusMode && (
-          <div className="w-full max-w-xs mt-6 mx-auto transition-all">
-            {subjects.length === 0 ? (
-              <div className="text-center p-5 bg-white/5 border border-white/10 rounded-2xl shadow-sm shadow-black/5">
-                <p className="text-xs text-amber-400 font-semibold mb-3 leading-relaxed">
-                  Crie uma matéria para iniciar um ciclo de foco.
-                </p>
-                <Link
-                  to="/subjects"
-                  className="h-9 px-4 inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary-600 hover:bg-primary-500 text-white text-xs font-bold transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer shadow-md shadow-primary-950/20"
-                >
-                  Criar matéria
-                </Link>
-              </div>
-            ) : (
+  return (
+    <div className={`min-h-screen w-full font-sans antialiased transition-all duration-300 ${
+      activeFocus 
+        ? "bg-gradient-to-br from-indigo-900 via-indigo-950 to-violet-950 flex flex-col justify-center items-center px-4 text-white" 
+        : "bg-[#f9fafb] text-gray-900 pb-24"
+    }`}>
+      {/* Header (hidden in focus) */}
+      {!activeFocus && (
+        <header className="max-w-md mx-auto w-full px-4 pt-6 pb-2 text-left">
+          <span className="text-xs uppercase font-bold tracking-wide text-gray-400">Foco</span>
+          <h1 className="text-2xl font-bold text-gray-900 mt-0.5">Pomodoro</h1>
+        </header>
+      )}
+
+      {/* Container principal */}
+      <main className={`w-full max-w-md mx-auto px-4 ${activeFocus ? "py-0 flex flex-col items-center justify-center" : "py-4 flex flex-col gap-6"}`}>
+        
+        {/* Card Principal do Timer */}
+        <div className="bg-gradient-to-br from-indigo-600 to-violet-700 text-white rounded-2xl p-6 shadow-xl w-full flex flex-col items-center relative">
+          
+          {/* Topo do card */}
+          <div className="w-full flex items-center justify-between gap-3 shrink-0">
+            {/* Pill de seleção de matéria + fase */}
+            <div className="relative inline-flex items-center bg-white/20 text-white rounded-full px-4 py-2 text-sm font-medium hover:bg-white/25 transition-all cursor-pointer">
+              <span>
+                {PHASE_NAMES[phase]} · {subjects.find(s => s.id === selectedSubject)?.name || "Selecionar"} ▾
+              </span>
               <select
-                id="pomodoro-subject"
                 value={selectedSubject}
                 onChange={(e) => setSelectedSubject(e.target.value)}
                 disabled={isRunning}
-                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white outline-none transition-all duration-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20 disabled:opacity-50 cursor-pointer text-center text-sm font-semibold"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
               >
-                <option value="" className="bg-primary-950 text-white">Selecione uma matéria</option>
+                <option value="" className="bg-indigo-900 text-white">Selecionar Matéria</option>
                 {!subjectsLoading && subjects.map((s) => (
-                  <option key={s.id} value={s.id} className="bg-primary-950 text-white">
+                  <option key={s.id} value={s.id} className="bg-indigo-900 text-white">
                     {s.name}
                   </option>
                 ))}
               </select>
-            )}
-          </div>
-        )}
+            </div>
 
-        {/* Fases Tabs (escondido no modo foco) */}
-        {!isFocusMode && (
-          <div className="flex bg-white/5 p-1 rounded-full mt-6 border border-white/10 shadow-inner max-w-xs w-full justify-between gap-1">
-            {(["focus", "shortBreak", "longBreak"] as const).map((p) => (
+            {/* Botão expandir/minimizar */}
+            {activeFocus ? (
               <button
-                key={p}
-                onClick={() => setPhase(p)}
-                className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer flex-1 text-center ${
-                  phase === p 
-                    ? "bg-primary-600 text-white shadow-md" 
-                    : "text-primary-300 hover:text-white hover:bg-white/5"
-                }`}
+                onClick={handleExitFocus}
+                className="w-9 h-9 rounded-full bg-white/20 hover:bg-white/25 text-white flex items-center justify-center transition-all cursor-pointer shrink-0"
+                title="Minimizar foco"
               >
-                {PHASE_NAMES[p]}
+                {/* Minimize icon */}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3 3M15 9V4.5M15 9h4.5M15 9l6-6M9 15v4.5M9 15H4.5M9 15l-6 6M15 15v4.5M15 15h4.5M15 15l6 6" />
+                </svg>
               </button>
-            ))}
-          </div>
-        )}
-
-        {/* Timer Circular */}
-        <div className="relative flex items-center justify-center mt-8 transition-transform duration-500">
-          <svg className="w-[280px] h-[280px] transform -rotate-90">
-            {/* Círculo de fundo */}
-            <circle
-              cx="140"
-              cy="140"
-              r={radius}
-              strokeWidth="8"
-              fill="transparent"
-              className="stroke-indigo-950/40"
-            />
-            {/* Círculo de progresso */}
-            <circle
-              cx="140"
-              cy="140"
-              r={radius}
-              strokeWidth="8"
-              fill="transparent"
-              strokeDasharray={circumference}
-              strokeDashoffset={strokeDashoffset}
-              strokeLinecap="round"
-              className={`transition-[stroke-dashoffset] duration-1000 ease-linear ${PHASE_COLORS[phase]}`}
-            />
-          </svg>
-          
-          <div className="absolute flex flex-col items-center justify-center pointer-events-none">
-            <span className="text-6xl font-extrabold tracking-tight tabular-nums text-white">
-              {formatTime(timeLeft)}
-            </span>
-            {isFocusMode && (
-              <span className="text-[10px] font-bold text-indigo-300 mt-2 tracking-widest uppercase animate-pulse">
-                Foco Profundo
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Controles */}
-        <div className="flex items-center gap-6 mt-8">
-          <button
-            onClick={resetTimer}
-            className="w-11 h-11 flex items-center justify-center rounded-xl bg-white/5 text-white opacity-70 hover:opacity-100 hover:bg-white/10 transition-all cursor-pointer shadow-sm border border-white/5"
-            title="Reiniciar"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-              <path fillRule="evenodd" d="M4.755 10.059a7.5 7.5 0 0112.548-3.364l1.903 1.903h-3.183a.75.75 0 100 1.5h4.992a.75.75 0 00.75-.75V4.356a.75.75 0 00-1.5 0v3.18l-1.9-1.9A9 9 0 003.306 9.67a.75.75 0 101.45.388zm15.408 3.352a.75.75 0 00-.919.53 7.5 7.5 0 01-12.548 3.364l-1.902-1.903h3.183a.75.75 0 000-1.5H2.984a.75.75 0 00-.75.75v4.992a.75.75 0 001.5 0v-3.18l1.9 1.9a9 9 0 0014.536-5.04.75.75 0 00-.507-.913z" clipRule="evenodd" />
-            </svg>
-          </button>
-
-          <button
-            onClick={toggleTimer}
-            disabled={(phase === "focus" && !selectedSubject && !isRunning) || subjects.length === 0}
-            className={`w-16 h-16 flex items-center justify-center rounded-2xl shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105 active:scale-95 ${
-              (phase === "focus" && !selectedSubject && !isRunning) || subjects.length === 0
-                ? "bg-indigo-950/40 text-white/30 border border-white/5 cursor-not-allowed"
-                : isRunning
-                  ? "bg-red-500/15 text-red-400 border border-red-500/30 shadow-red-500/10 hover:bg-red-500/25"
-                  : "bg-indigo-600 text-white shadow-indigo-600/30 hover:bg-indigo-500"
-            }`}
-          >
-            {isRunning ? (
-              // Icon Pause
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clipRule="evenodd" />
-              </svg>
             ) : (
-              // Icon Play
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-0.5">
-                <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
-              </svg>
+              <button
+                onClick={() => setIsManuallyFocused(true)}
+                className="w-9 h-9 rounded-full bg-white/20 hover:bg-white/25 text-white flex items-center justify-center transition-all cursor-pointer shrink-0"
+                title="Expandir modo foco"
+              >
+                {/* Maximize icon */}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75v4.5m0-4.5h-4.5m4.5 0L15 9M20.25 20.25v-4.5m0 4.5h-4.5m4.5 0L15 15" />
+                </svg>
+              </button>
             )}
-          </button>
+          </div>
 
-          <button
-            onClick={skipPhase}
-            className="w-11 h-11 flex items-center justify-center rounded-xl bg-white/5 text-white opacity-70 hover:opacity-100 hover:bg-white/10 transition-all cursor-pointer shadow-sm border border-white/5"
-            title="Pular Fase"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-              <path fillRule="evenodd" d="M16.28 11.47a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 01-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 011.06-1.06l7.5 7.5z" clipRule="evenodd" />
+          {/* Timer circular (centro) */}
+          <div className="relative flex items-center justify-center my-7 transition-transform duration-500 shrink-0">
+            <svg className="w-[220px] h-[220px] transform -rotate-90">
+              {/* Círculo de fundo */}
+              <circle
+                cx="110"
+                cy="110"
+                r={radius}
+                strokeWidth="5"
+                fill="transparent"
+                className="stroke-white/20"
+              />
+              {/* Círculo de progresso */}
+              <circle
+                cx="110"
+                cy="110"
+                r={radius}
+                strokeWidth="5"
+                fill="transparent"
+                strokeDasharray={circumference}
+                strokeDashoffset={strokeDashoffset}
+                strokeLinecap="round"
+                className="transition-[stroke-dashoffset] duration-1000 ease-linear stroke-white"
+              />
             </svg>
-          </button>
+            
+            <div className="absolute flex flex-col items-center justify-center pointer-events-none">
+              <span className="text-5xl font-extrabold tracking-tight tabular-nums text-white">
+                {formatTime(timeLeft)}
+              </span>
+              <span className="text-[11px] text-white/70 mt-1.5 font-medium">
+                ciclos hoje · {cycles}
+              </span>
+            </div>
+          </div>
+
+          {/* Controles (base) */}
+          <div className="flex items-center gap-4 shrink-0 w-full justify-center">
+            {/* Reiniciar */}
+            <button
+              onClick={resetTimer}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/25 transition-all cursor-pointer"
+              title="Reiniciar timer"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+              </svg>
+            </button>
+
+            {/* Iniciar/Pausar */}
+            <button
+              onClick={toggleTimer}
+              disabled={(phase === "focus" && !selectedSubject && !isRunning) || subjects.length === 0}
+              className="bg-white text-indigo-600 hover:bg-neutral-50 rounded-full px-8 py-3 font-bold shadow-md active:scale-98 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-sm shrink-0 min-w-[125px]"
+            >
+              {isRunning ? "⏸ Pausar" : "▶ Iniciar"}
+            </button>
+
+            {/* Pular fase */}
+            <button
+              onClick={skipPhase}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/25 transition-all cursor-pointer"
+              title="Pular fase"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                <path d="M13.25 5v10a.75.75 0 01-1.5 0V5a.75.75 0 011.5 0zM3.22 5.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L6.94 10 3.22 6.28a.75.75 0 010-1.06z" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Alerta de matéria ausente */}
+          {!isRunning && phase === "focus" && !selectedSubject && subjects.length > 0 && (
+            <p className="mt-4 text-[10px] bg-white/10 text-white/90 border border-white/10 px-4 py-2 rounded-xl text-center w-full font-semibold">
+              Selecione uma matéria acima antes de iniciar o foco.
+            </p>
+          )}
         </div>
 
-        {/* Alerta caso tente iniciar foco sem matéria */}
-        {!isRunning && phase === "focus" && !selectedSubject && subjects.length > 0 && (
-          <p className="mt-6 text-xs text-amber-400 bg-amber-400/10 px-4.5 py-2.5 rounded-xl border border-amber-400/20 font-bold text-center max-w-xs shadow-sm">
-            Selecione uma matéria antes de iniciar o foco.
-          </p>
+        {/* Elementos visíveis apenas fora do modo foco */}
+        {!activeFocus && (
+          <>
+            {/* Tabs de fase */}
+            <div className="bg-white border border-gray-200 rounded-xl p-1 flex justify-between gap-1 shadow-xs">
+              {(["focus", "shortBreak", "longBreak"] as const).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setPhase(p)}
+                  className={`px-3 py-2.5 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer flex-1 text-center ${
+                    phase === p 
+                      ? "bg-gray-100 text-gray-900 shadow-xs" 
+                      : "text-gray-400 hover:text-gray-600"
+                  }`}
+                >
+                  {PHASE_NAMES[p]}
+                </button>
+              ))}
+            </div>
+
+            {/* Seção de blocos planejados */}
+            <div className="flex flex-col mt-2">
+              <h3 className="text-base font-semibold text-gray-900 mb-3">Blocos planejados</h3>
+              <div className="flex flex-col gap-3">
+                {todayBlocks.length === 0 ? (
+                  <div className="bg-white border border-gray-150 rounded-xl py-8 px-4 text-center shadow-xs">
+                    <p className="text-sm text-gray-400">Nenhum bloco planejado para hoje.</p>
+                  </div>
+                ) : (
+                  todayBlocks.map((block) => {
+                    const subjectColor = block.subject?.color || "indigo";
+                    const badgeClasses = badgeColorMap[subjectColor] || badgeColorMap.indigo;
+                    return (
+                      <div
+                        key={block.id}
+                        className="bg-white border border-gray-100 rounded-xl shadow-sm px-4 py-3 flex items-center gap-3.5"
+                      >
+                        <div className={`rounded-lg px-2.5 py-1 text-xs font-bold shrink-0 ${badgeClasses}`}>
+                          {block.durationMinutes}m
+                        </div>
+                        <div className="min-w-0 flex-grow">
+                          <p className="text-sm font-bold text-gray-900 truncate">
+                            {block.subject?.name}
+                          </p>
+                          <p className="text-xs text-gray-400 font-medium mt-0.5">
+                            {block.subject?.category || "Estudo"}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          </>
         )}
       </main>
     </div>
