@@ -30,7 +30,7 @@ export default function SubjectsPage() {
     setIsModalOpen(true);
   }
 
-  async function handleSave(data: { name: string; color: string }) {
+  async function handleSave(data: { name: string; color: string; category?: string; icon?: string }) {
     if (editingSubject) {
       await updateSubject(editingSubject.id, data);
     } else {
@@ -62,16 +62,16 @@ export default function SubjectsPage() {
       {/* Conteúdo */}
       <main className="max-w-md lg:max-w-5xl mx-auto px-4 py-6 pb-24 lg:pb-8 lg:py-8">
         {/* Título administrativo com descrição */}
-        <div className="mb-6 flex flex-col gap-4">
+        <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-extrabold text-white tracking-tight">Gerenciar Matérias</h1>
-            <p className="mt-1 text-primary-300/80 text-sm">
+            <p className="mt-1 text-primary-300/80 text-sm max-w-xl">
               Cadastre e organize as matérias usadas para rastrear suas atividades, planejar sua grade semanal e registrar sessões Pomodoro.
             </p>
           </div>
           <button
             onClick={handleOpenCreate}
-            className="h-11 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer shadow-md shadow-primary-950/20"
+            className="h-11 md:w-auto px-5 inline-flex items-center justify-center gap-2 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer shadow-md shadow-primary-950/20 shrink-0"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
               <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
@@ -121,16 +121,18 @@ export default function SubjectsPage() {
 
         {/* Lista de matérias */}
         {!isLoading && subjects.length > 0 && (
-          <div className="space-y-3">
-            {subjects.map((subject) => (
-              <SubjectCard
-                key={subject.id}
-                subject={subject}
-                onEdit={handleOpenEdit}
-                onDelete={setDeleteConfirm}
-              />
-            ))}
-            <p className="text-center text-xs text-primary-400 pt-2 font-bold uppercase tracking-wider">
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {subjects.map((subject) => (
+                <SubjectCard
+                  key={subject.id}
+                  subject={subject}
+                  onEdit={handleOpenEdit}
+                  onDelete={setDeleteConfirm}
+                />
+              ))}
+            </div>
+            <p className="text-center text-xs text-primary-400 font-bold uppercase tracking-wider">
               {subjects.length} {subjects.length === 1 ? "matéria cadastrada" : "matérias cadastradas"}
             </p>
           </div>

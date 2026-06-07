@@ -3,6 +3,7 @@ import type { Subject } from "../types";
 import { colorMap } from "./SubjectCard";
 
 const AVAILABLE_COLORS = ["indigo", "sky", "emerald", "amber", "rose", "violet", "orange", "teal"];
+const AVAILABLE_ICONS = ["📚", "💻", "🔬", "📐", "🎨", "🧪", "🌍", "🧠", "📝", "💡"];
 
 const colorLabels: Record<string, string> = {
   indigo: "Índigo",
@@ -19,12 +20,14 @@ interface SubjectModalProps {
   isOpen: boolean;
   subject: Subject | null; // null = criar, Subject = editar
   onClose: () => void;
-  onSave: (data: { name: string; color: string }) => Promise<void>;
+  onSave: (data: { name: string; color: string; category?: string; icon?: string }) => Promise<void>;
 }
 
 export default function SubjectModal({ isOpen, subject, onClose, onSave }: SubjectModalProps) {
   const [name, setName] = useState("");
   const [color, setColor] = useState("indigo");
+  const [category, setCategory] = useState("");
+  const [icon, setIcon] = useState("📚");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -35,9 +38,13 @@ export default function SubjectModal({ isOpen, subject, onClose, onSave }: Subje
     if (subject) {
       setName(subject.name);
       setColor(subject.color);
+      setCategory(subject.category || "");
+      setIcon(subject.icon || "📚");
     } else {
       setName("");
       setColor("indigo");
+      setCategory("");
+      setIcon("📚");
     }
     setError("");
   }, [subject, isOpen]);
@@ -53,7 +60,12 @@ export default function SubjectModal({ isOpen, subject, onClose, onSave }: Subje
 
     setIsSubmitting(true);
     try {
-      await onSave({ name: name.trim(), color });
+      await onSave({
+        name: name.trim(),
+        color,
+        category: category.trim() || undefined,
+        icon,
+      });
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao salvar matéria.");
@@ -73,7 +85,7 @@ export default function SubjectModal({ isOpen, subject, onClose, onSave }: Subje
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-md bg-primary-900/95 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-2xl animate-[fadeIn_0.15s_ease-out]">
+      <div className="relative w-full max-w-md bg-primary-900/95 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-2xl animate-[fadeIn_0.15s_ease-out] max-h-[90vh] overflow-y-auto">
         <h2 className="text-xl font-bold text-white mb-5">
           {isEditing ? "Editar matéria" : "Nova matéria"}
         </h2>
@@ -100,6 +112,45 @@ export default function SubjectModal({ isOpen, subject, onClose, onSave }: Subje
               autoFocus
               className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-primary-400/60 outline-none transition-all duration-200 focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20"
             />
+          </div>
+
+          {/* Categoria */}
+          <div className="space-y-1.5">
+            <label htmlFor="subject-category" className="block text-sm font-medium text-primary-200">
+              Categoria (opcional)
+            </label>
+            <input
+              id="subject-category"
+              type="text"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              placeholder="Ex: Exatas, Humanas, Idiomas"
+              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-primary-400/60 outline-none transition-all duration-200 focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20"
+            />
+          </div>
+
+          {/* Seletor de ícone */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-primary-200">Ícone</label>
+            <div className="grid grid-cols-5 gap-2">
+              {AVAILABLE_ICONS.map((i) => {
+                const isSelected = icon === i;
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setIcon(i)}
+                    className={`flex items-center justify-center h-11 rounded-xl border text-xl transition-all duration-150 cursor-pointer ${
+                      isSelected
+                        ? "bg-white/15 border-white/30 text-white"
+                        : "bg-white/5 border-white/5 text-primary-400 hover:border-white/15"
+                    }`}
+                  >
+                    {i}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Seletor de cor */}

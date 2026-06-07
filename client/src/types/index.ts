@@ -11,8 +11,11 @@ export interface Subject {
   id: string;
   name: string;
   color: string;
+  category?: string | null;
+  icon?: string | null;
   userId: string;
   createdAt: string;
+  activities?: Activity[];
 }
 
 export interface Activity {

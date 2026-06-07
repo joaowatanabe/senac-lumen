@@ -28,6 +28,8 @@ model Subject {
   id               String            @id @default(uuid())
   name             String
   color            String
+  category         String?
+  icon             String?
   userId           String
   user             User              @relation(fields: [userId], references: [id])
   createdAt        DateTime          @default(now())

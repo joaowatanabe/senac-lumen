@@ -4,11 +4,15 @@ import type { Subject } from "../types";
 export interface CreateSubjectData {
   name: string;
   color: string;
+  category?: string;
+  icon?: string;
 }
 
 export interface UpdateSubjectData {
   name?: string;
   color?: string;
+  category?: string;
+  icon?: string;
 }
 
 export const subjectService = {

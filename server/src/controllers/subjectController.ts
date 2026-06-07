@@ -9,6 +9,9 @@ export async function listSubjects(req: Request, res: Response): Promise<void> {
   try {
     const subjects = await prisma.subject.findMany({
       where: { userId: req.userId! },
+      include: {
+        activities: true,
+      },
       orderBy: { createdAt: "asc" },
     });
 
@@ -25,7 +28,7 @@ export async function listSubjects(req: Request, res: Response): Promise<void> {
  */
 export async function createSubject(req: Request, res: Response): Promise<void> {
   try {
-    const { name, color } = req.body;
+    const { name, color, category, icon } = req.body;
 
     if (!name || !color) {
       res.status(400).json({ message: "Nome e cor são obrigatórios." });
@@ -39,7 +42,13 @@ export async function createSubject(req: Request, res: Response): Promise<void> 
     }
 
     const subject = await prisma.subject.create({
-      data: { name, color, userId: req.userId! },
+      data: { 
+        name, 
+        color, 
+        category: category || null,
+        icon: icon || null,
+        userId: req.userId! 
+      },
     });
 
     res.status(201).json(subject);
@@ -56,7 +65,7 @@ export async function createSubject(req: Request, res: Response): Promise<void> 
 export async function updateSubject(req: Request, res: Response): Promise<void> {
   try {
     const { id } = req.params;
-    const { name, color } = req.body;
+    const { name, color, category, icon } = req.body;
 
     // Verifica ownership
     const existing = await prisma.subject.findUnique({ where: { id } });
@@ -78,6 +87,8 @@ export async function updateSubject(req: Request, res: Response): Promise<void> 
       data: {
         ...(name && { name }),
         ...(color && { color }),
+        category: category === undefined ? undefined : (category || null),
+        icon: icon === undefined ? undefined : (icon || null),
       },
     });
 
