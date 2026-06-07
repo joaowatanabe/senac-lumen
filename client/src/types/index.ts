@@ -23,6 +23,8 @@ export interface Activity {
   title: string;
   dueDate: string | null;
   status: "pending" | "completed";
+  type?: string | null;
+  priority?: string;
   subjectId: string;
   userId: string;
   subject?: Subject;

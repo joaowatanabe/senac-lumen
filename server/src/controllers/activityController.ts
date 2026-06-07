@@ -37,7 +37,7 @@ export async function listActivities(req: Request, res: Response): Promise<void>
  */
 export async function createActivity(req: Request, res: Response): Promise<void> {
   try {
-    const { title, subjectId, dueDate } = req.body;
+    const { title, subjectId, dueDate, type, priority } = req.body;
 
     if (!title || !subjectId) {
       res.status(400).json({ message: "Título e matéria são obrigatórios." });
@@ -56,6 +56,8 @@ export async function createActivity(req: Request, res: Response): Promise<void>
         title,
         subjectId,
         userId: req.userId!,
+        type: type || null,
+        priority: priority || "Média",
         ...(dueDate && { dueDate: new Date(dueDate) }),
       },
       include: { subject: true },
@@ -75,7 +77,7 @@ export async function createActivity(req: Request, res: Response): Promise<void>
 export async function updateActivity(req: Request, res: Response): Promise<void> {
   try {
     const { id } = req.params;
-    const { title, subjectId, dueDate, status } = req.body;
+    const { title, subjectId, dueDate, status, type, priority } = req.body;
 
     // Verifica ownership
     const existing = await prisma.activity.findUnique({ where: { id } });
@@ -105,6 +107,8 @@ export async function updateActivity(req: Request, res: Response): Promise<void>
         ...(title && { title }),
         ...(subjectId && { subjectId }),
         ...(status && { status }),
+        type: type === undefined ? undefined : (type || null),
+        priority: priority === undefined ? undefined : (priority || "Média"),
         ...(dueDate !== undefined && { dueDate: dueDate ? new Date(dueDate) : null }),
       },
       include: { subject: true },

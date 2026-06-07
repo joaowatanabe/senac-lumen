@@ -1,18 +1,29 @@
 import { useState, useEffect, type FormEvent } from "react";
 import type { Activity, Subject } from "../types";
 
+const AVAILABLE_TYPES = ["Prova", "Trabalho", "Exercício", "Leitura", "Outros"];
+const AVAILABLE_PRIORITIES = ["Alta", "Média", "Baixa"];
+
 interface ActivityModalProps {
   isOpen: boolean;
   activity: Activity | null; // null = criar
   subjects: Subject[];
   onClose: () => void;
-  onSave: (data: { title: string; subjectId: string; dueDate?: string | null }) => Promise<void>;
+  onSave: (data: {
+    title: string;
+    subjectId: string;
+    dueDate?: string | null;
+    type?: string | null;
+    priority?: string;
+  }) => Promise<void>;
 }
 
 export default function ActivityModal({ isOpen, activity, subjects, onClose, onSave }: ActivityModalProps) {
   const [title, setTitle] = useState("");
   const [subjectId, setSubjectId] = useState("");
   const [dueDate, setDueDate] = useState("");
+  const [type, setType] = useState("");
+  const [priority, setPriority] = useState("Média");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -23,10 +34,14 @@ export default function ActivityModal({ isOpen, activity, subjects, onClose, onS
       setTitle(activity.title);
       setSubjectId(activity.subjectId);
       setDueDate(activity.dueDate ? activity.dueDate.split("T")[0] : "");
+      setType(activity.type || "");
+      setPriority(activity.priority || "Média");
     } else {
       setTitle("");
       setSubjectId(subjects[0]?.id || "");
       setDueDate("");
+      setType("");
+      setPriority("Média");
     }
     setError("");
   }, [activity, isOpen, subjects]);
@@ -50,6 +65,8 @@ export default function ActivityModal({ isOpen, activity, subjects, onClose, onS
         title: title.trim(),
         subjectId,
         dueDate: dueDate || null,
+        type: type || null,
+        priority,
       });
       onClose();
     } catch (err) {
@@ -65,7 +82,7 @@ export default function ActivityModal({ isOpen, activity, subjects, onClose, onS
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
 
-      <div className="relative w-full max-w-md bg-primary-900/95 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-2xl animate-[fadeIn_0.15s_ease-out]">
+      <div className="relative w-full max-w-md bg-primary-900/95 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-2xl animate-[fadeIn_0.15s_ease-out] max-h-[90vh] overflow-y-auto">
         <h2 className="text-xl font-bold text-white mb-5">
           {isEditing ? "Editar atividade" : "Nova atividade"}
         </h2>
@@ -116,6 +133,54 @@ export default function ActivityModal({ isOpen, activity, subjects, onClose, onS
                 ))}
               </select>
             )}
+          </div>
+
+          {/* Tipo de atividade */}
+          <div className="space-y-1.5">
+            <label htmlFor="activity-type" className="block text-sm font-medium text-primary-200">
+              Tipo
+            </label>
+            <select
+              id="activity-type"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white outline-none transition-all duration-200 focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20 cursor-pointer"
+            >
+              <option value="" className="bg-primary-900 text-primary-400">Selecionar tipo (opcional)</option>
+              {AVAILABLE_TYPES.map((t) => (
+                <option key={t} value={t} className="bg-primary-900 text-white">
+                  {t}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Prioridade */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-primary-200">Prioridade</label>
+            <div className="grid grid-cols-3 gap-2">
+              {AVAILABLE_PRIORITIES.map((p) => {
+                const isSelected = priority === p;
+                let activeColor = "bg-primary-500/20 border-primary-400/40 text-primary-200";
+                if (p === "Alta") activeColor = "bg-red-500/20 border-red-500/40 text-red-300";
+                if (p === "Baixa") activeColor = "bg-emerald-500/20 border-emerald-500/40 text-emerald-300";
+                
+                return (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setPriority(p)}
+                    className={`h-11 rounded-xl border text-sm font-semibold transition-all cursor-pointer ${
+                      isSelected
+                        ? `${activeColor} font-bold ring-2 ring-white/10`
+                        : "bg-white/5 border-white/5 text-primary-400 hover:border-white/15"
+                    }`}
+                  >
+                    {p}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Data de entrega */}

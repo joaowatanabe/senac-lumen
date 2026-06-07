@@ -10,6 +10,15 @@ interface ActivityCardProps {
 
 function formatDate(dateStr: string | null): string | null {
   if (!dateStr) return null;
+  // Use UTC safe slicing to prevent timezone offsets shifting the date
+  const parts = dateStr.split("T")[0].split("-");
+  if (parts.length === 3) {
+    const month = parts[1];
+    const day = parts[2];
+    const months = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+    const monthIdx = parseInt(month, 10) - 1;
+    return `${day} de ${months[monthIdx] || month}`;
+  }
   const d = new Date(dateStr);
   return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
 }
@@ -20,9 +29,23 @@ export default function ActivityCard({ activity, onToggle, onEdit, onDelete }: A
   const colors = colorMap[subjectColor] || colorMap.indigo;
   const dueLabel = formatDate(activity.dueDate);
 
-  // Verifica se está atrasada
-  const isOverdue =
-    !isDone && activity.dueDate && new Date(activity.dueDate) < new Date();
+  // Verifica se está atrasada (data no passado e não concluída)
+  const isOverdue = !isDone && activity.dueDate && (() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const due = new Date(activity.dueDate);
+    due.setHours(0, 0, 0, 0);
+    return due < today;
+  })();
+
+  // Verifica se vence hoje
+  const isToday = !isDone && activity.dueDate && (() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const due = new Date(activity.dueDate);
+    due.setHours(0, 0, 0, 0);
+    return due.getTime() === today.getTime();
+  })();
 
   return (
     <div
@@ -54,15 +77,43 @@ export default function ActivityCard({ activity, onToggle, onEdit, onDelete }: A
         <div className="flex items-center gap-2 mt-2 flex-wrap">
           {/* Badge da matéria */}
           {activity.subject && (
-            <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[11px] font-semibold ${colors.bg} ${colors.text}`}>
+            <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg text-[10px] font-bold ${colors.bg} ${colors.text} border ${colors.border}`}>
               <span className={`w-1.5 h-1.5 rounded-full ${colors.chip}`} />
               {activity.subject.name}
             </span>
           )}
+
+          {/* Badge de Tipo */}
+          {activity.type && (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white/5 text-primary-300 border border-white/5 uppercase tracking-wide">
+              {activity.type}
+            </span>
+          )}
+
+          {/* Badge de Prioridade */}
+          {activity.priority && (
+            <span className={`inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-bold border uppercase tracking-wide ${
+              activity.priority === "Alta"
+                ? "bg-red-500/10 text-red-400 border-red-500/20"
+                : activity.priority === "Baixa"
+                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+            }`}>
+              {activity.priority}
+            </span>
+          )}
+
           {/* Data */}
           {dueLabel && (
-            <span className={`text-[11px] font-medium ${isOverdue ? "text-red-400" : "text-primary-400"}`}>
-              📅 {dueLabel}
+            <span className={`text-[10px] font-bold flex items-center gap-1 px-2 py-0.5 rounded-lg border ${
+              isOverdue
+                ? "bg-red-500/20 text-red-400 border-red-500/30 animate-pulse"
+                : isToday
+                ? "bg-amber-500/20 text-amber-400 border-amber-500/30 font-bold"
+                : "bg-white/5 text-primary-400 border-white/5"
+            }`}>
+              {isOverdue ? "⚠️ Atrasado: " : isToday ? "⏰ Hoje: " : "📅 "}
+              {dueLabel}
             </span>
           )}
         </div>
@@ -72,7 +123,7 @@ export default function ActivityCard({ activity, onToggle, onEdit, onDelete }: A
       <div className="flex items-center gap-1 shrink-0">
         <button
           onClick={() => onEdit(activity)}
-          className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 text-primary-300 hover:bg-white/10 hover:text-white transition-all cursor-pointer"
+          className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 text-primary-300 hover:bg-white/10 hover:text-white transition-all cursor-pointer"
           title="Editar"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
@@ -81,7 +132,7 @@ export default function ActivityCard({ activity, onToggle, onEdit, onDelete }: A
         </button>
         <button
           onClick={() => onDelete(activity)}
-          className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 text-primary-400 hover:bg-red-500/10 hover:text-red-400 transition-all cursor-pointer"
+          className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 text-primary-400 hover:bg-red-500/10 hover:text-red-400 transition-all cursor-pointer"
           title="Excluir"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">

@@ -5,6 +5,8 @@ export interface CreateActivityData {
   title: string;
   subjectId: string;
   dueDate?: string;
+  type?: string;
+  priority?: string;
 }
 
 export interface UpdateActivityData {
@@ -12,6 +14,8 @@ export interface UpdateActivityData {
   subjectId?: string;
   dueDate?: string | null;
   status?: "pending" | "completed";
+  type?: string;
+  priority?: string;
 }
 
 export const activityService = {
