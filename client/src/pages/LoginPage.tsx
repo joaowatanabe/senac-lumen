@@ -76,7 +76,7 @@ export default function LoginPage() {
           {/* Header do Card */}
           <div className="mb-6 text-center lg:text-left select-none">
             <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Entrar</h2>
-            <p className="text-sm text-gray-505 text-gray-500 mt-1.5 leading-relaxed">
+            <p className="text-sm text-gray-500 mt-1.5 leading-relaxed">
               Continue organizando seus estudos com o Lúmen
             </p>
           </div>

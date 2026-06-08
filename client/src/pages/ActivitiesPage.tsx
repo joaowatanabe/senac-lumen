@@ -471,7 +471,7 @@ export default function ActivitiesPage() {
                               {dueLabel}
                             </span>
                           ) : (
-                            <span className="text-gray-405">Sem prazo</span>
+                            <span className="text-gray-400">Sem prazo</span>
                           )}
                         </td>
 
