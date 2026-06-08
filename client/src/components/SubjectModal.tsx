@@ -80,27 +80,27 @@ export default function SubjectModal({ isOpen, subject, onClose, onSave }: Subje
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/50 transition-opacity"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-md bg-primary-900/95 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-2xl animate-[fadeIn_0.15s_ease-out] max-h-[90vh] overflow-y-auto">
-        <h2 className="text-xl font-bold text-white mb-5">
+      <div className="relative w-full max-w-md bg-white border border-gray-100 rounded-2xl p-6 shadow-2xl animate-[fadeIn_0.15s_ease-out] max-h-[90vh] overflow-y-auto text-gray-900">
+        <h2 className="text-xl font-bold text-gray-900 mb-5">
           {isEditing ? "Editar matéria" : "Nova matéria"}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Erro */}
           {error && (
-            <div className="bg-red-500/10 border border-red-400/30 rounded-xl px-4 py-3 text-red-300 text-sm">
-              {error}
+            <div className="bg-red-50 border border-red-150 rounded-xl px-4 py-3 text-red-700 text-xs font-semibold leading-relaxed animate-[fadeIn_0.15s_ease-out]">
+              ⚠️ {error}
             </div>
           )}
 
           {/* Nome */}
           <div className="space-y-1.5">
-            <label htmlFor="subject-name" className="block text-sm font-medium text-primary-200">
+            <label htmlFor="subject-name" className="block text-xs font-bold uppercase tracking-wider text-gray-400">
               Nome da matéria
             </label>
             <input
@@ -110,13 +110,13 @@ export default function SubjectModal({ isOpen, subject, onClose, onSave }: Subje
               onChange={(e) => setName(e.target.value)}
               placeholder="Ex: Matemática"
               autoFocus
-              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-primary-400/60 outline-none transition-all duration-200 focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20"
+              className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
             />
           </div>
 
           {/* Categoria */}
           <div className="space-y-1.5">
-            <label htmlFor="subject-category" className="block text-sm font-medium text-primary-200">
+            <label htmlFor="subject-category" className="block text-xs font-bold uppercase tracking-wider text-gray-400">
               Categoria (opcional)
             </label>
             <input
@@ -125,13 +125,13 @@ export default function SubjectModal({ isOpen, subject, onClose, onSave }: Subje
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               placeholder="Ex: Exatas, Humanas, Idiomas"
-              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-primary-400/60 outline-none transition-all duration-200 focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20"
+              className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
             />
           </div>
 
           {/* Seletor de ícone */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-primary-200">Ícone</label>
+            <label className="block text-xs font-bold uppercase tracking-wider text-gray-400">Ícone</label>
             <div className="grid grid-cols-5 gap-2">
               {AVAILABLE_ICONS.map((i) => {
                 const isSelected = icon === i;
@@ -142,8 +142,8 @@ export default function SubjectModal({ isOpen, subject, onClose, onSave }: Subje
                     onClick={() => setIcon(i)}
                     className={`flex items-center justify-center h-11 rounded-xl border text-xl transition-all duration-150 cursor-pointer ${
                       isSelected
-                        ? "bg-white/15 border-white/30 text-white"
-                        : "bg-white/5 border-white/5 text-primary-400 hover:border-white/15"
+                        ? "bg-indigo-50 border-indigo-200 text-indigo-700 ring-2 ring-indigo-500/15 font-bold"
+                        : "bg-gray-50 border border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-100"
                     }`}
                   >
                     {i}
@@ -155,7 +155,7 @@ export default function SubjectModal({ isOpen, subject, onClose, onSave }: Subje
 
           {/* Seletor de cor */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-primary-200">Cor</label>
+            <label className="block text-xs font-bold uppercase tracking-wider text-gray-400">Cor</label>
             <div className="grid grid-cols-4 gap-2">
               {AVAILABLE_COLORS.map((c) => {
                 const isSelected = color === c;
@@ -165,10 +165,10 @@ export default function SubjectModal({ isOpen, subject, onClose, onSave }: Subje
                     key={c}
                     type="button"
                     onClick={() => setColor(c)}
-                    className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-sm font-medium transition-all duration-150 cursor-pointer ${
+                    className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-xs font-semibold transition-all duration-150 cursor-pointer ${
                       isSelected
-                        ? `${chipColor}/20 border-white/30 text-white`
-                        : "bg-white/5 border-white/5 text-primary-400 hover:border-white/15 hover:text-primary-200"
+                        ? "bg-indigo-50 border-indigo-200 text-indigo-700 ring-2 ring-indigo-500/15 font-bold"
+                        : "bg-gray-50 border border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-100"
                     }`}
                   >
                     <div className={`w-3 h-3 rounded-full ${chipColor} shrink-0`} />
@@ -180,18 +180,18 @@ export default function SubjectModal({ isOpen, subject, onClose, onSave }: Subje
           </div>
 
           {/* Botões */}
-          <div className="flex gap-3 pt-1">
+          <div className="flex gap-3 pt-4 border-t border-gray-100">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-primary-300 font-medium hover:bg-white/10 hover:text-white transition-all duration-200 cursor-pointer"
+              className="flex-1 py-3 px-4 rounded-xl text-gray-500 font-semibold text-sm hover:text-gray-700 transition-all cursor-pointer"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 py-3 px-4 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="flex-1 py-3 px-6 rounded-xl bg-gray-900 hover:bg-black text-white font-semibold text-sm transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-md"
             >
               {isSubmitting ? "Salvando..." : isEditing ? "Salvar" : "Criar"}
             </button>

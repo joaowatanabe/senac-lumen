@@ -1,14 +1,14 @@
 import type { Subject } from "../types";
 
 const colorMap: Record<string, { bg: string; border: string; text: string; chip: string }> = {
-  indigo:  { bg: "bg-indigo-500/10",  border: "border-indigo-400/30",  text: "text-indigo-300",  chip: "bg-indigo-500" },
-  sky:     { bg: "bg-sky-500/10",     border: "border-sky-400/30",     text: "text-sky-300",     chip: "bg-sky-500" },
-  emerald: { bg: "bg-emerald-500/10", border: "border-emerald-400/30", text: "text-emerald-300", chip: "bg-emerald-500" },
-  amber:   { bg: "bg-amber-500/10",   border: "border-amber-400/30",   text: "text-amber-300",   chip: "bg-amber-500" },
-  rose:    { bg: "bg-rose-500/10",    border: "border-rose-400/30",    text: "text-rose-300",    chip: "bg-rose-500" },
-  violet:  { bg: "bg-violet-500/10",  border: "border-violet-400/30",  text: "text-violet-300",  chip: "bg-violet-500" },
-  orange:  { bg: "bg-orange-500/10",  border: "border-orange-400/30",  text: "text-orange-300",  chip: "bg-orange-500" },
-  teal:    { bg: "bg-teal-500/10",    border: "border-teal-400/30",    text: "text-teal-300",    chip: "bg-teal-500" },
+  indigo:  { bg: "bg-indigo-50",  border: "border-indigo-200",  text: "text-indigo-700",  chip: "bg-indigo-600" },
+  sky:     { bg: "bg-sky-50",     border: "border-sky-200",     text: "text-sky-700",     chip: "bg-sky-500" },
+  emerald: { bg: "bg-emerald-50", border: "border-emerald-200", text: "text-emerald-700", chip: "bg-emerald-600" },
+  amber:   { bg: "bg-amber-50",   border: "border-amber-200",   text: "text-amber-700",   chip: "bg-amber-500" },
+  rose:    { bg: "bg-rose-50",    border: "border-rose-200",    text: "text-rose-700",    chip: "bg-rose-500" },
+  violet:  { bg: "bg-violet-50",  border: "border-violet-200",  text: "text-violet-700",  chip: "bg-violet-600" },
+  orange:  { bg: "bg-orange-50",  border: "border-orange-200",  text: "text-orange-700",  chip: "bg-orange-500" },
+  teal:    { bg: "bg-teal-50",    border: "border-teal-200",    text: "text-teal-700",    chip: "bg-teal-600" },
 };
 
 interface SubjectCardProps {
@@ -25,7 +25,7 @@ export default function SubjectCard({ subject, onEdit, onDelete }: SubjectCardPr
   const progressPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 hover:scale-[1.01] hover:bg-white/[0.07] shadow-sm hover:shadow relative group">
+    <div className="bg-white border border-gray-200 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400 shadow-sm relative group">
       
       {/* Top Section: Icon, Info & Actions */}
       <div className="flex items-start justify-between gap-3">
@@ -36,15 +36,15 @@ export default function SubjectCard({ subject, onEdit, onDelete }: SubjectCardPr
           </div>
           
           <div className="min-w-0">
-            <span className="font-bold text-white text-base truncate block leading-snug">
+            <span className="font-bold text-gray-900 text-base truncate block leading-snug">
               {subject.name}
             </span>
             {subject.category ? (
-              <span className="inline-block mt-0.5 text-[9px] font-bold px-2 py-0.5 rounded-md bg-white/5 text-primary-300 border border-white/5 uppercase tracking-wider">
+              <span className="inline-block mt-0.5 text-[9px] font-bold px-2 py-0.5 rounded-md bg-gray-100 text-gray-600 border border-gray-200 uppercase tracking-wider">
                 {subject.category}
               </span>
             ) : (
-              <span className="inline-block mt-0.5 text-[9px] font-bold px-2 py-0.5 rounded-md bg-transparent text-primary-400/50 border border-dashed border-white/10 uppercase tracking-wider">
+              <span className="inline-block mt-0.5 text-[9px] font-bold px-2 py-0.5 rounded-md bg-transparent text-gray-400 border border-dashed border-gray-200 uppercase tracking-wider">
                 Geral
               </span>
             )}
@@ -55,7 +55,7 @@ export default function SubjectCard({ subject, onEdit, onDelete }: SubjectCardPr
         <div className="flex items-center gap-1 opacity-60 hover:opacity-100 group-hover:opacity-100 transition-opacity">
           <button
             onClick={() => onEdit(subject)}
-            className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 text-primary-300 hover:bg-white/10 hover:text-white transition-all cursor-pointer"
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-all border border-gray-200 cursor-pointer"
             title="Editar"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
@@ -64,7 +64,7 @@ export default function SubjectCard({ subject, onEdit, onDelete }: SubjectCardPr
           </button>
           <button
             onClick={() => onDelete(subject)}
-            className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 text-primary-400 hover:bg-red-500/10 hover:text-red-400 transition-all cursor-pointer"
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-500 hover:bg-red-50 hover:text-red-650 hover:border-red-150 transition-all border border-gray-200 cursor-pointer"
             title="Excluir"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
@@ -76,14 +76,14 @@ export default function SubjectCard({ subject, onEdit, onDelete }: SubjectCardPr
 
       {/* Bottom Section: Progress & Tasks count */}
       <div className="mt-5 space-y-2">
-        <div className="flex items-center justify-between text-xs text-primary-300/80">
+        <div className="flex items-center justify-between text-xs text-gray-500">
           <span className="font-medium">
             {totalTasks === 0 ? "Sem tarefas" : `${completedTasks} de ${totalTasks} concluídas`}
           </span>
-          {totalTasks > 0 && <span className="font-bold text-white">{progressPercent}%</span>}
+          {totalTasks > 0 && <span className="font-bold text-gray-900">{progressPercent}%</span>}
         </div>
         
-        <div className="w-full h-1.5 rounded-full bg-white/5 overflow-hidden border border-white/5">
+        <div className="w-full h-1.5 rounded-full bg-gray-100 overflow-hidden border border-gray-200">
           <div
             className={`h-full rounded-full transition-all duration-500 ${colors.chip}`}
             style={{ width: `${progressPercent}%` }}
@@ -96,4 +96,3 @@ export default function SubjectCard({ subject, onEdit, onDelete }: SubjectCardPr
 }
 
 export { colorMap };
-

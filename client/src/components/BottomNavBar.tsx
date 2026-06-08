@@ -51,7 +51,7 @@ export default function BottomNavBar({ onOpenCreateModal }: BottomNavBarProps) {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-primary-950/85 backdrop-blur-xl border-t border-white/10 shadow-lg shadow-black/30">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-indigo-950/95 border-t border-indigo-900/20 backdrop-blur-lg shadow-lg shadow-black/30">
       <div className="max-w-md mx-auto flex items-center justify-around h-16 px-4">
         
         {/* Left navigation items */}
@@ -62,13 +62,13 @@ export default function BottomNavBar({ onOpenCreateModal }: BottomNavBarProps) {
               key={item.to}
               to={item.to}
               className={`flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-xl transition-all duration-200 min-w-[56px] ${
-                isActive ? "text-primary-400" : "text-primary-500 hover:text-primary-300"
+                isActive ? "text-white scale-105 font-bold" : "text-indigo-300/60 hover:text-indigo-200"
               }`}
             >
               <span className={isActive ? "scale-105 transition-transform" : "transition-transform"}>
                 {item.icon}
               </span>
-              <span className={`text-[9px] font-bold uppercase tracking-wider ${isActive ? "text-primary-300" : ""}`}>
+              <span className={`text-[9px] font-bold uppercase tracking-wider ${isActive ? "text-white" : ""}`}>
                 {item.label}
               </span>
             </Link>
@@ -78,7 +78,7 @@ export default function BottomNavBar({ onOpenCreateModal }: BottomNavBarProps) {
         {/* Highlighted Central "+" Button */}
         <button
           onClick={onOpenCreateModal}
-          className="relative -top-3 w-12 h-12 flex items-center justify-center rounded-full bg-black hover:bg-neutral-900 border border-white/10 text-white shadow-xl shadow-black/60 transition-all active:scale-95 cursor-pointer shrink-0 z-50 hover:scale-105"
+          className="relative -top-3 w-12 h-12 flex items-center justify-center rounded-full bg-black hover:bg-neutral-900 border border-white/15 text-white shadow-lg shadow-black/40 ring-4 ring-indigo-950 transition-all active:scale-95 cursor-pointer shrink-0 z-50 hover:scale-105"
           title="Criar Item"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-5 h-5">
@@ -94,13 +94,13 @@ export default function BottomNavBar({ onOpenCreateModal }: BottomNavBarProps) {
               key={item.to}
               to={item.to}
               className={`flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-xl transition-all duration-200 min-w-[56px] ${
-                isActive ? "text-primary-400" : "text-primary-500 hover:text-primary-300"
+                isActive ? "text-white scale-105 font-bold" : "text-indigo-300/60 hover:text-indigo-200"
               }`}
             >
               <span className={isActive ? "scale-105 transition-transform" : "transition-transform"}>
                 {item.icon}
               </span>
-              <span className={`text-[9px] font-bold uppercase tracking-wider ${isActive ? "text-primary-300" : ""}`}>
+              <span className={`text-[9px] font-bold uppercase tracking-wider ${isActive ? "text-white" : ""}`}>
                 {item.label}
               </span>
             </Link>

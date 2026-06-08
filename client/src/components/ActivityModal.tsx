@@ -80,23 +80,25 @@ export default function ActivityModal({ isOpen, activity, subjects, onClose, onS
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/50 transition-opacity" onClick={onClose} />
 
-      <div className="relative w-full max-w-md bg-primary-900/95 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-2xl animate-[fadeIn_0.15s_ease-out] max-h-[90vh] overflow-y-auto">
-        <h2 className="text-xl font-bold text-white mb-5">
+      {/* Modal Container */}
+      <div className="relative w-full max-w-md bg-white border border-gray-100 rounded-2xl p-6 shadow-2xl animate-[fadeIn_0.15s_ease-out] max-h-[90vh] overflow-y-auto text-gray-900">
+        <h2 className="text-xl font-bold text-gray-900 mb-5">
           {isEditing ? "Editar atividade" : "Nova atividade"}
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <div className="bg-red-500/10 border border-red-400/30 rounded-xl px-4 py-3 text-red-300 text-sm">
-              {error}
+            <div className="bg-red-50 border border-red-100 rounded-xl px-4 py-3 text-red-700 text-xs font-semibold leading-relaxed animate-[fadeIn_0.15s_ease-out]">
+              ⚠️ {error}
             </div>
           )}
 
           {/* Título */}
           <div className="space-y-1.5">
-            <label htmlFor="activity-title" className="block text-sm font-medium text-primary-200">
+            <label htmlFor="activity-title" className="block text-xs font-bold uppercase tracking-wider text-gray-400">
               Título
             </label>
             <input
@@ -106,17 +108,17 @@ export default function ActivityModal({ isOpen, activity, subjects, onClose, onS
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Ex: Entregar trabalho de cálculo"
               autoFocus
-              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-primary-400/60 outline-none transition-all duration-200 focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20"
+              className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
             />
           </div>
 
           {/* Matéria */}
           <div className="space-y-1.5">
-            <label htmlFor="activity-subject" className="block text-sm font-medium text-primary-200">
+            <label htmlFor="activity-subject" className="block text-xs font-bold uppercase tracking-wider text-gray-400">
               Matéria
             </label>
             {subjects.length === 0 ? (
-              <p className="text-sm text-primary-400 py-2">
+              <p className="text-sm text-gray-500 py-2">
                 Nenhuma matéria cadastrada. Cadastre uma matéria primeiro.
               </p>
             ) : (
@@ -124,10 +126,10 @@ export default function ActivityModal({ isOpen, activity, subjects, onClose, onS
                 id="activity-subject"
                 value={subjectId}
                 onChange={(e) => setSubjectId(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white outline-none transition-all duration-200 focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20 cursor-pointer"
+                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/15 cursor-pointer"
               >
                 {subjects.map((s) => (
-                  <option key={s.id} value={s.id} className="bg-primary-900 text-white">
+                  <option key={s.id} value={s.id} className="bg-white text-gray-900">
                     {s.name}
                   </option>
                 ))}
@@ -137,18 +139,18 @@ export default function ActivityModal({ isOpen, activity, subjects, onClose, onS
 
           {/* Tipo de atividade */}
           <div className="space-y-1.5">
-            <label htmlFor="activity-type" className="block text-sm font-medium text-primary-200">
+            <label htmlFor="activity-type" className="block text-xs font-bold uppercase tracking-wider text-gray-400">
               Tipo
             </label>
             <select
               id="activity-type"
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white outline-none transition-all duration-200 focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20 cursor-pointer"
+              className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/15 cursor-pointer"
             >
-              <option value="" className="bg-primary-900 text-primary-400">Selecionar tipo (opcional)</option>
+              <option value="" className="bg-white text-gray-400">Selecionar tipo (opcional)</option>
               {AVAILABLE_TYPES.map((t) => (
-                <option key={t} value={t} className="bg-primary-900 text-white">
+                <option key={t} value={t} className="bg-white text-gray-900">
                   {t}
                 </option>
               ))}
@@ -157,23 +159,24 @@ export default function ActivityModal({ isOpen, activity, subjects, onClose, onS
 
           {/* Prioridade */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-primary-200">Prioridade</label>
+            <label className="block text-xs font-bold uppercase tracking-wider text-gray-400">Prioridade</label>
             <div className="grid grid-cols-3 gap-2">
               {AVAILABLE_PRIORITIES.map((p) => {
                 const isSelected = priority === p;
-                let activeColor = "bg-primary-500/20 border-primary-400/40 text-primary-200";
-                if (p === "Alta") activeColor = "bg-red-500/20 border-red-500/40 text-red-300";
-                if (p === "Baixa") activeColor = "bg-emerald-500/20 border-emerald-500/40 text-emerald-300";
+                let activeColor = "bg-indigo-50 border-indigo-200 text-indigo-700 ring-2 ring-indigo-500/15";
+                if (p === "Alta") activeColor = "bg-red-50 border-red-200 text-red-700 ring-2 ring-red-500/15";
+                if (p === "Baixa") activeColor = "bg-emerald-50 border-emerald-200 text-emerald-700 ring-2 ring-emerald-500/15";
+                if (p === "Média") activeColor = "bg-amber-50 border-amber-200 text-amber-700 ring-2 ring-amber-500/15";
                 
                 return (
                   <button
                     key={p}
                     type="button"
                     onClick={() => setPriority(p)}
-                    className={`h-11 rounded-xl border text-sm font-semibold transition-all cursor-pointer ${
+                    className={`h-11 rounded-xl border text-xs font-semibold transition-all duration-150 cursor-pointer ${
                       isSelected
-                        ? `${activeColor} font-bold ring-2 ring-white/10`
-                        : "bg-white/5 border-white/5 text-primary-400 hover:border-white/15"
+                        ? `${activeColor} font-bold`
+                        : "bg-gray-50 border border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-100"
                     }`}
                   >
                     {p}
@@ -185,31 +188,31 @@ export default function ActivityModal({ isOpen, activity, subjects, onClose, onS
 
           {/* Data de entrega */}
           <div className="space-y-1.5">
-            <label htmlFor="activity-date" className="block text-sm font-medium text-primary-200">
-              Data de entrega <span className="text-primary-500">(opcional)</span>
+            <label htmlFor="activity-date" className="block text-xs font-bold uppercase tracking-wider text-gray-400">
+              Data de entrega <span className="text-gray-400 lowercase">(opcional)</span>
             </label>
             <input
               id="activity-date"
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white outline-none transition-all duration-200 focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20 [color-scheme:dark]"
+              className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/15 [color-scheme:light]"
             />
           </div>
 
           {/* Botões */}
-          <div className="flex gap-3 pt-1">
+          <div className="flex gap-3 pt-4 border-t border-gray-100">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-primary-300 font-medium hover:bg-white/10 hover:text-white transition-all duration-200 cursor-pointer"
+              className="flex-1 py-3 px-4 rounded-xl text-gray-500 font-semibold text-sm hover:text-gray-700 transition-all cursor-pointer"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isSubmitting || subjects.length === 0}
-              className="flex-1 py-3 px-4 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="flex-1 py-3 px-6 rounded-xl bg-gray-900 hover:bg-black text-white font-semibold text-sm transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-md"
             >
               {isSubmitting ? "Salvando..." : isEditing ? "Salvar" : "Criar"}
             </button>

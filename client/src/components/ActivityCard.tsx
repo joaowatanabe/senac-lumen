@@ -49,8 +49,8 @@ export default function ActivityCard({ activity, onToggle, onEdit, onDelete }: A
 
   return (
     <div
-      className={`bg-white/5 border border-white/10 rounded-2xl p-4 flex items-start gap-3.5 transition-all duration-300 shadow-sm ${
-        isDone ? "opacity-55" : "hover:bg-white/[0.07] hover:scale-[1.01]"
+      className={`bg-white border border-gray-200 rounded-2xl p-4 flex items-start gap-3.5 transition-all duration-300 shadow-sm relative group ${
+        isDone ? "opacity-55" : "hover:scale-[1.01] hover:border-indigo-400"
       }`}
     >
       {/* Checkbox */}
@@ -58,8 +58,8 @@ export default function ActivityCard({ activity, onToggle, onEdit, onDelete }: A
         onClick={() => onToggle(activity)}
         className={`mt-0.5 w-6 h-6 rounded-lg border-2 shrink-0 flex items-center justify-center transition-all cursor-pointer ${
           isDone
-            ? `${colors.chip} border-transparent`
-            : `border-white/20 hover:border-primary-400 bg-white/5`
+            ? `bg-emerald-500 border-transparent text-white`
+            : `border-gray-300 bg-gray-50 hover:border-indigo-500`
         }`}
       >
         {isDone && (
@@ -71,7 +71,7 @@ export default function ActivityCard({ activity, onToggle, onEdit, onDelete }: A
 
       {/* Conteúdo */}
       <div className="flex-1 min-w-0">
-        <p className={`text-sm font-semibold leading-snug ${isDone ? "line-through text-primary-500" : "text-white"}`}>
+        <p className={`text-sm font-semibold leading-snug ${isDone ? "line-through text-gray-400" : "text-gray-900"}`}>
           {activity.title}
         </p>
         <div className="flex items-center gap-2 mt-2 flex-wrap">
@@ -85,7 +85,7 @@ export default function ActivityCard({ activity, onToggle, onEdit, onDelete }: A
 
           {/* Badge de Tipo */}
           {activity.type && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white/5 text-primary-300 border border-white/5 uppercase tracking-wide">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-bold bg-gray-150 text-gray-650 border border-gray-250 uppercase tracking-wide">
               {activity.type}
             </span>
           )}
@@ -94,10 +94,10 @@ export default function ActivityCard({ activity, onToggle, onEdit, onDelete }: A
           {activity.priority && (
             <span className={`inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-bold border uppercase tracking-wide ${
               activity.priority === "Alta"
-                ? "bg-red-500/10 text-red-400 border-red-500/20"
+                ? "bg-red-50 text-red-700 border-red-200"
                 : activity.priority === "Baixa"
-                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                : "bg-amber-50 text-amber-700 border-amber-200"
             }`}>
               {activity.priority}
             </span>
@@ -107,10 +107,10 @@ export default function ActivityCard({ activity, onToggle, onEdit, onDelete }: A
           {dueLabel && (
             <span className={`text-[10px] font-bold flex items-center gap-1 px-2 py-0.5 rounded-lg border ${
               isOverdue
-                ? "bg-red-500/20 text-red-400 border-red-500/30 animate-pulse"
+                ? "bg-red-50 text-red-700 border-red-200 animate-pulse"
                 : isToday
-                ? "bg-amber-500/20 text-amber-400 border-amber-500/30 font-bold"
-                : "bg-white/5 text-primary-400 border-white/5"
+                ? "bg-amber-50 text-amber-700 border-amber-200 font-bold"
+                : "bg-gray-50 text-gray-500 border-gray-200"
             }`}>
               {isOverdue ? "⚠️ Atrasado: " : isToday ? "⏰ Hoje: " : "📅 "}
               {dueLabel}
@@ -120,10 +120,10 @@ export default function ActivityCard({ activity, onToggle, onEdit, onDelete }: A
       </div>
 
       {/* Ações */}
-      <div className="flex items-center gap-1 shrink-0">
+      <div className="flex items-center gap-1 shrink-0 opacity-60 hover:opacity-100 group-hover:opacity-100 transition-opacity">
         <button
           onClick={() => onEdit(activity)}
-          className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 text-primary-300 hover:bg-white/10 hover:text-white transition-all cursor-pointer"
+          className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-all border border-gray-200 cursor-pointer"
           title="Editar"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
@@ -132,7 +132,7 @@ export default function ActivityCard({ activity, onToggle, onEdit, onDelete }: A
         </button>
         <button
           onClick={() => onDelete(activity)}
-          className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 text-primary-400 hover:bg-red-500/10 hover:text-red-400 transition-all cursor-pointer"
+          className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-500 hover:bg-red-50 hover:text-red-650 hover:border-red-150 transition-all border border-gray-200 cursor-pointer"
           title="Excluir"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">

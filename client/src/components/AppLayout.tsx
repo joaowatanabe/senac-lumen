@@ -80,13 +80,13 @@ export default function AppLayout() {
                   <Link
                     key={item.to}
                     to={item.to}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer border-l-[3px] ${
                       isActive
-                        ? "bg-white/10 text-white shadow-sm"
-                        : "text-indigo-200 hover:text-white hover:bg-white/5"
+                        ? "bg-white/10 text-white shadow-sm border-indigo-400 rounded-l-none"
+                        : "border-transparent text-indigo-200 hover:text-white hover:bg-white/5"
                     }`}
                   >
-                    <span className={isActive ? "text-indigo-400" : "text-indigo-300/80"}>
+                    <span className={isActive ? "text-indigo-300" : "text-indigo-300/80"}>
                       {item.icon}
                     </span>
                     {item.label}
