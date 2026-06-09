@@ -17,13 +17,11 @@ export default function RegisterPage() {
     e.preventDefault();
     setError("");
 
-    // Validação de senhas iguais
     if (password !== confirmPassword) {
       setError("As senhas não coincidem.");
       return;
     }
 
-    // Validação de senha mínima
     if (password.length < 6) {
       setError("A senha deve ter pelo menos 6 caracteres.");
       return;
@@ -47,12 +45,9 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-gray-900 font-sans flex lg:flex-row flex-col">
-      {/* 1. Lado Esquerdo: Branding e Mensagem Institucional (Desktop) */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-950 via-indigo-900 to-violet-950 text-white p-12 flex-col justify-between relative overflow-hidden shrink-0 select-none">
-        {/* Glow effect */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Logo */}
         <div className="flex items-center gap-3 relative z-10">
           <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur-md">
             <span className="text-xl">💡</span>
@@ -60,7 +55,6 @@ export default function RegisterPage() {
           <span className="text-xl font-bold tracking-tight text-white">Lúmen</span>
         </div>
 
-        {/* Mensagem Principal */}
         <div className="my-auto space-y-6 max-w-md relative z-10">
           <h1 className="text-4xl font-extrabold tracking-tight leading-tight bg-gradient-to-r from-white via-indigo-100 to-indigo-200 bg-clip-text text-transparent">
             Organize seus estudos e domine seu tempo.
@@ -70,15 +64,12 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        {/* Rodapé */}
         <div className="text-xs text-indigo-300/40 font-semibold tracking-wide relative z-10">
           © {new Date().getFullYear()} Lúmen. Todos os direitos reservados.
         </div>
       </div>
 
-      {/* 2. Lado Direito: Formulário de Cadastro */}
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 md:p-12 min-h-screen bg-[#f8fafc]">
-        {/* Logo Móvel (Oculto no Desktop) */}
         <div className="flex flex-col items-center mb-8 lg:hidden select-none">
           <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4">
             <span className="text-2xl">💡</span>
@@ -86,9 +77,7 @@ export default function RegisterPage() {
           <h2 className="text-2xl font-black text-gray-900 tracking-tight">Lúmen</h2>
         </div>
 
-        {/* Card de Formulário */}
         <div className="w-full max-w-md bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
-          {/* Header do Card */}
           <div className="mb-6 text-center lg:text-left select-none">
             <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Criar sua conta</h2>
             <p className="text-sm text-gray-500 mt-1.5 leading-relaxed">
@@ -96,16 +85,13 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Erro */}
             {error && (
               <div className="bg-red-50 border border-red-150 rounded-xl px-4 py-3 text-red-700 text-xs font-semibold leading-relaxed animate-[fadeIn_0.15s_ease-out]">
                 ⚠️ {error}
               </div>
             )}
 
-            {/* Campo Nome */}
             <div className="space-y-1.5">
               <label htmlFor="register-name" className="block text-xs font-bold text-gray-400 uppercase tracking-wider">
                 Nome
@@ -122,7 +108,6 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Campo E-mail */}
             <div className="space-y-1.5">
               <label htmlFor="register-email" className="block text-xs font-bold text-gray-400 uppercase tracking-wider">
                 E-mail
@@ -139,7 +124,6 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Campo Senha */}
             <div className="space-y-1.5">
               <label htmlFor="register-password" className="block text-xs font-bold text-gray-400 uppercase tracking-wider">
                 Senha
@@ -156,7 +140,6 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Campo Confirmar Senha */}
             <div className="space-y-1.5">
               <label htmlFor="register-confirm-password" className="block text-xs font-bold text-gray-400 uppercase tracking-wider">
                 Confirmar senha
@@ -173,7 +156,6 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Botão de Enviar */}
             <button
               type="submit"
               disabled={isSubmitting}
@@ -189,7 +171,6 @@ export default function RegisterPage() {
               )}
             </button>
 
-            {/* Link para Login */}
             <p className="text-center text-xs font-bold text-gray-400 mt-6 pt-4 border-t border-gray-100">
               Já tem uma conta?{" "}
               <Link to="/login" className="text-indigo-600 hover:text-indigo-700 font-extrabold uppercase tracking-wide transition-colors">

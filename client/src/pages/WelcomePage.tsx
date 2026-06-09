@@ -6,7 +6,7 @@ const ONBOARDING_STEPS = [
   {
     step: 1,
     eyebrow: "OLÁ",
-    title: "Bem-vinda ao Lúmen.",
+    title: "Bem-vindo ao Lúmen.",
     text: "Um planejador acadêmico minimalista para quem leva os estudos a sério — sem ruído, sem distração."
   },
   {

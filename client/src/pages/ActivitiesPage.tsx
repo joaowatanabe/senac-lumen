@@ -31,7 +31,6 @@ export default function ActivitiesPage() {
   const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<Activity | null>(null);
 
-  // Search and filter states
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "pending" | "completed">("all");
   const [priorityFilter, setPriorityFilter] = useState<"all" | "Alta" | "Média" | "Baixa">("all");
@@ -81,7 +80,6 @@ export default function ActivitiesPage() {
     }
   }
 
-  // Filter lists based on search query, priority, and subject selection
   const filterList = (list: Activity[]) => {
     return list.filter((act) => {
       const matchesSearch =
@@ -100,7 +98,6 @@ export default function ActivitiesPage() {
   const hasAnyCompleted = filteredCompleted.length > 0;
   const hasAnyData = pending.length > 0 || completed.length > 0;
 
-  // Determine which list to render in the table or card view
   const getRenderableActivities = () => {
     let list: Activity[] = [];
     if (statusFilter === "all" || statusFilter === "pending") {
@@ -116,17 +113,13 @@ export default function ActivitiesPage() {
 
   return (
     <div className="min-h-screen bg-transparent">
-      {/* Header (Móvel apenas) */}
       <header className="border-b border-gray-200 bg-white/90 backdrop-blur-lg sticky top-0 z-10 lg:hidden">
         <div className="max-w-md mx-auto px-4 py-4">
           <h1 className="text-lg font-bold text-gray-900 tracking-tight">Atividades</h1>
         </div>
       </header>
 
-      {/* Conteúdo */}
       <main className="max-w-md lg:max-w-5xl mx-auto px-4 py-6 pb-24 lg:pb-8 lg:py-8">
-        
-        {/* Title, description & action button */}
         <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Atividades</h1>
@@ -147,10 +140,8 @@ export default function ActivitiesPage() {
           )}
         </div>
 
-        {/* Search and Filters Panel */}
         {!isLoading && !error && hasAnyData && (
           <div className="mb-6 space-y-4 bg-white border border-gray-200 rounded-2xl p-4.5 shadow-sm">
-            {/* Search Box */}
             <div className="relative">
               <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
@@ -166,9 +157,7 @@ export default function ActivitiesPage() {
               />
             </div>
 
-            {/* Filter Chips Bar */}
             <div className="flex flex-col gap-3">
-              {/* Status Chips */}
               <div className="flex items-center gap-2 overflow-x-auto pb-0.5 scrollbar-none">
                 <span className="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider mr-1">Status:</span>
                 {[
@@ -190,7 +179,6 @@ export default function ActivitiesPage() {
                 ))}
               </div>
 
-              {/* Priority Chips */}
               <div className="flex items-center gap-2 overflow-x-auto pb-0.5 scrollbar-none">
                 <span className="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider mr-1">Prioridade:</span>
                 {[
@@ -213,7 +201,6 @@ export default function ActivitiesPage() {
                 ))}
               </div>
 
-              {/* Subject Chips */}
               {subjects.length > 0 && (
                 <div className="flex items-center gap-2 overflow-x-auto pb-0.5 scrollbar-none">
                   <span className="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider mr-1">Matéria:</span>
@@ -251,21 +238,18 @@ export default function ActivitiesPage() {
           </div>
         )}
 
-        {/* Loading */}
         {isLoading && (
           <div className="flex justify-center py-20">
             <div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin" />
           </div>
         )}
 
-        {/* Erro */}
         {error && !isLoading && (
           <div className="bg-red-50 border border-red-200 rounded-2xl px-5 py-4 text-red-700 text-sm text-center">
             {error}
           </div>
         )}
 
-        {/* Empty state específico para quando não há matérias */}
         {!isLoading && !error && subjects.length === 0 && (
           <div className="text-center py-10 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-50 border border-indigo-100 mb-4">
@@ -286,7 +270,6 @@ export default function ActivitiesPage() {
           </div>
         )}
 
-        {/* Empty state global ou filtros vazios */}
         {!isLoading && !error && subjects.length > 0 && (!hasAnyData || visibleActivities.length === 0) && (
           <div className="text-center py-10 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gray-50 border border-gray-200 mb-4">
@@ -326,10 +309,8 @@ export default function ActivitiesPage() {
           </div>
         )}
 
-        {/* LISTAGEM RESPONSIVA */}
         {!isLoading && !error && visibleActivities.length > 0 && (
           <div>
-            {/* 1. MÓVEL: Lista de Cards (< lg) */}
             <div className="lg:hidden space-y-3">
               {statusFilter === "all" ? (
                 <>
@@ -362,7 +343,6 @@ export default function ActivitiesPage() {
               )}
             </div>
 
-            {/* 2. DESKTOP: Tabela estruturada (>= lg) */}
             <div className="hidden lg:block bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
               <table className="w-full border-collapse text-left text-xs text-gray-900">
                 <thead>
@@ -383,7 +363,6 @@ export default function ActivitiesPage() {
                     const colors = colorMap[subjectColor] || colorMap.indigo;
                     const dueLabel = formatDate(act.dueDate);
 
-                    // Urgência prazo
                     const isOverdue = !isDone && act.dueDate && new Date(act.dueDate).setHours(0,0,0,0) < new Date().setHours(0,0,0,0);
                     const isToday = !isDone && act.dueDate && new Date(act.dueDate).setHours(0,0,0,0) === new Date().setHours(0,0,0,0);
 
@@ -392,7 +371,6 @@ export default function ActivitiesPage() {
                         key={act.id}
                         className={`transition-colors duration-150 ${isDone ? "opacity-55 bg-gray-50/50" : "hover:bg-gray-50/40"}`}
                       >
-                        {/* Checkbox */}
                         <td className="px-6 py-3.5 text-center">
                           <button
                             onClick={() => toggleStatus(act)}
@@ -410,14 +388,12 @@ export default function ActivitiesPage() {
                           </button>
                         </td>
 
-                        {/* Atividade */}
                         <td className="px-6 py-3.5">
                           <span className={`font-semibold text-sm leading-snug ${isDone ? "line-through text-gray-400 font-medium" : "text-gray-900"}`}>
                             {act.title}
                           </span>
                         </td>
 
-                        {/* Matéria */}
                         <td className="px-6 py-3.5">
                           {act.subject ? (
                             <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[10px] font-bold ${colors.bg} ${colors.text} border ${colors.border}`}>
@@ -429,7 +405,6 @@ export default function ActivitiesPage() {
                           )}
                         </td>
 
-                        {/* Tipo */}
                         <td className="px-6 py-3.5">
                           {act.type ? (
                             <span className="inline-block px-2 py-0.5 rounded-lg text-[10px] font-bold bg-gray-150 text-gray-650 border border-gray-250 uppercase tracking-wide">
@@ -440,7 +415,6 @@ export default function ActivitiesPage() {
                           )}
                         </td>
 
-                        {/* Prioridade */}
                         <td className="px-6 py-3.5">
                           {act.priority ? (
                             <span className={`inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-bold border uppercase tracking-wide ${
@@ -457,7 +431,6 @@ export default function ActivitiesPage() {
                           )}
                         </td>
 
-                        {/* Prazo */}
                         <td className="px-6 py-3.5">
                           {dueLabel ? (
                             <span className={`text-[10px] font-bold inline-flex items-center gap-1 px-2 py-0.5 rounded-lg border ${
@@ -475,7 +448,6 @@ export default function ActivitiesPage() {
                           )}
                         </td>
 
-                        {/* Ações */}
                         <td className="px-6 py-3.5 text-right">
                           <div className="inline-flex items-center gap-1 opacity-60 hover:opacity-100 transition-opacity">
                             <button
@@ -505,7 +477,6 @@ export default function ActivitiesPage() {
               </table>
             </div>
 
-            {/* Totalizador de rodapé */}
             <p className="text-center text-[10px] font-extrabold text-gray-400 uppercase tracking-wider mt-6">
               {visibleActivities.length} {visibleActivities.length === 1 ? "atividade listada" : "atividades listadas"}
             </p>
@@ -513,7 +484,6 @@ export default function ActivitiesPage() {
         )}
       </main>
 
-      {/* Modal de criação/edição */}
       <ActivityModal
         isOpen={isModalOpen}
         activity={editingActivity}
@@ -522,7 +492,6 @@ export default function ActivitiesPage() {
         onSave={handleSave}
       />
 
-      {/* Modal de confirmação de exclusão */}
       {deleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/50 transition-opacity" onClick={() => setDeleteConfirm(null)} />
