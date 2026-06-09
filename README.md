@@ -176,5 +176,4 @@ O projeto encontra-se **Funcional e Finalizado** como MVP para a entrega acadêm
 ## 👥 Autores
 
 - **João Watanabe** — [GitHub](https://github.com/joaowatanabe)
-- **[Nome do Integrante 2]** — [GitHub](https://github.com/...)
-- **[Nome do Integrante 3]** — [GitHub](https://github.com/...)
+
