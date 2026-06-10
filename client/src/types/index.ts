@@ -35,6 +35,7 @@ export interface PlannerBlock {
   id: string;
   dayOfWeek: number; // 0 = Domingo, 6 = Sábado
   durationMinutes: number;
+  startTime: string;
   subjectId: string;
   userId: string;
   subject?: Subject;

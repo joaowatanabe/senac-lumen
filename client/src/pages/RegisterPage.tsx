@@ -49,9 +49,7 @@ export default function RegisterPage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-zinc-500/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex items-center gap-3 relative z-10">
-          <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur-md">
-            <span className="text-xl">💡</span>
-          </div>
+          <img src="/favicon.png" alt="Lúmen Logo" className="w-10 h-10 object-contain shrink-0" />
           <span className="text-xl font-bold tracking-tight text-white">Lúmen</span>
         </div>
 
@@ -71,9 +69,7 @@ export default function RegisterPage() {
 
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 md:p-12 min-h-screen bg-[#f8fafc]">
         <div className="flex flex-col items-center mb-8 lg:hidden select-none">
-          <div className="w-14 h-14 rounded-2xl bg-zinc-500/10 border border-zinc-500/20 flex items-center justify-center mb-4">
-            <span className="text-2xl">💡</span>
-          </div>
+          <img src="/favicon.png" alt="Lúmen Logo" className="w-14 h-14 object-contain mb-4 shrink-0" />
           <h2 className="text-2xl font-black text-gray-900 tracking-tight">Lúmen</h2>
         </div>
 

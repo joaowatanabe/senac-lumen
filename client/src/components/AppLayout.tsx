@@ -48,28 +48,6 @@ const PlusIcon = () => (
   </svg>
 );
 
-const ChevronRightIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-    <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
-  </svg>
-);
-
-const ChevronLeftIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-    <path fillRule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clipRule="evenodd" />
-  </svg>
-);
-
-// ─── Page meta map ──────────────────────────────────────────────────
-const PAGE_META: Record<string, { title: string; subtitle: string }> = {
-  "/dashboard": { title: "Dashboard", subtitle: "Visão geral dos seus estudos" },
-  "/subjects": { title: "Disciplinas", subtitle: "Gerencie suas matérias" },
-  "/activities": { title: "Tarefas", subtitle: "Gerencie suas atividades acadêmicas" },
-  "/planner": { title: "Calendário", subtitle: "Planejamento semanal de estudos" },
-  "/pomodoro": { title: "Sessões de Estudo", subtitle: "Timer Pomodoro e blocos de estudo" },
-  "/flashcards": { title: "Flashcards", subtitle: "Revisão espaçada (SM-2)" },
-};
-
 // ─── Nav Items ──────────────────────────────────────────────────────
 const NAV_ITEMS = [
   { to: "/dashboard", label: "Dashboard", icon: <DashboardIcon /> },
@@ -80,24 +58,15 @@ const NAV_ITEMS = [
   { to: "/flashcards", label: "Flashcards", icon: <FlashcardIcon /> },
 ];
 
-// ─── Lúmen Logo SVG ─────────────────────────────────────────────────
+// ─── Lúmen Logo Image ───────────────────────────────────────────────
 const LumenLogo = () => (
-  <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center shadow-sm shrink-0">
-    <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 3L12 7" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M9 5L12 3L15 5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <rect x="5" y="9" width="14" height="2.5" rx="1" fill="white" opacity="0.9"/>
-      <rect x="5" y="13" width="14" height="2.5" rx="1" fill="white" opacity="0.7"/>
-      <rect x="5" y="17" width="14" height="2.5" rx="1" fill="white" opacity="0.5"/>
-    </svg>
-  </div>
+  <img src="/favicon.png" alt="Lúmen Logo" className="w-8 h-8 object-contain shrink-0" />
 );
 
 export default function AppLayout() {
   const { logout } = useAuth();
   const location = useLocation();
 
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // Close modal on location change
@@ -105,143 +74,70 @@ export default function AppLayout() {
     setIsCreateModalOpen(false);
   }, [location.pathname]);
 
-  const pageMeta = PAGE_META[location.pathname] || { title: "Lúmen", subtitle: "" };
-
   return (
-    <div className="flex h-screen bg-surface font-sans">
+    <div className="flex flex-col h-screen bg-surface font-sans">
 
-      {/* ── DESKTOP SIDEBAR ──────────────────────────────────────── */}
-      <aside
-        className={`hidden lg:flex flex-col bg-white border-r border-border transition-all duration-200 shrink-0 ${
-          isSidebarExpanded ? "w-56" : "w-14"
-        }`}
-      >
-        {/* Logo + Toggle */}
-        <div className={`flex items-center h-14 border-b border-border px-3 ${isSidebarExpanded ? "gap-3 justify-between" : "justify-center"}`}>
-          <div className="flex items-center gap-2 min-w-0">
+      {/* ── DESKTOP HORIZONTAL TOPBAR ────────────────────────────── */}
+      <header className="hidden lg:flex h-14 bg-white border-b border-border sticky top-0 z-40 shrink-0 select-none w-full">
+        <div className="max-w-6xl mx-auto w-full px-6 flex items-center justify-between h-full">
+          
+          {/* Left side: Logo + Text */}
+          <div className="flex items-center gap-2 h-full">
             <LumenLogo />
-            {isSidebarExpanded && (
-              <span className="text-base font-bold text-text-primary tracking-tight truncate">Lúmen</span>
-            )}
+            <span className="text-base font-bold text-text-primary tracking-tight">Lúmen</span>
           </div>
-          <button
-            onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
-            className={`w-6 h-6 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all cursor-pointer shrink-0 ${isSidebarExpanded ? "" : "hidden"}`}
-            title={isSidebarExpanded ? "Colapsar sidebar" : "Expandir sidebar"}
-          >
-            <ChevronLeftIcon />
-          </button>
-        </div>
 
-        {/* Nova Tarefa Button */}
-        <div className={`px-2 pt-3 pb-2`}>
-          {isSidebarExpanded ? (
+          {/* Center: NAV_ITEMS in horizontal line */}
+          <div className="h-full flex items-stretch">
+            <nav className="flex items-stretch gap-1">
+              {NAV_ITEMS.map((item) => {
+                const isActive = location.pathname === item.to;
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    className={`flex items-center px-4 border-b-2 transition-all duration-200 text-sm font-medium ${
+                      isActive
+                        ? "bg-primary-light text-primary border-primary"
+                        : "text-zinc-500 hover:text-zinc-950 border-transparent hover:border-zinc-200"
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Right side: Actions */}
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setIsCreateModalOpen(true)}
-              className="flex items-center gap-2 w-full px-3 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-primary hover:bg-primary-hover text-white rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer"
             >
               <PlusIcon />
               <span>Nova tarefa</span>
             </button>
-          ) : (
-            <div className="relative group flex justify-center">
-              <button
-                onClick={() => setIsCreateModalOpen(true)}
-                className="mx-auto flex items-center justify-center w-9 h-9 bg-primary hover:bg-primary-hover text-white rounded-lg transition-all duration-200 cursor-pointer"
-                title="Nova tarefa"
-              >
-                <PlusIcon />
-              </button>
-              <span className="absolute left-full ml-2 px-2 py-1 text-xs bg-gray-900 text-white rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                Nova tarefa
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex flex-col gap-0.5 px-2 flex-1">
-          {NAV_ITEMS.map((item) => {
-            const isActive = location.pathname === item.to;
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                title={!isSidebarExpanded ? item.label : undefined}
-                className={`flex items-center gap-3 rounded-lg transition-all duration-200 relative group ${
-                  isSidebarExpanded ? "px-3 py-2.5" : "justify-center px-0 py-2.5 mx-0"
-                } ${
-                  isActive
-                    ? "bg-primary-light text-primary border-l-2 border-primary rounded-l-none"
-                    : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                <span className={`shrink-0 ${isActive ? "text-primary" : ""}`}>
-                  {item.icon}
-                </span>
-                {isSidebarExpanded && (
-                  <span className={`text-sm font-medium truncate ${isActive ? "text-primary" : ""}`}>
-                    {item.label}
-                  </span>
-                )}
-                {/* Tooltip for collapsed state */}
-                {!isSidebarExpanded && (
-                  <span className="absolute left-full ml-3 px-2 py-1 text-xs bg-gray-900 text-white rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                    {item.label}
-                  </span>
-                )}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Expand toggle (collapsed state) + Logout */}
-        <div className={`px-2 py-3 border-t border-border space-y-1`}>
-          {!isSidebarExpanded && (
-            <div className="flex justify-center mb-1">
-              <button
-                onClick={() => setIsSidebarExpanded(true)}
-                className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all cursor-pointer"
-                title="Expandir sidebar"
-              >
-                <ChevronRightIcon />
-              </button>
-            </div>
-          )}
-          <button
-            onClick={logout}
-            className={`flex items-center gap-2 w-full rounded-lg py-2 text-xs font-medium text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer ${
-              isSidebarExpanded ? "px-3" : "justify-center px-0"
-            }`}
-            title="Sair da conta"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 shrink-0">
-              <path fillRule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z" clipRule="evenodd" />
-              <path fillRule="evenodd" d="M6 10a.75.75 0 01.75-.75h9.546l-1.048-.943a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 11-1.004-1.114l1.048-.943H6.75A.75.75 0 016 10z" clipRule="evenodd" />
-            </svg>
-            {isSidebarExpanded && <span>Sair</span>}
-          </button>
-        </div>
-      </aside>
-
-      {/* ── MAIN CONTENT AREA ────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-
-        {/* ── DESKTOP TOPBAR ─────────────────────────────────────── */}
-        <header className="hidden lg:flex h-14 bg-white border-b border-gray-100 px-6 items-center shrink-0">
-          <div>
-            <h1 className="text-xl font-semibold text-gray-900 leading-tight">{pageMeta.title}</h1>
-            {pageMeta.subtitle && (
-              <p className="text-sm text-gray-500 leading-tight">{pageMeta.subtitle}</p>
-            )}
+            <button
+              onClick={logout}
+              className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-zinc-500 hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer"
+              title="Sair da conta"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 shrink-0">
+                <path fillRule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z" clipRule="evenodd" />
+                <path fillRule="evenodd" d="M6 10a.75.75 0 01.75-.75h9.546l-1.048-.943a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 11-1.004-1.114l1.048-.943H6.75A.75.75 0 016 10z" clipRule="evenodd" />
+              </svg>
+              <span>Sair</span>
+            </button>
           </div>
-        </header>
 
-        {/* ── PAGE CONTENT ───────────────────────────────────────── */}
-        <main className="flex-1 overflow-y-auto">
-          <Outlet />
-        </main>
-      </div>
+        </div>
+      </header>
+
+      {/* ── PAGE CONTENT ───────────────────────────────────────── */}
+      <main className="flex-1 overflow-y-auto">
+        <Outlet />
+      </main>
 
       {/* ── MOBILE BOTTOM NAVBAR ───────────────────────────────────── */}
       <div className="lg:hidden">

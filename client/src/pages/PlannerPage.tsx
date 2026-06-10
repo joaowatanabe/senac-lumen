@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { usePlanner } from "../hooks/usePlanner";
 import { useSubjects } from "../hooks/useSubjects";
 import { useActivities } from "../hooks/useActivities";
-import type { Activity } from "../types";
+import type { Activity, PlannerBlock } from "../types";
 
 const DAYS = [
   { label: "Dom", value: 0 },
@@ -25,26 +25,10 @@ const DAYS_FULL = [
   "Sábado",
 ];
 
-const lightColorMap: Record<
-  string,
-  {
-    bg: string;
-    text: string;
-    border: string;
-    borderL: string;
-    pillBg: string;
-    pillText: string;
-    dot: string;
-  }
-> = {
-  indigo:  { bg: "bg-zinc-950 text-white",  text: "text-zinc-950",  border: "border-zinc-300",   borderL: "border-l-zinc-950",   pillBg: "bg-zinc-100",      pillText: "text-zinc-900",       dot: "bg-zinc-950" },
-  sky:     { bg: "bg-zinc-800 text-white",  text: "text-zinc-800",  border: "border-zinc-250",   borderL: "border-l-zinc-800",   pillBg: "bg-zinc-55",       pillText: "text-zinc-800",       dot: "bg-zinc-700" },
-  emerald: { bg: "bg-zinc-650 text-white",  text: "text-zinc-650",  border: "border-zinc-200",   borderL: "border-l-zinc-600",   pillBg: "bg-zinc-50/50",    pillText: "text-zinc-700",       dot: "bg-zinc-500" },
-  amber:   { bg: "bg-stone-850 text-white", text: "text-stone-850", border: "border-stone-250",  borderL: "border-l-stone-850",  pillBg: "bg-stone-100/50",  pillText: "text-stone-800",      dot: "bg-stone-700" },
-  rose:    { bg: "bg-slate-850 text-white", text: "text-slate-850", border: "border-slate-250",  borderL: "border-l-slate-850",  pillBg: "bg-slate-100/50",  pillText: "text-slate-800",      dot: "bg-slate-700" },
-  violet:  { bg: "bg-zinc-900 text-white",  text: "text-zinc-900",  border: "border-zinc-300",   borderL: "border-l-zinc-900",   pillBg: "bg-zinc-200/50",   pillText: "text-zinc-900",       dot: "bg-zinc-850" },
-  orange:  { bg: "bg-stone-650 text-white", text: "text-stone-650", border: "border-stone-200",  borderL: "border-l-stone-600",  pillBg: "bg-stone-50/50",   pillText: "text-stone-700",      dot: "bg-stone-550" },
-  teal:    { bg: "bg-slate-650 text-white", text: "text-slate-650", border: "border-slate-200",  borderL: "border-l-slate-600",  pillBg: "bg-slate-50/50",   pillText: "text-slate-700",      dot: "bg-slate-550" },
+const COLOR_FALLBACK: Record<string, string> = {
+  indigo: '#4f46e5', sky: '#0ea5e9', emerald: '#10b981',
+  amber: '#f59e0b', rose: '#f43f5e', violet: '#7c3aed',
+  orange: '#f97316', teal: '#14b8a6',
 };
 
 export default function PlannerPage() {
@@ -61,6 +45,8 @@ export default function PlannerPage() {
   const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [weekOffset, setWeekOffset] = useState(0);
+  const [selectedBlock, setSelectedBlock] = useState<PlannerBlock | null>(null);
+  const [modalStartTime, setModalStartTime] = useState("07:00");
 
   useEffect(() => {
     if (searchParams.get("create") === "true") {
@@ -69,10 +55,11 @@ export default function PlannerPage() {
     }
   }, [searchParams, setSearchParams]);
 
-  function handleOpenModal(day: number) {
+  function handleOpenModal(day: number, defaultStartTime?: string) {
     setModalDay(day);
     setSelectedSubjectId(subjects[0]?.id || "");
     setModalDuration(45);
+    setModalStartTime(defaultStartTime || "07:00");
     setSubmitError("");
     setIsModalOpen(true);
   }
@@ -97,6 +84,7 @@ export default function PlannerPage() {
         subjectId: selectedSubjectId,
         dayOfWeek: modalDay,
         durationMinutes: modalDuration,
+        startTime: modalStartTime,
       });
       setIsModalOpen(false);
     } catch (err) {
@@ -300,12 +288,12 @@ export default function PlannerPage() {
                       <>
                         {/* 1. Blocos de Planner */}
                         {currentDayBlocks.map((block) => {
-                          const subjectColor = block.subject?.color || "indigo";
-                          const colors = lightColorMap[subjectColor] || lightColorMap.indigo;
+                          const blockColor = COLOR_FALLBACK[block.subject?.color ?? ""] ?? block.subject?.color ?? "#4f46e5";
                           return (
                             <div
                               key={block.id}
-                              className={`flex items-center justify-between gap-3 px-4 py-3 bg-white rounded-xl shadow-sm border border-gray-100 border-l-[4px] ${colors.borderL} transition-all duration-200`}
+                              style={{ borderLeftColor: blockColor }}
+                              className="flex items-center justify-between gap-3 px-4 py-3 bg-white rounded-xl shadow-sm border border-gray-100 border-l-[4px] transition-all duration-200"
                             >
                               <div className="flex-grow min-w-0">
                                 <div className="flex items-center justify-between gap-2">
@@ -333,8 +321,7 @@ export default function PlannerPage() {
 
                         {/* 2. Tarefas / Atividades */}
                         {currentDayTasks.map((task) => {
-                          const subjectColor = task.subject?.color || "indigo";
-                          const colors = lightColorMap[subjectColor] || lightColorMap.indigo;
+                          const taskColor = COLOR_FALLBACK[task.subject?.color ?? ""] ?? task.subject?.color ?? "#4f46e5";
                           return (
                             <div
                               key={task.id}
@@ -350,8 +337,14 @@ export default function PlannerPage() {
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-1.5 mt-1.5">
-                                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${colors.pillBg} ${colors.pillText}`}>
-                                    <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
+                                  <span
+                                    style={{ backgroundColor: `${taskColor}18`, color: taskColor }}
+                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
+                                  >
+                                    <span
+                                      style={{ backgroundColor: taskColor }}
+                                      className="w-1.5 h-1.5 rounded-full"
+                                    />
                                     {task.subject?.name}
                                   </span>
                                   {task.status === "completed" && (
@@ -383,52 +376,36 @@ export default function PlannerPage() {
                 {/* 2. LAYOUT DESKTOP (>= lg) */}
                 <div className="hidden lg:flex lg:flex-col w-full">
                   {/* Header Seção */}
-                  <div className="flex items-center justify-between gap-4 mb-6">
+                  <div className="grid grid-cols-3 items-center gap-4 mb-6">
+                    {/* Lado Esquerdo: Título */}
                     <div>
                       <h1 className="text-xl font-semibold text-gray-900">Planner Semanal</h1>
                       <p className="text-sm text-gray-500 mt-0.5">Aloque blocos de estudo por dia e matéria</p>
                     </div>
 
-                    {/* Controles de navegação de semana */}
-                    <div className="flex items-center gap-2.5">
-                      <div className="inline-flex rounded-lg border border-gray-200 bg-white p-0.5 shadow-xs">
+                    {/* Centro: Navegação de semana */}
+                    <div className="flex justify-center">
+                      <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-3 py-1.5 shadow-xs">
                         <button
                           onClick={() => setWeekOffset(prev => prev - 1)}
-                          className="w-8 h-8 flex items-center justify-center rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all cursor-pointer text-xs font-bold"
-                          title="Semana anterior"
+                          className="w-7 h-7 flex items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition-all cursor-pointer text-sm font-bold"
                         >
-                          &lt;
+                          ‹
                         </button>
-                        <button
-                          onClick={() => setWeekOffset(0)}
-                          className="px-3 h-8 flex items-center justify-center text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-all cursor-pointer border-x border-gray-150"
-                        >
-                          Hoje
-                        </button>
+                        <span className="text-sm font-semibold text-gray-700 min-w-[160px] text-center">
+                          {getWeekRangeLabel()}
+                        </span>
                         <button
                           onClick={() => setWeekOffset(prev => prev + 1)}
-                          className="w-8 h-8 flex items-center justify-center rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all cursor-pointer text-xs font-bold"
-                          title="Próxima semana"
+                          className="w-7 h-7 flex items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition-all cursor-pointer text-sm font-bold"
                         >
-                          &gt;
+                          ›
                         </button>
                       </div>
-                      <span className="text-sm font-bold text-gray-700">
-                        {getWeekRangeLabel()}
-                      </span>
                     </div>
 
-                    {/* Ações canto direito */}
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => alert("Filtros em desenvolvimento")}
-                        className="h-10 px-4 inline-flex items-center justify-center gap-1.5 rounded-xl border border-gray-200 bg-white text-gray-700 text-xs font-semibold hover:bg-gray-50 transition-all cursor-pointer shadow-xs"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="w-3.5 h-3.5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
-                        </svg>
-                        Filtros
-                      </button>
+                    {/* Lado Direito: Ações */}
+                    <div className="justify-self-end">
                       <button
                         onClick={() => handleOpenModal(new Date().getDay())}
                         className="h-10 px-4 inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-medium transition-all cursor-pointer shadow-sm"
@@ -441,111 +418,215 @@ export default function PlannerPage() {
                     </div>
                   </div>
 
-                  {/* Grade de 7 colunas */}
-                  <div className="grid grid-cols-7 gap-3.5 items-start w-full">
-                    {weekDates.map((item) => {
-                      const isToday = todayDayOfWeek === item.dayOfWeek && weekOffset === 0;
-                      const dayBlocks = getBlocksForDay(item.dayOfWeek);
-                      const dayTasks = getActivitiesForDay(item.dayOfWeek, activities);
-
-                      return (
-                        <div
-                          key={item.dayOfWeek}
-                          className={`bg-white border rounded-xl p-3 flex flex-col min-h-[440px] shadow-sm transition-all duration-300 ${
-                            isToday 
-                              ? "border-primary/40 ring-2 ring-primary/10" 
-                              : "border-border"
-                          }`}
-                        >
-                          {/* Cabeçalho da coluna do dia */}
-                          <div className="text-center border-b border-gray-100 pb-3 mb-3 shrink-0">
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none">
-                              {DAYS[item.dayOfWeek].label}
-                            </p>
-                            <div className="mt-1.5 flex justify-center">
-                              {isToday ? (
-                                <span className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full font-semibold text-xs shadow-sm">
-                                  {item.dayOfMonth}
-                                </span>
-                              ) : (
-                                <span className="w-8 h-8 flex items-center justify-center text-gray-800 font-bold text-xs">
-                                  {item.dayOfMonth}
-                                </span>
-                              )}
+                  {/* Grade de horários + painel lateral */}
+                  <div className="flex gap-4 w-full">
+                    {/* Grade principal (Coluna principal: flex-1) */}
+                    <div className="flex-1 bg-white border border-border rounded-xl overflow-hidden flex flex-col shadow-sm">
+                      
+                      {/* Cabeçalho da grade de horários */}
+                      <div className="flex border-b border-border bg-gray-50/50 shrink-0">
+                        {/* Primeira coluna vazia para os rótulos de hora */}
+                        <div className="w-14 border-r border-border shrink-0 h-12" />
+                        
+                        {/* As 7 colunas de dias */}
+                        {weekDates.map((item) => {
+                          const isToday = todayDayOfWeek === item.dayOfWeek && weekOffset === 0;
+                          return (
+                            <div key={item.dayOfWeek} className="flex-1 h-12 flex flex-col items-center justify-center border-l border-border first:border-l-0">
+                              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none">
+                                {DAYS[item.dayOfWeek].label}
+                              </span>
+                              <div className="mt-1">
+                                {isToday ? (
+                                  <span className="w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full font-bold text-xs shadow-sm">
+                                    {item.dayOfMonth}
+                                  </span>
+                                ) : (
+                                  <span className="text-gray-805 font-bold text-xs">
+                                    {item.dayOfMonth}
+                                  </span>
+                                )}
+                              </div>
                             </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Linha separada de chips para atividades com dueDate */}
+                      <div className="flex border-b border-border bg-gray-50/20 shrink-0 h-6">
+                        <div className="w-14 border-r border-border shrink-0 h-full" />
+                        {weekDates.map((item) => {
+                          const dayTasks = getActivitiesForDay(item.dayOfWeek, activities);
+                          return (
+                            <div key={item.dayOfWeek} className="flex-1 h-full px-1 flex items-center gap-1 overflow-x-auto no-scrollbar border-l border-gray-100 first:border-l-0 min-w-0">
+                              {dayTasks.map((task) => {
+                                return (
+                                  <div
+                                    key={task.id}
+                                    className="shrink-0 border-l-2 border-amber-400 bg-amber-50 text-amber-800 text-[10px] px-2 rounded font-medium max-w-full truncate"
+                                    title={task.title}
+                                  >
+                                    {task.title}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Corpo da grade com scroll vertical */}
+                      <div className="overflow-y-auto max-h-[calc(100vh-260px)] flex-1 relative no-scrollbar">
+                        <div className="flex relative h-[896px]">
+                          {/* Coluna de rótulos de hora */}
+                          <div className="w-14 shrink-0 flex flex-col h-full border-r border-border bg-gray-50/5">
+                            {Array.from({ length: 16 }, (_, i) => {
+                              const hour = 7 + i;
+                              const hourLabel = `${hour.toString().padStart(2, "0")}:00`;
+                              return (
+                                <div key={hour} className="h-[56px] text-[11px] text-gray-400 text-right pr-3 pt-1 select-none border-b border-gray-100 last:border-b-0">
+                                  {hourLabel}
+                                </div>
+                              );
+                            })}
                           </div>
 
-                          {/* Lista interna de cards */}
-                          <div className="flex-grow flex flex-col gap-2 overflow-y-auto max-h-[310px] no-scrollbar">
-                            {dayBlocks.length === 0 && dayTasks.length === 0 ? (
-                              <div className="flex-grow flex flex-col items-center justify-center text-center py-16 border border-dashed border-gray-150 rounded-xl bg-gray-50/50">
-                                <p className="text-[9px] font-bold text-gray-300 uppercase tracking-widest">Livre</p>
-                              </div>
-                            ) : (
-                              <>
-                                {/* Blocos (cards de fundo da matéria) */}
-                                {dayBlocks.map((block) => {
-                                  const subjectColor = block.subject?.color || "indigo";
-                                  const colors = lightColorMap[subjectColor] || lightColorMap.indigo;
-                                  return (
-                                    <div
-                                      key={block.id}
-                                      className={`flex items-start justify-between gap-1.5 p-2.5 rounded-lg shadow-xs ${colors.bg} relative group hover:scale-[1.02] transition-all duration-150`}
-                                    >
-                                      <div className="min-w-0 flex-1">
+                          {/* As 7 colunas correspondentes aos dias */}
+                          <div className="flex flex-1 h-full">
+                            {weekDates.map((item) => {
+                              const dayBlocks = getBlocksForDay(item.dayOfWeek);
+
+                              return (
+                                <div
+                                  key={item.dayOfWeek}
+                                  className="flex-1 border-l border-gray-100 first:border-l-0 relative h-full flex flex-col bg-white"
+                                >
+                                  {/* Células de fundo/slots de hora */}
+                                  {Array.from({ length: 16 }, (_, i) => {
+                                    const hour = 7 + i;
+                                    return (
+                                      <div
+                                        key={hour}
+                                        onClick={() => handleOpenModal(item.dayOfWeek, `${hour.toString().padStart(2, "0")}:00`)}
+                                        className="h-[56px] border-b border-gray-100 last:border-b-0 hover:bg-gray-50/50 cursor-pointer"
+                                      />
+                                    );
+                                  })}
+
+                                  {/* Blocos de Planner posicionados absolutamente */}
+                                  {dayBlocks.map((block) => {
+                                    const blockColor = COLOR_FALLBACK[block.subject?.color ?? ""] ?? block.subject?.color ?? "#4f46e5";
+                                    const heightPx = (block.durationMinutes / 60) * 56;
+                                    
+                                    // Calculate top offset based on startTime
+                                    const [startHourStr, startMinStr] = (block.startTime || "07:00").split(":");
+                                    const startHour = Number(startHourStr) || 7;
+                                    const startMin = Number(startMinStr) || 0;
+                                    const topPx = (startHour - 7) * 56 + (startMin / 60) * 56;
+
+                                    return (
+                                      <div
+                                        key={block.id}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setSelectedBlock(block);
+                                        }}
+                                        className="absolute left-1 right-1 p-2 rounded-lg shadow-xs cursor-pointer hover:brightness-95 transition-all select-none overflow-hidden z-10 text-white"
+                                        style={{
+                                          height: `${heightPx}px`,
+                                          top: `${topPx}px`,
+                                          backgroundColor: blockColor,
+                                        }}
+                                      >
                                         <p className="text-[11px] font-extrabold truncate leading-tight">
                                           {block.subject?.name}
                                         </p>
-                                        <p className="text-[9px] opacity-75 font-semibold mt-0.5 leading-none">
-                                          {block.durationMinutes} min
+                                        <p className="text-[9px] opacity-70 mt-0.5 leading-none font-semibold">
+                                          {block.startTime || "07:00"} ({block.durationMinutes} min)
                                         </p>
                                       </div>
-                                      <button
-                                        onClick={() => handleDeleteBlock(block.id)}
-                                        className="w-4 h-4 flex items-center justify-center rounded bg-white/20 text-white hover:bg-white/40 hover:scale-105 transition-all opacity-0 group-hover:opacity-100 cursor-pointer shrink-0 text-xs font-bold leading-none"
-                                        title="Excluir"
-                                      >
-                                        &times;
-                                      </button>
-                                    </div>
-                                  );
-                                })}
-
-                                {/* Tarefas associadas ao dia (borda amarela) */}
-                                {dayTasks.map((task) => {
-                                  const subjectColor = task.subject?.color || "indigo";
-                                  const colors = lightColorMap[subjectColor] || lightColorMap.indigo;
-                                  return (
-                                    <div
-                                      key={task.id}
-                                      className="flex flex-col gap-1 p-2 bg-white border border-gray-150 rounded-lg shadow-xs border-l-[3px] border-l-amber-500"
-                                    >
-                                      <p className="text-[10px] font-bold text-gray-800 leading-tight truncate" title={task.title}>
-                                        {task.title}
-                                      </p>
-                                      <span className={`inline-block text-[8px] font-extrabold px-1.5 py-0.2 rounded-full self-start ${colors.pillBg} ${colors.pillText} truncate max-w-full`}>
-                                        {task.subject?.name}
-                                      </span>
-                                    </div>
-                                  );
-                                })}
-                              </>
-                            )}
+                                    );
+                                  })}
+                                </div>
+                              );
+                            })}
                           </div>
-
-                          {/* Adicionar por coluna */}
-                          <button
-                            onClick={() => handleOpenModal(item.dayOfWeek)}
-                            className="mt-3 w-full py-2 border border-dashed border-gray-200 hover:border-primary/40 bg-gray-50/50 hover:bg-primary-light/30 text-gray-400 hover:text-primary rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center justify-center gap-1.5"
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
-                              <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                            </svg>
-                            Adicionar
-                          </button>
                         </div>
-                      );
-                    })}
+                      </div>
+
+                    </div>
+
+                    {/* Painel lateral direito (w-72 shrink-0) */}
+                    <div className="w-72 shrink-0 flex flex-col gap-3">
+                      
+                      {/* Card 1: Detalhes do bloco selecionado */}
+                      <div className="bg-white border border-border rounded-xl p-4 flex flex-col shadow-sm justify-center min-h-[160px]">
+                        {selectedBlock === null ? (
+                          <div className="flex flex-col items-center justify-center py-6 text-center select-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-gray-300 mb-2">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <p className="text-sm font-medium text-gray-500">Selecione um evento</p>
+                            <p className="text-xs text-gray-400 mt-1">Clique em um bloco para ver detalhes</p>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col gap-2 align-start text-left">
+                            <h4 className="text-sm font-semibold text-gray-900">
+                              {selectedBlock.subject?.name}
+                            </h4>
+                            <p className="text-xs text-gray-500">
+                              {selectedBlock.durationMinutes} minutos
+                            </p>
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                await handleDeleteBlock(selectedBlock.id);
+                                setSelectedBlock(null);
+                              }}
+                              className="mt-2 w-full h-9 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 text-xs font-semibold transition-all cursor-pointer text-center"
+                            >
+                              Remover
+                            </button>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Card 2: Sugestão da semana */}
+                      <div className="bg-white border border-border rounded-xl p-4 flex flex-col shadow-sm">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2 select-none">
+                          SUGESTÃO DA SEMANA
+                        </span>
+                        
+                        {(() => {
+                          const dayMinutes = [0, 1, 2, 3, 4, 5, 6].map(d => {
+                            const blocks = getBlocksForDay(d);
+                            const total = blocks.reduce((sum, b) => sum + b.durationMinutes, 0);
+                            return { day: d, total };
+                          });
+
+                          const totalMinutes = dayMinutes.reduce((sum, d) => sum + d.total, 0);
+                          const averageMinutes = totalMinutes / 7;
+
+                          const maxDay = dayMinutes.reduce((max, d) => d.total > max.total ? d : max, dayMinutes[0]);
+
+                          if (maxDay.total > averageMinutes + 120 && maxDay.total > 0) {
+                            const dayName = DAYS_FULL[maxDay.day];
+                            return (
+                              <p className="text-sm text-gray-600 leading-relaxed">
+                                Sua carga está concentrada em <span className="font-bold text-zinc-950">{dayName}</span>. Distribua sessões para outros dias para equilibrar o estudo.
+                              </p>
+                            );
+                          }
+
+                          return (
+                            <p className="text-sm text-gray-600 leading-relaxed">
+                              Sua semana está bem distribuída. Continue assim!
+                            </p>
+                          );
+                        })()}
+                      </div>
+
+                    </div>
                   </div>
                 </div>
               </>
@@ -610,6 +691,17 @@ export default function PlannerPage() {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              {/* Horário de início */}
+              <div className="space-y-1.5">
+                <label className="block text-sm font-medium text-gray-700">Horário de início</label>
+                <input
+                  type="time"
+                  value={modalStartTime}
+                  onChange={(e) => setModalStartTime(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-gray-55 border border-gray-200 text-gray-900 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
               </div>
 
               {/* Duração */}

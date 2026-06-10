@@ -27,7 +27,7 @@ export async function listBlocks(req: Request, res: Response): Promise<void> {
  */
 export async function createBlock(req: Request, res: Response): Promise<void> {
   try {
-    const { subjectId, dayOfWeek, durationMinutes } = req.body;
+    const { subjectId, dayOfWeek, durationMinutes, startTime } = req.body;
 
     // Valida campos obrigatórios
     if (subjectId === undefined || dayOfWeek === undefined || durationMinutes === undefined) {
@@ -47,6 +47,12 @@ export async function createBlock(req: Request, res: Response): Promise<void> {
       return;
     }
 
+    // Valida horário de início se fornecido
+    if (startTime !== undefined && (typeof startTime !== "string" || !/^\d{2}:\d{2}$/.test(startTime))) {
+      res.status(400).json({ message: "O horário de início deve estar no formato HH:MM (ex: 09:30)." });
+      return;
+    }
+
     // Verifica se a matéria pertence ao usuário
     const subject = await prisma.subject.findUnique({ where: { id: subjectId } });
     if (!subject || subject.userId !== req.userId) {
@@ -60,6 +66,7 @@ export async function createBlock(req: Request, res: Response): Promise<void> {
         subjectId,
         dayOfWeek,
         durationMinutes,
+        startTime: startTime || "07:00",
       },
       include: { subject: true },
     });

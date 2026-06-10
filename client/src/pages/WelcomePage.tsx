@@ -66,9 +66,7 @@ export default function WelcomePage() {
 
         {/* Logo */}
         <div className="flex items-center gap-3 relative z-10">
-          <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur-md">
-            <span className="text-xl">💡</span>
-          </div>
+          <img src="/favicon.png" alt="Lúmen Logo" className="w-10 h-10 object-contain shrink-0" />
           <span className="text-xl font-bold tracking-tight text-white">Lúmen</span>
         </div>
 
@@ -92,9 +90,7 @@ export default function WelcomePage() {
       {/* 2. LOGO MÓVEL COMPACTO: (Visível Apenas Mobile) */}
       <div className="flex items-center justify-between w-full lg:hidden bg-[#121212] text-white p-5 border-b border-white/5 select-none">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
-            <span className="text-sm">💡</span>
-          </div>
+          <img src="/favicon.png" alt="Lúmen Logo" className="w-8 h-8 object-contain shrink-0" />
           <span className="text-base font-bold tracking-tight">Lúmen</span>
         </div>
         <span className="text-[9px] font-bold text-gray-400 tracking-wider">FOCO. ESTUDO. CONSTÂNCIA.</span>

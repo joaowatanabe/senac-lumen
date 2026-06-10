@@ -5,6 +5,7 @@ export interface CreatePlannerBlockData {
   subjectId: string;
   dayOfWeek: number;
   durationMinutes: number;
+  startTime?: string;
 }
 
 export const plannerService = {

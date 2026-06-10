@@ -58,6 +58,7 @@ model PlannerBlock {
   id              String  @id @default(uuid())
   dayOfWeek       Int
   durationMinutes Int
+  startTime       String  @default("07:00")
   subjectId       String
   userId          String
   subject         Subject @relation(fields: [subjectId], references: [id])
