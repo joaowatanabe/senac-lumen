@@ -65,3 +65,17 @@ export interface AuthResponse {
   token: string;
   user: User;
 }
+
+export interface Flashcard {
+  id: string;
+  front: string;
+  back: string;
+  intervalDays: number;
+  easeFactor: number;
+  repetitions: number;
+  nextReview: string;
+  subjectId: string;
+  userId: string;
+  createdAt: string;
+  subject?: Subject;
+}

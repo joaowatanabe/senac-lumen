@@ -31,6 +31,7 @@ export declare const ModelName: {
     readonly Activity: "Activity";
     readonly PlannerBlock: "PlannerBlock";
     readonly PomodoroSession: "PomodoroSession";
+    readonly Flashcard: "Flashcard";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export declare const TransactionIsolationLevel: {
@@ -86,6 +87,20 @@ export declare const PomodoroSessionScalarFieldEnum: {
     readonly userId: "userId";
 };
 export type PomodoroSessionScalarFieldEnum = (typeof PomodoroSessionScalarFieldEnum)[keyof typeof PomodoroSessionScalarFieldEnum];
+export declare const FlashcardScalarFieldEnum: {
+    readonly id: "id";
+    readonly front: "front";
+    readonly back: "back";
+    readonly intervalDays: "intervalDays";
+    readonly easeFactor: "easeFactor";
+    readonly repetitions: "repetitions";
+    readonly nextReview: "nextReview";
+    readonly subjectId: "subjectId";
+    readonly userId: "userId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type FlashcardScalarFieldEnum = (typeof FlashcardScalarFieldEnum)[keyof typeof FlashcardScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";

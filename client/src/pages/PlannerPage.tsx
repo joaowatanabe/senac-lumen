@@ -37,78 +37,14 @@ const lightColorMap: Record<
     dot: string;
   }
 > = {
-  indigo: {
-    bg: "bg-indigo-600 text-white",
-    text: "text-indigo-600",
-    border: "border-indigo-100",
-    borderL: "border-l-indigo-500",
-    pillBg: "bg-indigo-50",
-    pillText: "text-indigo-700",
-    dot: "bg-indigo-500"
-  },
-  sky: {
-    bg: "bg-sky-500 text-white",
-    text: "text-sky-600",
-    border: "border-sky-100",
-    borderL: "border-l-sky-500",
-    pillBg: "bg-sky-50",
-    pillText: "text-sky-700",
-    dot: "bg-sky-500"
-  },
-  emerald: {
-    bg: "bg-emerald-600 text-white",
-    text: "text-emerald-600",
-    border: "border-emerald-100",
-    borderL: "border-l-emerald-500",
-    pillBg: "bg-emerald-50",
-    pillText: "text-emerald-700",
-    dot: "bg-emerald-500"
-  },
-  amber: {
-    bg: "bg-amber-500 text-white",
-    text: "text-amber-600",
-    border: "border-amber-100",
-    borderL: "border-l-amber-500",
-    pillBg: "bg-amber-50",
-    pillText: "text-amber-700",
-    dot: "bg-amber-500"
-  },
-  rose: {
-    bg: "bg-rose-500 text-white",
-    text: "text-rose-600",
-    border: "border-rose-100",
-    borderL: "border-l-rose-500",
-    pillBg: "bg-rose-50",
-    pillText: "text-rose-700",
-    dot: "bg-rose-500"
-  },
-  violet: {
-    bg: "bg-violet-600 text-white",
-    text: "text-violet-600",
-    border: "border-violet-100",
-    borderL: "border-l-violet-500",
-    pillBg: "bg-violet-50",
-    pillText: "text-violet-700",
-    dot: "bg-violet-500"
-  },
-  orange: {
-    bg: "bg-orange-500 text-white",
-    text: "text-orange-600",
-    border: "border-orange-100",
-    borderL: "border-l-orange-500",
-    pillBg: "bg-orange-50",
-    pillText: "text-orange-700",
-    dot: "bg-orange-500"
-  },
-  teal: {
-    bg: "bg-teal-600 text-white",
-    text: "text-teal-600",
-    border: "border-teal-100",
-    borderL: "border-l-teal-500",
-    pillBg: "bg-teal-50",
-    pillText: "text-teal-700",
-    dot: "bg-teal-500"
-  }
+  indigo:  { bg: "bg-zinc-950 text-white",  text: "text-zinc-950",  border: "border-zinc-300",   borderL: "border-l-zinc-950",   pillBg: "bg-zinc-100",      pillText: "text-zinc-900",       dot: "bg-zinc-950" },
+  sky:     { bg: "bg-zinc-800 text-white",  text: "text-zinc-800",  border: "border-zinc-250",   borderL: "border-l-zinc-800",   pillBg: "bg-zinc-55",       pillText: "text-zinc-800",       dot: "bg-zinc-700" },
+  emerald: { bg: "bg-zinc-650 text-white",  text: "text-zinc-650",  border: "border-zinc-200",   borderL: "border-l-zinc-600",   pillBg: "bg-zinc-50/50",    pillText: "text-zinc-700",       dot: "bg-zinc-500" },
+  amber:   { bg: "bg-stone-850 text-white", text: "text-stone-850", border: "border-stone-250",  borderL: "border-l-stone-850",  pillBg: "bg-stone-100/50",  pillText: "text-stone-800",      dot: "bg-stone-700" },
+  rose:    { bg: "bg-slate-850 text-white", text: "text-slate-850", border: "border-slate-250",  borderL: "border-l-slate-850",  pillBg: "bg-slate-100/50",  pillText: "text-slate-800",      dot: "bg-slate-700" },
+  violet:  { bg: "bg-zinc-900 text-white",  text: "text-zinc-900",  border: "border-zinc-300",   borderL: "border-l-zinc-900",   pillBg: "bg-zinc-200/50",   pillText: "text-zinc-900",       dot: "bg-zinc-850" },
+  orange:  { bg: "bg-stone-650 text-white", text: "text-stone-650", border: "border-stone-200",  borderL: "border-l-stone-600",  pillBg: "bg-stone-50/50",   pillText: "text-stone-700",      dot: "bg-stone-550" },
+  teal:    { bg: "bg-slate-650 text-white", text: "text-slate-650", border: "border-slate-200",  borderL: "border-l-slate-600",  pillBg: "bg-slate-50/50",   pillText: "text-slate-700",      dot: "bg-slate-550" },
 };
 
 export default function PlannerPage() {
@@ -242,9 +178,9 @@ export default function PlannerPage() {
   const currentDayTasks = getActivitiesForDay(activeDay, activities);
 
   return (
-    <div className="min-h-screen bg-[#f9fafb] text-gray-900 w-full font-sans antialiased">
+    <div className="min-h-full bg-[#F8F8FA] text-gray-900 w-full font-sans antialiased">
       {/* Header (Móvel apenas) */}
-      <header className="border-b border-gray-200 bg-white/90 backdrop-blur-lg sticky top-0 z-10 lg:hidden px-4 py-3.5">
+      <header className="border-b border-gray-200 bg-white sticky top-0 z-10 lg:hidden px-4 py-3">
         <div className="max-w-md mx-auto">
           <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Esta semana</span>
           <h1 className="text-xl font-extrabold text-gray-900 tracking-tight leading-tight mt-0.5">Planner Semanal</h1>
@@ -252,11 +188,11 @@ export default function PlannerPage() {
       </header>
 
       {/* Conteúdo */}
-      <main className="max-w-md lg:max-w-5xl mx-auto px-4 py-6 pb-24 lg:pb-8 lg:py-8">
+      <main className="max-w-6xl mx-auto px-4 py-6 pb-24 lg:pb-8 lg:py-8">
         {/* Loading */}
         {isLoading && (
           <div className="flex justify-center py-20">
-            <div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
           </div>
         )}
 
@@ -271,7 +207,7 @@ export default function PlannerPage() {
           <>
             {subjects.length === 0 ? (
               <div className="text-center py-12 bg-white border border-gray-150 rounded-2xl p-6 shadow-sm max-w-sm mx-auto">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-50 border border-indigo-100 mb-4">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-light border border-border mb-4">
                   <span className="text-3xl">📚</span>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">
@@ -282,7 +218,7 @@ export default function PlannerPage() {
                 </p>
                 <Link
                   to="/subjects"
-                  className="h-11 px-5 inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-all duration-300 shadow-md shadow-indigo-600/10 hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
+                  className="h-10 px-4 inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-medium transition-all cursor-pointer"
                 >
                   Criar matéria
                 </Link>
@@ -314,25 +250,25 @@ export default function PlannerPage() {
                           onClick={() => setActiveDay(item.dayOfWeek)}
                           className={`flex flex-col items-center py-2 px-1 rounded-xl transition-all cursor-pointer ${
                             isSelected
-                              ? "bg-indigo-600 text-white shadow-sm shadow-indigo-600/20"
+                              ? "bg-primary text-white shadow-sm"
                               : "text-gray-600 hover:bg-gray-50"
                           }`}
                         >
-                          <span className={`text-[10px] uppercase font-bold tracking-wider ${isSelected ? "text-indigo-200" : "text-gray-400"}`}>
+                          <span className={`text-[10px] uppercase font-medium tracking-wider ${isSelected ? "text-indigo-200" : "text-gray-400"}`}>
                             {DAYS[item.dayOfWeek].label}
                           </span>
                           <span className={`text-base font-bold mt-1 leading-none ${
                             isSelected 
                               ? "text-white" 
                               : isToday 
-                              ? "text-indigo-600 font-extrabold border-b-2 border-indigo-600" 
+                              ? "text-primary font-bold border-b-2 border-primary" 
                               : "text-gray-800"
                           }`}>
                             {item.dayOfMonth}
                           </span>
                           {/* Ponto indicador se possui itens */}
                           {hasItems && (
-                            <span className={`w-1 h-1 rounded-full mt-1.5 ${isSelected ? "bg-white" : "bg-indigo-400"}`} />
+                            <span className={`w-1 h-1 rounded-full mt-1.5 ${isSelected ? "bg-white" : "bg-primary"}`} />
                           )}
                         </button>
                       );
@@ -434,7 +370,7 @@ export default function PlannerPage() {
                     {/* Botão de adicionar bloco móvel */}
                     <button
                       onClick={() => handleOpenModal(activeDay)}
-                      className="mt-2 w-full h-11 rounded-xl bg-white hover:bg-gray-50 border border-gray-200 text-indigo-600 text-sm font-bold transition-all shadow-xs cursor-pointer flex items-center justify-center gap-2"
+                      className="mt-2 w-full h-10 rounded-lg bg-white hover:bg-gray-50 border border-gray-200 text-primary text-sm font-medium transition-all cursor-pointer flex items-center justify-center gap-2"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                         <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
@@ -449,8 +385,8 @@ export default function PlannerPage() {
                   {/* Header Seção */}
                   <div className="flex items-center justify-between gap-4 mb-6">
                     <div>
-                      <h1 className="text-2xl font-bold text-gray-900">Planner Semanal</h1>
-                      <p className="text-xs text-gray-500 mt-1">Aloque blocos de estudo por dia e matéria</p>
+                      <h1 className="text-xl font-semibold text-gray-900">Planner Semanal</h1>
+                      <p className="text-sm text-gray-500 mt-0.5">Aloque blocos de estudo por dia e matéria</p>
                     </div>
 
                     {/* Controles de navegação de semana */}
@@ -495,7 +431,7 @@ export default function PlannerPage() {
                       </button>
                       <button
                         onClick={() => handleOpenModal(new Date().getDay())}
-                        className="h-10 px-4.5 inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-md shadow-indigo-600/10 hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
+                        className="h-10 px-4 inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-medium transition-all cursor-pointer shadow-sm"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                           <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
@@ -515,10 +451,10 @@ export default function PlannerPage() {
                       return (
                         <div
                           key={item.dayOfWeek}
-                          className={`bg-white border rounded-2xl p-3 flex flex-col min-h-[440px] shadow-sm transition-all duration-300 ${
+                          className={`bg-white border rounded-xl p-3 flex flex-col min-h-[440px] shadow-sm transition-all duration-300 ${
                             isToday 
-                              ? "border-indigo-400 ring-2 ring-indigo-500/10 bg-indigo-50/5" 
-                              : "border-gray-200"
+                              ? "border-primary/40 ring-2 ring-primary/10" 
+                              : "border-border"
                           }`}
                         >
                           {/* Cabeçalho da coluna do dia */}
@@ -528,7 +464,7 @@ export default function PlannerPage() {
                             </p>
                             <div className="mt-1.5 flex justify-center">
                               {isToday ? (
-                                <span className="w-8 h-8 flex items-center justify-center bg-gray-900 text-white rounded-full font-bold text-xs shadow-sm">
+                                <span className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full font-semibold text-xs shadow-sm">
                                   {item.dayOfMonth}
                                 </span>
                               ) : (
@@ -600,7 +536,7 @@ export default function PlannerPage() {
                           {/* Adicionar por coluna */}
                           <button
                             onClick={() => handleOpenModal(item.dayOfWeek)}
-                            className="mt-3 w-full py-2 border border-dashed border-gray-200 hover:border-indigo-400 bg-gray-50/50 hover:bg-indigo-50/20 text-gray-400 hover:text-indigo-600 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                            className="mt-3 w-full py-2 border border-dashed border-gray-200 hover:border-primary/40 bg-gray-50/50 hover:bg-primary-light/30 text-gray-400 hover:text-primary rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center justify-center gap-1.5"
                           >
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
                               <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
@@ -647,7 +583,7 @@ export default function PlannerPage() {
                   <select
                     value={selectedSubjectId}
                     onChange={(e) => setSelectedSubjectId(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 cursor-pointer"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-55 border border-gray-200 text-gray-900 outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20 cursor-pointer"
                   >
                     {subjects.map((s) => (
                       <option key={s.id} value={s.id} className="bg-white text-gray-900">
@@ -666,7 +602,7 @@ export default function PlannerPage() {
                 <select
                   value={modalDay}
                   onChange={(e) => setModalDay(Number(e.target.value))}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 cursor-pointer"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-55 border border-gray-200 text-gray-900 outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20 cursor-pointer"
                 >
                   {DAYS.map((d) => (
                     <option key={d.value} value={d.value} className="bg-white text-gray-900">
@@ -688,7 +624,7 @@ export default function PlannerPage() {
                   step="15"
                   value={modalDuration}
                   onChange={(e) => setModalDuration(Number(e.target.value))}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-55 border border-gray-200 text-gray-900 outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -697,14 +633,14 @@ export default function PlannerPage() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 h-11 rounded-xl bg-gray-100 border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-200 transition-all duration-200 cursor-pointer"
+                  className="flex-1 h-10 rounded-lg border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 transition-all cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting || subjects.length === 0}
-                  className="flex-1 h-11 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  className="flex-1 h-10 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {isSubmitting ? "Salvando..." : "Salvar"}
                 </button>

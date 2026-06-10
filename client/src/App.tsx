@@ -9,6 +9,7 @@ import SubjectsPage from "./pages/SubjectsPage";
 import ActivitiesPage from "./pages/ActivitiesPage";
 import PomodoroPage from "./pages/PomodoroPage";
 import PlannerPage from "./pages/PlannerPage";
+import FlashcardsPage from "./pages/FlashcardsPage";
 
 import AppLayout from "./components/AppLayout";
 
@@ -35,6 +36,7 @@ function App() {
             <Route path="/activities" element={<ActivitiesPage />} />
             <Route path="/pomodoro" element={<PomodoroPage />} />
             <Route path="/planner" element={<PlannerPage />} />
+            <Route path="/flashcards" element={<FlashcardsPage />} />
           </Route>
 
           {/* Redireciona raiz para dashboard */}

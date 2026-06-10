@@ -9,7 +9,6 @@ import type { Activity } from "../types";
 
 function formatDate(dateStr: string | null): string | null {
   if (!dateStr) return null;
-  // Use UTC safe slicing to prevent timezone offsets shifting the date
   const parts = dateStr.split("T")[0].split("-");
   if (parts.length === 3) {
     const month = parts[1];
@@ -112,25 +111,27 @@ export default function ActivitiesPage() {
   const visibleActivities = getRenderableActivities();
 
   return (
-    <div className="min-h-screen bg-transparent">
-      <header className="border-b border-gray-200 bg-white/90 backdrop-blur-lg sticky top-0 z-10 lg:hidden">
-        <div className="max-w-md mx-auto px-4 py-4">
-          <h1 className="text-lg font-bold text-gray-900 tracking-tight">Atividades</h1>
+    <div className="min-h-full bg-[#F8F8FA]">
+      {/* Mobile header */}
+      <header className="border-b border-gray-200 bg-white sticky top-0 z-10 lg:hidden">
+        <div className="max-w-md mx-auto px-4 py-3">
+          <h1 className="text-base font-bold text-gray-900">Tarefas</h1>
         </div>
       </header>
 
-      <main className="max-w-md lg:max-w-5xl mx-auto px-4 py-6 pb-24 lg:pb-8 lg:py-8">
-        <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <main className="max-w-6xl mx-auto px-4 py-6 pb-24 lg:pb-8">
+
+        {/* Desktop page header */}
+        <div className="hidden lg:flex mb-6 items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Atividades</h1>
-            <p className="mt-1 text-gray-500 text-sm">
-              Gerencie suas tarefas, prazos, prioridades e acompanhe seu progresso de estudos.
+            <p className="text-sm text-gray-500">
+              Gerencie suas tarefas, prazos e prioridades acadêmicas.
             </p>
           </div>
           {!isLoading && !error && subjects.length > 0 && (
             <button
               onClick={handleOpenCreate}
-              className="h-11 md:w-auto px-5 inline-flex items-center justify-center gap-2 rounded-xl bg-black hover:bg-gray-900 text-white text-sm font-semibold transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer shadow-md shrink-0 font-bold"
+              className="h-10 px-4 inline-flex items-center gap-2 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-medium transition-all duration-200 cursor-pointer shadow-sm"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                 <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
@@ -140,153 +141,158 @@ export default function ActivitiesPage() {
           )}
         </div>
 
+        {/* Filter bar */}
         {!isLoading && !error && hasAnyData && (
-          <div className="mb-6 space-y-4 bg-white border border-gray-200 rounded-2xl p-4.5 shadow-sm">
-            <div className="relative">
-              <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.637 10.637z" />
-                </svg>
-              </span>
-              <input
-                type="text"
-                placeholder="Buscar por título ou tipo de atividade..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-xs text-gray-900 placeholder-gray-400 outline-none transition-all focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
-              />
+            <div className="mb-6 bg-white border border-border rounded-xl p-4 shadow-sm space-y-3">
+              {/* Search */}
+              <div className="relative">
+                <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.637 10.637z" />
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  placeholder="Buscar por título ou tipo..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-white border border-gray-200 rounded-lg py-2 pl-10 pr-4 text-sm placeholder:text-gray-400 text-gray-900 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
+                />
             </div>
 
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2 overflow-x-auto pb-0.5 scrollbar-none">
-                <span className="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider mr-1">Status:</span>
-                {[
-                  { id: "all", label: "Todas" },
-                  { id: "pending", label: "Pendentes" },
-                  { id: "completed", label: "Concluídas" },
-                ].map((opt) => (
-                  <button
-                    key={opt.id}
-                    onClick={() => setStatusFilter(opt.id as any)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer whitespace-nowrap ${
-                      statusFilter === opt.id
-                        ? "bg-indigo-600 border-transparent text-white"
-                        : "bg-gray-50 border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-100"
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex items-center gap-2 overflow-x-auto pb-0.5 scrollbar-none">
-                <span className="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider mr-1">Prioridade:</span>
-                {[
-                  { id: "all", label: "Todas" },
-                  { id: "Alta", label: "Alta 🔴" },
-                  { id: "Média", label: "Média 🟡" },
-                  { id: "Baixa", label: "Baixa 🟢" },
-                ].map((opt) => (
-                  <button
-                    key={opt.id}
-                    onClick={() => setPriorityFilter(opt.id as any)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer whitespace-nowrap ${
-                      priorityFilter === opt.id
-                        ? "bg-indigo-600 border-transparent text-white"
-                        : "bg-gray-50 border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-100"
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-
-              {subjects.length > 0 && (
-                <div className="flex items-center gap-2 overflow-x-auto pb-0.5 scrollbar-none">
-                  <span className="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider mr-1">Matéria:</span>
-                  <button
-                    onClick={() => setSubjectFilter("all")}
-                    className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer whitespace-nowrap ${
-                      subjectFilter === "all"
-                        ? "bg-indigo-600 border-transparent text-white"
-                        : "bg-gray-50 border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-100"
-                    }`}
-                  >
-                    Todas
-                  </button>
-                  {subjects.map((sub) => {
-                    const colors = colorMap[sub.color] || colorMap.indigo;
-                    const isSelected = subjectFilter === sub.id;
-                    return (
-                      <button
-                        key={sub.id}
-                        onClick={() => setSubjectFilter(sub.id)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
-                          isSelected
-                            ? `${colors.bg} ${colors.border} ${colors.text} ring-2 ring-indigo-500/15`
-                            : "bg-gray-50 border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-100"
-                        }`}
-                      >
-                        <span className={`w-1.5 h-1.5 rounded-full ${colors.chip}`} />
-                        {sub.name}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
+            {/* Status filter */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-0.5 scrollbar-none">
+              <span className="text-[10px] font-medium text-gray-400 uppercase tracking-wide shrink-0">Status:</span>
+              {[
+                { id: "all", label: "Todas" },
+                { id: "pending", label: "Pendentes" },
+                { id: "completed", label: "Concluídas" },
+              ].map((opt) => (
+                <button
+                  key={opt.id}
+                  onClick={() => setStatusFilter(opt.id as any)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer whitespace-nowrap ${
+                    statusFilter === opt.id
+                      ? "bg-primary border-transparent text-white"
+                      : "bg-white border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
             </div>
+
+            {/* Priority filter */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-0.5 scrollbar-none">
+              <span className="text-[10px] font-medium text-gray-400 uppercase tracking-wide shrink-0">Prioridade:</span>
+              {[
+                { id: "all", label: "Todas" },
+                { id: "Alta", label: "Alta" },
+                { id: "Média", label: "Média" },
+                { id: "Baixa", label: "Baixa" },
+              ].map((opt) => (
+                <button
+                  key={opt.id}
+                  onClick={() => setPriorityFilter(opt.id as any)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer whitespace-nowrap ${
+                    priorityFilter === opt.id
+                      ? "bg-primary border-transparent text-white"
+                      : "bg-white border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Subject filter */}
+            {subjects.length > 0 && (
+              <div className="flex items-center gap-2 overflow-x-auto pb-0.5 scrollbar-none">
+                <span className="text-[10px] font-medium text-gray-400 uppercase tracking-wide shrink-0">Matéria:</span>
+                <button
+                  onClick={() => setSubjectFilter("all")}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer whitespace-nowrap ${
+                    subjectFilter === "all"
+                      ? "bg-primary border-transparent text-white"
+                      : "bg-white border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                  }`}
+                >
+                  Todas
+                </button>
+                {subjects.map((sub) => {
+                  const colors = colorMap[sub.color] || colorMap.indigo;
+                  const isSelected = subjectFilter === sub.id;
+                  return (
+                    <button
+                      key={sub.id}
+                      onClick={() => setSubjectFilter(sub.id)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                        isSelected
+                          ? `${colors.bg} ${colors.border} ${colors.text} ring-1 ring-primary/20`
+                          : "bg-white border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                      }`}
+                    >
+                      <span className={`w-1.5 h-1.5 rounded-full ${colors.chip}`} />
+                      {sub.name}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
 
+        {/* Loading */}
         {isLoading && (
           <div className="flex justify-center py-20">
-            <div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
           </div>
         )}
 
+        {/* Error */}
         {error && !isLoading && (
-          <div className="bg-red-50 border border-red-200 rounded-2xl px-5 py-4 text-red-700 text-sm text-center">
+          <div className="bg-red-50 border border-red-200 rounded-xl px-5 py-4 text-red-700 text-sm text-center">
             {error}
           </div>
         )}
 
+        {/* No subjects */}
         {!isLoading && !error && subjects.length === 0 && (
-          <div className="text-center py-10 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-50 border border-indigo-100 mb-4">
+          <div className="text-center py-10 bg-white border border-border rounded-xl p-6 shadow-sm">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary-light border border-border mb-4">
               <span className="text-3xl">📚</span>
             </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">
-              Nenhuma matéria cadastrada
-            </h3>
+            <h3 className="text-base font-semibold text-gray-900 mb-2">Nenhuma matéria cadastrada</h3>
             <p className="text-gray-500 text-sm max-w-sm mx-auto mb-6 leading-relaxed">
               Você precisa criar uma matéria antes de adicionar atividades.
             </p>
             <Link
               to="/subjects"
-              className="h-11 px-5 inline-flex items-center justify-center gap-2 rounded-xl bg-black hover:bg-gray-900 text-white text-sm font-semibold transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
+              className="h-10 px-4 inline-flex items-center gap-2 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-medium transition-all cursor-pointer"
             >
               Criar matéria
             </Link>
           </div>
         )}
 
+        {/* Empty state */}
         {!isLoading && !error && subjects.length > 0 && (!hasAnyData || visibleActivities.length === 0) && (
-          <div className="text-center py-10 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gray-50 border border-gray-200 mb-4">
+          <div className="text-center py-10 bg-white border border-border rounded-xl p-6 shadow-sm">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gray-55 border border-gray-200 mb-4">
               <span className="text-3xl">📋</span>
             </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">
+            <h3 className="text-base font-semibold text-gray-900 mb-2">
               {!hasAnyData ? "Nenhuma atividade cadastrada" : "Nenhuma atividade corresponde aos filtros"}
             </h3>
             <p className="text-gray-500 text-sm max-w-sm mx-auto mb-6 leading-relaxed">
               {!hasAnyData
-                ? "Crie suas atividades acadêmicas vinculadas às matérias. Acompanhe prazos e marque como concluídas conforme avança."
-                : "Tente limpar os filtros de busca, prioridade ou disciplina para encontrar o que procura."}
+                ? "Crie suas atividades acadêmicas vinculadas às matérias."
+                : "Tente limpar os filtros para encontrar o que procura."}
             </p>
             {!hasAnyData ? (
               <button
                 onClick={handleOpenCreate}
-                className="h-11 px-5 inline-flex items-center justify-center gap-2 rounded-xl bg-black hover:bg-gray-900 text-white text-sm font-semibold transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
+                className="h-10 px-4 inline-flex items-center gap-2 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-medium transition-all cursor-pointer"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                   <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
@@ -295,13 +301,8 @@ export default function ActivitiesPage() {
               </button>
             ) : (
               <button
-                onClick={() => {
-                  setSearchQuery("");
-                  setStatusFilter("all");
-                  setPriorityFilter("all");
-                  setSubjectFilter("all");
-                }}
-                className="h-11 px-5 inline-flex items-center justify-center gap-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-700 text-sm font-semibold transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer hover:bg-gray-100"
+                onClick={() => { setSearchQuery(""); setStatusFilter("all"); setPriorityFilter("all"); setSubjectFilter("all"); }}
+                className="h-10 px-4 inline-flex items-center gap-2 rounded-lg bg-white border border-gray-200 text-gray-700 text-sm font-medium transition-all cursor-pointer hover:bg-gray-50"
               >
                 Limpar filtros
               </button>
@@ -309,14 +310,18 @@ export default function ActivitiesPage() {
           </div>
         )}
 
+        {/* Activities list */}
         {!isLoading && !error && visibleActivities.length > 0 && (
           <div>
+            {/* Mobile cards */}
             <div className="lg:hidden space-y-3">
               {statusFilter === "all" ? (
                 <>
                   {hasAnyPending && (
                     <div className="space-y-3">
-                      <h2 className="text-[10px] font-extrabold text-indigo-600 uppercase tracking-widest px-1">Pendentes ({filteredPending.length})</h2>
+                      <h2 className="text-xs font-semibold text-primary uppercase tracking-wide px-1">
+                        Pendentes ({filteredPending.length})
+                      </h2>
                       {filteredPending.map((act) => (
                         <ActivityCard key={act.id} activity={act} onToggle={toggleStatus} onEdit={handleOpenEdit} onDelete={setDeleteConfirm} />
                       ))}
@@ -324,7 +329,9 @@ export default function ActivitiesPage() {
                   )}
                   {hasAnyCompleted && (
                     <div className="space-y-3 mt-6">
-                      <h2 className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest px-1">Concluídas ({filteredCompleted.length})</h2>
+                      <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wide px-1">
+                        Concluídas ({filteredCompleted.length})
+                      </h2>
                       {filteredCompleted.map((act) => (
                         <ActivityCard key={act.id} activity={act} onToggle={toggleStatus} onEdit={handleOpenEdit} onDelete={setDeleteConfirm} />
                       ))}
@@ -333,9 +340,6 @@ export default function ActivitiesPage() {
                 </>
               ) : (
                 <div className="space-y-3">
-                  <h2 className="text-[10px] font-extrabold text-indigo-600 uppercase tracking-widest px-1">
-                    {statusFilter === "pending" ? `Pendentes (${visibleActivities.length})` : `Concluídas (${visibleActivities.length})`}
-                  </h2>
                   {visibleActivities.map((act) => (
                     <ActivityCard key={act.id} activity={act} onToggle={toggleStatus} onEdit={handleOpenEdit} onDelete={setDeleteConfirm} />
                   ))}
@@ -343,71 +347,76 @@ export default function ActivitiesPage() {
               )}
             </div>
 
-            <div className="hidden lg:block bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
-              <table className="w-full border-collapse text-left text-xs text-gray-900">
+            {/* Desktop table */}
+            <div className="hidden lg:block bg-white border border-border rounded-xl overflow-hidden shadow-sm">
+              <table className="w-full border-collapse text-left text-sm text-gray-900">
                 <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50 text-gray-500">
-                    <th className="px-6 py-4 font-bold uppercase tracking-wider w-16 text-center">Status</th>
-                    <th className="px-6 py-4 font-bold uppercase tracking-wider">Atividade</th>
-                    <th className="px-6 py-4 font-bold uppercase tracking-wider">Matéria</th>
-                    <th className="px-6 py-4 font-bold uppercase tracking-wider">Tipo</th>
-                    <th className="px-6 py-4 font-bold uppercase tracking-wider w-28">Prioridade</th>
-                    <th className="px-6 py-4 font-bold uppercase tracking-wider w-36">Prazo</th>
-                    <th className="px-6 py-4 font-bold uppercase tracking-wider w-24 text-right">Ações</th>
+                  <tr className="border-b border-gray-100 bg-gray-50">
+                    <th className="px-5 py-3.5 text-xs font-medium text-gray-500 uppercase tracking-wide w-12 text-center">✓</th>
+                    <th className="px-5 py-3.5 text-xs font-medium text-gray-500 uppercase tracking-wide">Tarefa</th>
+                    <th className="px-5 py-3.5 text-xs font-medium text-gray-500 uppercase tracking-wide">Disciplina</th>
+                    <th className="px-5 py-3.5 text-xs font-medium text-gray-500 uppercase tracking-wide">Tipo</th>
+                    <th className="px-5 py-3.5 text-xs font-medium text-gray-500 uppercase tracking-wide w-24">Prioridade</th>
+                    <th className="px-5 py-3.5 text-xs font-medium text-gray-500 uppercase tracking-wide w-32">Prazo</th>
+                    <th className="px-5 py-3.5 text-xs font-medium text-gray-500 uppercase tracking-wide w-20 text-right">···</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-gray-50">
                   {visibleActivities.map((act) => {
                     const isDone = act.status === "completed";
                     const subjectColor = act.subject?.color || "indigo";
                     const colors = colorMap[subjectColor] || colorMap.indigo;
                     const dueLabel = formatDate(act.dueDate);
 
-                    const isOverdue = !isDone && act.dueDate && new Date(act.dueDate).setHours(0,0,0,0) < new Date().setHours(0,0,0,0);
-                    const isToday = !isDone && act.dueDate && new Date(act.dueDate).setHours(0,0,0,0) === new Date().setHours(0,0,0,0);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    const due = act.dueDate ? new Date(act.dueDate) : null;
+                    if (due) due.setHours(0, 0, 0, 0);
+                    const isOverdue = !isDone && due && due < today;
+                    const isToday = !isDone && due && due.getTime() === today.getTime();
 
                     return (
                       <tr
                         key={act.id}
-                        className={`transition-colors duration-150 ${isDone ? "opacity-55 bg-gray-50/50" : "hover:bg-gray-50/40"}`}
+                        className={`transition-colors duration-150 ${isDone ? "opacity-60 bg-gray-50/30" : "hover:bg-gray-50/40"}`}
                       >
-                        <td className="px-6 py-3.5 text-center">
+                        <td className="px-5 py-3.5 text-center">
                           <button
                             onClick={() => toggleStatus(act)}
-                            className={`w-5 h-5 mx-auto rounded border shrink-0 flex items-center justify-center transition-all cursor-pointer ${
+                            className={`w-5 h-5 mx-auto rounded border-2 flex items-center justify-center transition-all cursor-pointer ${
                               isDone
-                                ? `bg-emerald-500 border-transparent text-white`
-                                : `border-gray-300 bg-gray-50 hover:border-indigo-500`
+                                ? "bg-green-500 border-transparent text-white"
+                                : "border-gray-200 bg-white hover:border-primary"
                             }`}
                           >
                             {isDone && (
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-white">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
                                 <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
                               </svg>
                             )}
                           </button>
                         </td>
 
-                        <td className="px-6 py-3.5">
-                          <span className={`font-semibold text-sm leading-snug ${isDone ? "line-through text-gray-400 font-medium" : "text-gray-900"}`}>
+                        <td className="px-5 py-3.5">
+                          <span className={`font-medium text-sm leading-snug ${isDone ? "line-through text-gray-400" : "text-gray-900"}`}>
                             {act.title}
                           </span>
                         </td>
 
-                        <td className="px-6 py-3.5">
+                        <td className="px-5 py-3.5">
                           {act.subject ? (
-                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[10px] font-bold ${colors.bg} ${colors.text} border ${colors.border}`}>
+                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${colors.bg} ${colors.text} border ${colors.border}`}>
                               <span className={`w-1.5 h-1.5 rounded-full ${colors.chip}`} />
                               {act.subject.name}
                             </span>
                           ) : (
-                            <span className="text-gray-400 font-semibold">—</span>
+                            <span className="text-gray-300">—</span>
                           )}
                         </td>
 
-                        <td className="px-6 py-3.5">
+                        <td className="px-5 py-3.5">
                           {act.type ? (
-                            <span className="inline-block px-2 py-0.5 rounded-lg text-[10px] font-bold bg-gray-150 text-gray-650 border border-gray-250 uppercase tracking-wide">
+                            <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
                               {act.type}
                             </span>
                           ) : (
@@ -415,14 +424,14 @@ export default function ActivitiesPage() {
                           )}
                         </td>
 
-                        <td className="px-6 py-3.5">
+                        <td className="px-5 py-3.5">
                           {act.priority ? (
-                            <span className={`inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-bold border uppercase tracking-wide ${
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                               act.priority === "Alta"
-                                ? "bg-red-50 text-red-700 border-red-200"
+                                ? "bg-red-50 text-red-500"
                                 : act.priority === "Baixa"
-                                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                                : "bg-amber-50 text-amber-700 border-amber-200"
+                                ? "bg-green-50 text-green-600"
+                                : "bg-blue-50 text-blue-500"
                             }`}>
                               {act.priority}
                             </span>
@@ -431,28 +440,28 @@ export default function ActivitiesPage() {
                           )}
                         </td>
 
-                        <td className="px-6 py-3.5">
+                        <td className="px-5 py-3.5">
                           {dueLabel ? (
-                            <span className={`text-[10px] font-bold inline-flex items-center gap-1 px-2 py-0.5 rounded-lg border ${
+                            <span className={`text-xs font-medium inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full ${
                               isOverdue
-                                ? "bg-red-50 text-red-700 border-red-200 animate-pulse"
+                                ? "bg-red-50 text-red-500"
                                 : isToday
-                                ? "bg-amber-50 text-amber-700 border-amber-200"
-                                : "bg-gray-50 text-gray-500 border-gray-200"
+                                ? "bg-orange-50 text-orange-500"
+                                : "bg-gray-100 text-gray-500"
                             }`}>
-                              {isOverdue ? "⚠️ Atrasado: " : isToday ? "⏰ Hoje: " : "📅 "}
+                              {isOverdue ? "⚠ " : isToday ? "⏰ " : ""}
                               {dueLabel}
                             </span>
                           ) : (
-                            <span className="text-gray-400">Sem prazo</span>
+                            <span className="text-gray-400 text-xs">Sem prazo</span>
                           )}
                         </td>
 
-                        <td className="px-6 py-3.5 text-right">
-                          <div className="inline-flex items-center gap-1 opacity-60 hover:opacity-100 transition-opacity">
+                        <td className="px-5 py-3.5 text-right">
+                          <div className="inline-flex items-center gap-1">
                             <button
                               onClick={() => handleOpenEdit(act)}
-                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-gray-50 text-gray-500 border border-gray-200 hover:bg-gray-100 hover:text-gray-900 transition-all cursor-pointer"
+                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-white text-gray-400 border border-gray-200 hover:bg-gray-100 hover:text-gray-700 transition-all cursor-pointer"
                               title="Editar"
                             >
                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
@@ -461,7 +470,7 @@ export default function ActivitiesPage() {
                             </button>
                             <button
                               onClick={() => setDeleteConfirm(act)}
-                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-gray-50 text-gray-500 border border-gray-200 hover:bg-red-50 hover:text-red-650 hover:border-red-150 transition-all cursor-pointer"
+                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-white text-gray-400 border border-gray-200 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all cursor-pointer"
                               title="Excluir"
                             >
                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
@@ -477,7 +486,7 @@ export default function ActivitiesPage() {
               </table>
             </div>
 
-            <p className="text-center text-[10px] font-extrabold text-gray-400 uppercase tracking-wider mt-6">
+            <p className="text-center text-xs text-gray-400 font-medium mt-6">
               {visibleActivities.length} {visibleActivities.length === 1 ? "atividade listada" : "atividades listadas"}
             </p>
           </div>
@@ -494,23 +503,22 @@ export default function ActivitiesPage() {
 
       {deleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/50 transition-opacity" onClick={() => setDeleteConfirm(null)} />
-          <div className="relative w-full max-w-sm bg-white border border-gray-100 rounded-2xl p-6 shadow-2xl animate-[fadeIn_0.15s_ease-out] text-gray-900">
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Excluir atividade?</h3>
+          <div className="absolute inset-0 bg-black/50" onClick={() => setDeleteConfirm(null)} />
+          <div className="relative w-full max-w-sm bg-white border border-gray-100 rounded-xl p-6 shadow-2xl text-gray-900">
+            <h3 className="text-base font-semibold text-gray-900 mb-2">Excluir atividade?</h3>
             <p className="text-gray-500 text-sm mb-6">
-              A atividade <strong className="text-gray-900">{deleteConfirm.title}</strong> será
-              excluída permanentemente.
+              A atividade <strong className="text-gray-900">{deleteConfirm.title}</strong> será excluída permanentemente.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setDeleteConfirm(null)}
-                className="flex-1 h-11 rounded-xl bg-gray-50 border border-gray-200 text-gray-500 text-sm font-semibold hover:bg-gray-100 hover:text-gray-900 transition-all cursor-pointer"
+                className="flex-1 h-10 rounded-lg border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 transition-all cursor-pointer"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="flex-1 h-11 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-semibold transition-all cursor-pointer"
+                className="flex-1 h-10 rounded-lg bg-red-600 hover:bg-red-500 text-white text-sm font-medium transition-all cursor-pointer"
               >
                 Excluir
               </button>

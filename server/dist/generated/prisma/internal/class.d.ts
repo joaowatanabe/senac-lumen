@@ -172,6 +172,17 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
     get pomodoroSession(): Prisma.PomodoroSessionDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
+    /**
+     * `prisma.flashcard`: Exposes CRUD operations for the **Flashcard** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Flashcards
+      * const flashcards = await prisma.flashcard.findMany()
+      * ```
+      */
+    get flashcard(): Prisma.FlashcardDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
 }
 export declare function getPrismaClientClass(): PrismaClientConstructor;
 //# sourceMappingURL=class.d.ts.map

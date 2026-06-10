@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, type IRouter } from "express";
 import { authenticateToken } from "../middlewares/auth";
 import {
   listActivities,
@@ -7,7 +7,7 @@ import {
   deleteActivity,
 } from "../controllers/activityController";
 
-const router = Router();
+const router: IRouter = Router();
 
 router.use(authenticateToken);
 

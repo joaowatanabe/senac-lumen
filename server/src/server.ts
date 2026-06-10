@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express from "express";
+import express, { type Application } from "express";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes";
 import subjectRoutes from "./routes/subjectRoutes";
@@ -7,8 +7,9 @@ import activityRoutes from "./routes/activityRoutes";
 import pomodoroRoutes from "./routes/pomodoroRoutes";
 import plannerRoutes from "./routes/plannerRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
+import flashcardRoutes from "./routes/flashcardRoutes";
 
-const app = express();
+const app: Application = express();
 
 // Middlewares globais
 app.use(cors({ origin: "http://localhost:5173" }));
@@ -21,6 +22,7 @@ app.use("/api/activities", activityRoutes);
 app.use("/api/pomodoro", pomodoroRoutes);
 app.use("/api/planner", plannerRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api", flashcardRoutes);
 
 // Rota de health-check
 app.get("/health", (_req, res) => {

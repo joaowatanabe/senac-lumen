@@ -236,6 +236,7 @@ export declare const ModelName: {
     readonly Activity: "Activity";
     readonly PlannerBlock: "PlannerBlock";
     readonly PomodoroSession: "PomodoroSession";
+    readonly Flashcard: "Flashcard";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export interface TypeMapCb<GlobalOmitOptions = {}> extends runtime.Types.Utils.Fn<{
@@ -248,7 +249,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-        modelProps: "user" | "subject" | "activity" | "plannerBlock" | "pomodoroSession";
+        modelProps: "user" | "subject" | "activity" | "plannerBlock" | "pomodoroSession" | "flashcard";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -622,6 +623,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 };
             };
         };
+        Flashcard: {
+            payload: Prisma.$FlashcardPayload<ExtArgs>;
+            fields: Prisma.FlashcardFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.FlashcardFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FlashcardPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.FlashcardFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FlashcardPayload>;
+                };
+                findFirst: {
+                    args: Prisma.FlashcardFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FlashcardPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.FlashcardFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FlashcardPayload>;
+                };
+                findMany: {
+                    args: Prisma.FlashcardFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FlashcardPayload>[];
+                };
+                create: {
+                    args: Prisma.FlashcardCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FlashcardPayload>;
+                };
+                createMany: {
+                    args: Prisma.FlashcardCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.FlashcardCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FlashcardPayload>[];
+                };
+                delete: {
+                    args: Prisma.FlashcardDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FlashcardPayload>;
+                };
+                update: {
+                    args: Prisma.FlashcardUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FlashcardPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.FlashcardDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.FlashcardUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.FlashcardUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FlashcardPayload>[];
+                };
+                upsert: {
+                    args: Prisma.FlashcardUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$FlashcardPayload>;
+                };
+                aggregate: {
+                    args: Prisma.FlashcardAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateFlashcard>;
+                };
+                groupBy: {
+                    args: Prisma.FlashcardGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.FlashcardGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.FlashcardCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.FlashcardCountAggregateOutputType> | number;
+                };
+            };
+        };
     };
 } & {
     other: {
@@ -702,6 +777,20 @@ export declare const PomodoroSessionScalarFieldEnum: {
     readonly userId: "userId";
 };
 export type PomodoroSessionScalarFieldEnum = (typeof PomodoroSessionScalarFieldEnum)[keyof typeof PomodoroSessionScalarFieldEnum];
+export declare const FlashcardScalarFieldEnum: {
+    readonly id: "id";
+    readonly front: "front";
+    readonly back: "back";
+    readonly intervalDays: "intervalDays";
+    readonly easeFactor: "easeFactor";
+    readonly repetitions: "repetitions";
+    readonly nextReview: "nextReview";
+    readonly subjectId: "subjectId";
+    readonly userId: "userId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type FlashcardScalarFieldEnum = (typeof FlashcardScalarFieldEnum)[keyof typeof FlashcardScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";
@@ -866,6 +955,7 @@ export type GlobalOmitConfig = {
     activity?: Prisma.ActivityOmit;
     plannerBlock?: Prisma.PlannerBlockOmit;
     pomodoroSession?: Prisma.PomodoroSessionOmit;
+    flashcard?: Prisma.FlashcardOmit;
 };
 export type LogLevel = 'info' | 'query' | 'warn' | 'error';
 export type LogDefinition = {

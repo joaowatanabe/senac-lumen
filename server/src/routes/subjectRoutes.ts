@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, type IRouter } from "express";
 import { authenticateToken } from "../middlewares/auth";
 import {
   listSubjects,
@@ -7,7 +7,7 @@ import {
   deleteSubject,
 } from "../controllers/subjectController";
 
-const router = Router();
+const router: IRouter = Router();
 
 // Todas as rotas de matérias exigem autenticação
 router.use(authenticateToken);

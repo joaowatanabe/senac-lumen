@@ -12,6 +12,7 @@ const activityRoutes_1 = __importDefault(require("./routes/activityRoutes"));
 const pomodoroRoutes_1 = __importDefault(require("./routes/pomodoroRoutes"));
 const plannerRoutes_1 = __importDefault(require("./routes/plannerRoutes"));
 const dashboardRoutes_1 = __importDefault(require("./routes/dashboardRoutes"));
+const flashcardRoutes_1 = __importDefault(require("./routes/flashcardRoutes"));
 const app = (0, express_1.default)();
 // Middlewares globais
 app.use((0, cors_1.default)({ origin: "http://localhost:5173" }));
@@ -23,6 +24,7 @@ app.use("/api/activities", activityRoutes_1.default);
 app.use("/api/pomodoro", pomodoroRoutes_1.default);
 app.use("/api/planner", plannerRoutes_1.default);
 app.use("/api/dashboard", dashboardRoutes_1.default);
+app.use("/api", flashcardRoutes_1.default);
 // Rota de health-check
 app.get("/health", (_req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });

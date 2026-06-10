@@ -22,6 +22,7 @@ model User {
   activities       Activity[]
   plannerBlocks    PlannerBlock[]
   pomodoroSessions PomodoroSession[]
+  flashcards       Flashcard[]
 }
 
 model Subject {
@@ -36,6 +37,7 @@ model Subject {
   activities       Activity[]
   plannerBlocks    PlannerBlock[]
   pomodoroSessions PomodoroSession[]
+  flashcards       Flashcard[]
 }
 
 model Activity {
@@ -70,4 +72,22 @@ model PomodoroSession {
   userId          String
   subject         Subject  @relation(fields: [subjectId], references: [id])
   user            User     @relation(fields: [userId], references: [id])
+}
+
+model Flashcard {
+  id           String   @id @default(uuid())
+  front        String
+  back         String
+  intervalDays Int      @default(0)
+  easeFactor   Float    @default(2.5)
+  repetitions  Int      @default(0)
+  nextReview   DateTime @default(now())
+  subjectId    String
+  userId       String
+  subject      Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([userId, nextReview])
 }

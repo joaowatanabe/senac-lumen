@@ -1,8 +1,8 @@
-import { Router } from "express";
+import { Router, type IRouter } from "express";
 import { authenticateToken } from "../middlewares/auth";
 import { createSession, getTodaySessions } from "../controllers/pomodoroController";
 
-const router = Router();
+const router: IRouter = Router();
 
 router.use(authenticateToken);
 

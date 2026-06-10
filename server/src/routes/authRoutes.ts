@@ -1,7 +1,7 @@
-import { Router } from "express";
+import { Router, type IRouter } from "express";
 import { register, login } from "../controllers/authController";
 
-const router = Router();
+const router: IRouter = Router();
 
 // POST /api/auth/register — cadastro de novo usuário
 router.post("/register", register);

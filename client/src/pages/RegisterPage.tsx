@@ -45,8 +45,8 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-gray-900 font-sans flex lg:flex-row flex-col">
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-950 via-indigo-900 to-violet-950 text-white p-12 flex-col justify-between relative overflow-hidden shrink-0 select-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black text-white p-12 flex-col justify-between relative overflow-hidden shrink-0 select-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-zinc-500/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex items-center gap-3 relative z-10">
           <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur-md">
@@ -56,22 +56,22 @@ export default function RegisterPage() {
         </div>
 
         <div className="my-auto space-y-6 max-w-md relative z-10">
-          <h1 className="text-4xl font-extrabold tracking-tight leading-tight bg-gradient-to-r from-white via-indigo-100 to-indigo-200 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-extrabold tracking-tight leading-tight bg-gradient-to-r from-white via-zinc-100 to-zinc-300 bg-clip-text text-transparent">
             Organize seus estudos e domine seu tempo.
           </h1>
-          <p className="text-indigo-200/80 text-base leading-relaxed font-medium">
+          <p className="text-zinc-300/80 text-base leading-relaxed font-medium">
             Uma experiência visual e moderna de planner, pomodoro e acompanhamento de tarefas feita para impulsionar o seu aprendizado.
           </p>
         </div>
 
-        <div className="text-xs text-indigo-300/40 font-semibold tracking-wide relative z-10">
+        <div className="text-xs text-zinc-500/30 font-semibold tracking-wide relative z-10">
           © {new Date().getFullYear()} Lúmen. Todos os direitos reservados.
         </div>
       </div>
 
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 md:p-12 min-h-screen bg-[#f8fafc]">
         <div className="flex flex-col items-center mb-8 lg:hidden select-none">
-          <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4">
+          <div className="w-14 h-14 rounded-2xl bg-zinc-500/10 border border-zinc-500/20 flex items-center justify-center mb-4">
             <span className="text-2xl">💡</span>
           </div>
           <h2 className="text-2xl font-black text-gray-900 tracking-tight">Lúmen</h2>
@@ -104,7 +104,7 @@ export default function RegisterPage() {
                 placeholder="Seu nome completo"
                 required
                 autoComplete="name"
-                className="w-full px-4 py-3 rounded-xl bg-gray-55/40 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
+                className="w-full px-4 py-3 rounded-xl bg-gray-55/40 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all duration-200 focus:border-zinc-900 focus:bg-white focus:ring-2 focus:ring-zinc-900/15"
               />
             </div>
 
@@ -120,7 +120,7 @@ export default function RegisterPage() {
                 placeholder="seu@email.com"
                 required
                 autoComplete="email"
-                className="w-full px-4 py-3 rounded-xl bg-gray-55/40 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
+                className="w-full px-4 py-3 rounded-xl bg-gray-55/40 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all duration-200 focus:border-zinc-900 focus:bg-white focus:ring-2 focus:ring-zinc-900/15"
               />
             </div>
 
@@ -136,7 +136,7 @@ export default function RegisterPage() {
                 placeholder="Mínimo 6 caracteres"
                 required
                 autoComplete="new-password"
-                className="w-full px-4 py-3 rounded-xl bg-gray-55/40 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
+                className="w-full px-4 py-3 rounded-xl bg-gray-55/40 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all duration-200 focus:border-zinc-900 focus:bg-white focus:ring-2 focus:ring-zinc-900/15"
               />
             </div>
 
@@ -152,7 +152,7 @@ export default function RegisterPage() {
                 placeholder="Repita a senha"
                 required
                 autoComplete="new-password"
-                className="w-full px-4 py-3 rounded-xl bg-gray-55/40 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/15"
+                className="w-full px-4 py-3 rounded-xl bg-gray-55/40 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all duration-200 focus:border-zinc-900 focus:bg-white focus:ring-2 focus:ring-zinc-900/15"
               />
             </div>
 
@@ -173,7 +173,7 @@ export default function RegisterPage() {
 
             <p className="text-center text-xs font-bold text-gray-400 mt-6 pt-4 border-t border-gray-100">
               Já tem uma conta?{" "}
-              <Link to="/login" className="text-indigo-600 hover:text-indigo-700 font-extrabold uppercase tracking-wide transition-colors">
+              <Link to="/login" className="text-zinc-900 hover:text-black font-extrabold uppercase tracking-wide transition-colors">
                 Entrar
               </Link>
             </p>

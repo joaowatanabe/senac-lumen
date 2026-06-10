@@ -77,7 +77,7 @@ export async function createBlock(req: Request, res: Response): Promise<void> {
  */
 export async function deleteBlock(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
 
     // Verifica ownership do bloco
     const existing = await prisma.plannerBlock.findUnique({ where: { id } });

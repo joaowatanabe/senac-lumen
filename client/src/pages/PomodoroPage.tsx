@@ -17,14 +17,14 @@ const TOTAL_DURATIONS = {
 };
 
 const badgeColorMap: Record<string, string> = {
-  indigo: "bg-indigo-100 text-indigo-700",
-  sky: "bg-sky-100 text-sky-700",
-  emerald: "bg-emerald-100 text-emerald-700",
-  amber: "bg-amber-100 text-amber-700",
-  rose: "bg-rose-100 text-rose-700",
-  violet: "bg-violet-100 text-violet-700",
-  orange: "bg-orange-100 text-orange-700",
-  teal: "bg-teal-100 text-teal-700",
+  indigo: "bg-zinc-900 text-white",
+  sky: "bg-zinc-100 text-zinc-800",
+  emerald: "bg-zinc-100 text-zinc-700",
+  amber: "bg-stone-100 text-stone-800",
+  rose: "bg-slate-100 text-slate-850",
+  violet: "bg-zinc-200 text-zinc-900",
+  orange: "bg-stone-100 text-stone-700",
+  teal: "bg-slate-100 text-slate-700",
 };
 
 function formatTime(seconds: number) {
@@ -84,10 +84,10 @@ export default function PomodoroPage() {
   const todayBlocks = getBlocksForDay(todayDayOfWeek);
 
   return (
-    <div className={`min-h-screen w-full font-sans antialiased transition-all duration-300 ${
+    <div className={`min-h-full w-full font-sans antialiased transition-all duration-300 ${
       activeFocus 
-        ? "bg-gradient-to-br from-indigo-900 via-indigo-950 to-violet-950 flex flex-col justify-center items-center px-4 text-white" 
-        : "bg-[#f9fafb] text-gray-900 pb-24"
+        ? "bg-gradient-to-br from-zinc-900 via-zinc-950 to-black flex flex-col justify-center items-center px-4 text-white" 
+        : "bg-surface text-gray-900 pb-24"
     }`}>
       {/* Header (hidden in focus) */}
       {!activeFocus && (
@@ -101,7 +101,7 @@ export default function PomodoroPage() {
       <main className={`w-full max-w-md mx-auto px-4 ${activeFocus ? "py-0 flex flex-col items-center justify-center" : "py-4 flex flex-col gap-6"}`}>
         
         {/* Card Principal do Timer */}
-        <div className="bg-gradient-to-br from-indigo-600 to-violet-700 text-white rounded-2xl p-6 shadow-xl w-full flex flex-col items-center relative">
+        <div className="bg-gradient-to-br from-zinc-900 to-black text-white rounded-2xl p-6 shadow-xl w-full flex flex-col items-center relative">
           
           {/* Topo do card */}
           <div className="w-full flex items-center justify-between gap-3 shrink-0">
@@ -116,9 +116,9 @@ export default function PomodoroPage() {
                 disabled={isRunning}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
               >
-                <option value="" className="bg-indigo-900 text-white">Selecionar Matéria</option>
+                <option value="" className="bg-zinc-900 text-white">Selecionar Matéria</option>
                 {!subjectsLoading && subjects.map((s) => (
-                  <option key={s.id} value={s.id} className="bg-indigo-900 text-white">
+                  <option key={s.id} value={s.id} className="bg-zinc-900 text-white">
                     {s.name}
                   </option>
                 ))}
@@ -204,7 +204,7 @@ export default function PomodoroPage() {
             <button
               onClick={toggleTimer}
               disabled={(phase === "focus" && !selectedSubject && !isRunning) || subjects.length === 0}
-              className="bg-white text-indigo-600 hover:bg-neutral-50 rounded-full px-8 py-3 font-bold shadow-md active:scale-98 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-sm shrink-0 min-w-[125px]"
+              className="bg-white text-zinc-900 hover:bg-neutral-50 rounded-full px-8 py-3 font-bold shadow-md active:scale-98 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-sm shrink-0 min-w-[125px]"
             >
               {isRunning ? "⏸ Pausar" : "▶ Iniciar"}
             </button>

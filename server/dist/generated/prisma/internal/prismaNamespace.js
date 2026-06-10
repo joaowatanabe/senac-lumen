@@ -48,7 +48,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.defineExtension = exports.NullsOrder = exports.QueryMode = exports.SortOrder = exports.PomodoroSessionScalarFieldEnum = exports.PlannerBlockScalarFieldEnum = exports.ActivityScalarFieldEnum = exports.SubjectScalarFieldEnum = exports.UserScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
+exports.defineExtension = exports.NullsOrder = exports.QueryMode = exports.SortOrder = exports.FlashcardScalarFieldEnum = exports.PomodoroSessionScalarFieldEnum = exports.PlannerBlockScalarFieldEnum = exports.ActivityScalarFieldEnum = exports.SubjectScalarFieldEnum = exports.UserScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/client"));
 /**
  * Prisma Errors
@@ -107,7 +107,8 @@ exports.ModelName = {
     Subject: 'Subject',
     Activity: 'Activity',
     PlannerBlock: 'PlannerBlock',
-    PomodoroSession: 'PomodoroSession'
+    PomodoroSession: 'PomodoroSession',
+    Flashcard: 'Flashcard'
 };
 /**
  * Enums
@@ -158,6 +159,19 @@ exports.PomodoroSessionScalarFieldEnum = {
     completedAt: 'completedAt',
     subjectId: 'subjectId',
     userId: 'userId'
+};
+exports.FlashcardScalarFieldEnum = {
+    id: 'id',
+    front: 'front',
+    back: 'back',
+    intervalDays: 'intervalDays',
+    easeFactor: 'easeFactor',
+    repetitions: 'repetitions',
+    nextReview: 'nextReview',
+    subjectId: 'subjectId',
+    userId: 'userId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 };
 exports.SortOrder = {
     asc: 'asc',

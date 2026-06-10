@@ -120,6 +120,16 @@ export async function getDashboardData(req: Request, res: Response): Promise<voi
       }
     }
 
+    // 7.5. Flashcards pendentes para hoje
+    const flashcardsDueToday = await prisma.flashcard.count({
+      where: {
+        userId,
+        nextReview: {
+          lte: new Date(),
+        },
+      },
+    });
+
     const weeklyMinutesBySubject = Array.from(weeklyMinutesMap.values());
 
     res.json({
@@ -129,6 +139,7 @@ export async function getDashboardData(req: Request, res: Response): Promise<voi
       pomodoroSessionsToday,
       weeklyMinutesBySubject,
       plannerBlocksToday,
+      flashcardsDueToday,
     });
   } catch (error) {
     console.error("Erro ao obter dados do dashboard:", error);

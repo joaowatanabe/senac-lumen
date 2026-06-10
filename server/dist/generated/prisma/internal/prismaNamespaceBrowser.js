@@ -48,7 +48,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NullsOrder = exports.QueryMode = exports.SortOrder = exports.PomodoroSessionScalarFieldEnum = exports.PlannerBlockScalarFieldEnum = exports.ActivityScalarFieldEnum = exports.SubjectScalarFieldEnum = exports.UserScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
+exports.NullsOrder = exports.QueryMode = exports.SortOrder = exports.FlashcardScalarFieldEnum = exports.PomodoroSessionScalarFieldEnum = exports.PlannerBlockScalarFieldEnum = exports.ActivityScalarFieldEnum = exports.SubjectScalarFieldEnum = exports.UserScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/index-browser"));
 exports.Decimal = runtime.Decimal;
 exports.NullTypes = {
@@ -79,7 +79,8 @@ exports.ModelName = {
     Subject: 'Subject',
     Activity: 'Activity',
     PlannerBlock: 'PlannerBlock',
-    PomodoroSession: 'PomodoroSession'
+    PomodoroSession: 'PomodoroSession',
+    Flashcard: 'Flashcard'
 };
 /*
  * Enums
@@ -130,6 +131,19 @@ exports.PomodoroSessionScalarFieldEnum = {
     completedAt: 'completedAt',
     subjectId: 'subjectId',
     userId: 'userId'
+};
+exports.FlashcardScalarFieldEnum = {
+    id: 'id',
+    front: 'front',
+    back: 'back',
+    intervalDays: 'intervalDays',
+    easeFactor: 'easeFactor',
+    repetitions: 'repetitions',
+    nextReview: 'nextReview',
+    subjectId: 'subjectId',
+    userId: 'userId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 };
 exports.SortOrder = {
     asc: 'asc',

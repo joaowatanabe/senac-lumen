@@ -27,9 +27,27 @@ export default function BottomNavBar({ onOpenCreateModal }: BottomNavBarProps) {
         </svg>
       ),
     },
+    {
+      to: "/flashcards",
+      label: "Cards",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+          <path d="M4.5 3.75a.75.75 0 00-1.5 0v16.5a.75.75 0 001.5 0V3.75zM7.9 3h8.2c.94 0 1.7.76 1.7 1.7v14.6c0 .94-.76 1.7-1.7 1.7H7.9c-.94 0-1.7-.76-1.7-1.7V4.7c0-.94.76-1.7 1.7-1.7z" />
+        </svg>
+      ),
+    },
   ];
 
   const rightItems = [
+    {
+      to: "/pomodoro",
+      label: "Pomodoro",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+          <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z" clipRule="evenodd" />
+        </svg>
+      ),
+    },
     {
       to: "/planner",
       label: "Semana",
@@ -51,7 +69,7 @@ export default function BottomNavBar({ onOpenCreateModal }: BottomNavBarProps) {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-indigo-950/95 border-t border-indigo-900/20 backdrop-blur-lg shadow-lg shadow-black/30">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-border shadow-lg shadow-black/5">
       <div className="max-w-md mx-auto flex items-center justify-around h-16 px-4">
         
         {/* Left navigation items */}
@@ -62,13 +80,11 @@ export default function BottomNavBar({ onOpenCreateModal }: BottomNavBarProps) {
               key={item.to}
               to={item.to}
               className={`flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-xl transition-all duration-200 min-w-[56px] ${
-                isActive ? "text-white scale-105 font-bold" : "text-indigo-300/60 hover:text-indigo-200"
+                isActive ? "text-primary" : "text-gray-400 hover:text-gray-600"
               }`}
             >
-              <span className={isActive ? "scale-105 transition-transform" : "transition-transform"}>
-                {item.icon}
-              </span>
-              <span className={`text-[9px] font-bold uppercase tracking-wider ${isActive ? "text-white" : ""}`}>
+              <span>{item.icon}</span>
+              <span className={`text-[9px] font-medium uppercase tracking-wider ${isActive ? "text-primary font-semibold" : ""}`}>
                 {item.label}
               </span>
             </Link>
@@ -78,10 +94,10 @@ export default function BottomNavBar({ onOpenCreateModal }: BottomNavBarProps) {
         {/* Highlighted Central "+" Button */}
         <button
           onClick={onOpenCreateModal}
-          className="relative -top-3 w-12 h-12 flex items-center justify-center rounded-full bg-black hover:bg-neutral-900 border border-white/15 text-white shadow-lg shadow-black/40 ring-4 ring-indigo-950 transition-all active:scale-95 cursor-pointer shrink-0 z-50 hover:scale-105"
+          className="relative -top-3 w-12 h-12 flex items-center justify-center rounded-full bg-primary hover:bg-primary-hover text-white shadow-lg shadow-black/20 ring-4 ring-white transition-all active:scale-95 cursor-pointer shrink-0 z-50"
           title="Criar Item"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-5 h-5">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
         </button>
@@ -94,13 +110,11 @@ export default function BottomNavBar({ onOpenCreateModal }: BottomNavBarProps) {
               key={item.to}
               to={item.to}
               className={`flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-xl transition-all duration-200 min-w-[56px] ${
-                isActive ? "text-white scale-105 font-bold" : "text-indigo-300/60 hover:text-indigo-200"
+                isActive ? "text-primary" : "text-gray-400 hover:text-gray-600"
               }`}
             >
-              <span className={isActive ? "scale-105 transition-transform" : "transition-transform"}>
-                {item.icon}
-              </span>
-              <span className={`text-[9px] font-bold uppercase tracking-wider ${isActive ? "text-white" : ""}`}>
+              <span>{item.icon}</span>
+              <span className={`text-[9px] font-medium uppercase tracking-wider ${isActive ? "text-primary font-semibold" : ""}`}>
                 {item.label}
               </span>
             </Link>

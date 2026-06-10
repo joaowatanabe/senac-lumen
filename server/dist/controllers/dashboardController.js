@@ -108,6 +108,15 @@ async function getDashboardData(req, res) {
                 });
             }
         }
+        // 7.5. Flashcards pendentes para hoje
+        const flashcardsDueToday = await prisma_1.default.flashcard.count({
+            where: {
+                userId,
+                nextReview: {
+                    lte: new Date(),
+                },
+            },
+        });
         const weeklyMinutesBySubject = Array.from(weeklyMinutesMap.values());
         res.json({
             user: { name: user.name },
@@ -116,6 +125,7 @@ async function getDashboardData(req, res) {
             pomodoroSessionsToday,
             weeklyMinutesBySubject,
             plannerBlocksToday,
+            flashcardsDueToday,
         });
     }
     catch (error) {

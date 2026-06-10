@@ -142,6 +142,7 @@ export type UserWhereInput = {
     activities?: Prisma.ActivityListRelationFilter;
     plannerBlocks?: Prisma.PlannerBlockListRelationFilter;
     pomodoroSessions?: Prisma.PomodoroSessionListRelationFilter;
+    flashcards?: Prisma.FlashcardListRelationFilter;
 };
 export type UserOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -153,6 +154,7 @@ export type UserOrderByWithRelationInput = {
     activities?: Prisma.ActivityOrderByRelationAggregateInput;
     plannerBlocks?: Prisma.PlannerBlockOrderByRelationAggregateInput;
     pomodoroSessions?: Prisma.PomodoroSessionOrderByRelationAggregateInput;
+    flashcards?: Prisma.FlashcardOrderByRelationAggregateInput;
 };
 export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string;
@@ -167,6 +169,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     activities?: Prisma.ActivityListRelationFilter;
     plannerBlocks?: Prisma.PlannerBlockListRelationFilter;
     pomodoroSessions?: Prisma.PomodoroSessionListRelationFilter;
+    flashcards?: Prisma.FlashcardListRelationFilter;
 }, "id" | "email">;
 export type UserOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
@@ -198,6 +201,7 @@ export type UserCreateInput = {
     activities?: Prisma.ActivityCreateNestedManyWithoutUserInput;
     plannerBlocks?: Prisma.PlannerBlockCreateNestedManyWithoutUserInput;
     pomodoroSessions?: Prisma.PomodoroSessionCreateNestedManyWithoutUserInput;
+    flashcards?: Prisma.FlashcardCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateInput = {
     id?: string;
@@ -209,6 +213,7 @@ export type UserUncheckedCreateInput = {
     activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput;
     plannerBlocks?: Prisma.PlannerBlockUncheckedCreateNestedManyWithoutUserInput;
     pomodoroSessions?: Prisma.PomodoroSessionUncheckedCreateNestedManyWithoutUserInput;
+    flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -220,6 +225,7 @@ export type UserUpdateInput = {
     activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput;
     plannerBlocks?: Prisma.PlannerBlockUpdateManyWithoutUserNestedInput;
     pomodoroSessions?: Prisma.PomodoroSessionUpdateManyWithoutUserNestedInput;
+    flashcards?: Prisma.FlashcardUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -231,6 +237,7 @@ export type UserUncheckedUpdateInput = {
     activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput;
     plannerBlocks?: Prisma.PlannerBlockUncheckedUpdateManyWithoutUserNestedInput;
     pomodoroSessions?: Prisma.PomodoroSessionUncheckedUpdateManyWithoutUserNestedInput;
+    flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateManyInput = {
     id?: string;
@@ -332,6 +339,18 @@ export type UserUpdateOneRequiredWithoutPomodoroSessionsNestedInput = {
     connect?: Prisma.UserWhereUniqueInput;
     update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPomodoroSessionsInput, Prisma.UserUpdateWithoutPomodoroSessionsInput>, Prisma.UserUncheckedUpdateWithoutPomodoroSessionsInput>;
 };
+export type UserCreateNestedOneWithoutFlashcardsInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutFlashcardsInput, Prisma.UserUncheckedCreateWithoutFlashcardsInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutFlashcardsInput;
+    connect?: Prisma.UserWhereUniqueInput;
+};
+export type UserUpdateOneRequiredWithoutFlashcardsNestedInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutFlashcardsInput, Prisma.UserUncheckedCreateWithoutFlashcardsInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutFlashcardsInput;
+    upsert?: Prisma.UserUpsertWithoutFlashcardsInput;
+    connect?: Prisma.UserWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFlashcardsInput, Prisma.UserUpdateWithoutFlashcardsInput>, Prisma.UserUncheckedUpdateWithoutFlashcardsInput>;
+};
 export type UserCreateWithoutSubjectsInput = {
     id?: string;
     name: string;
@@ -341,6 +360,7 @@ export type UserCreateWithoutSubjectsInput = {
     activities?: Prisma.ActivityCreateNestedManyWithoutUserInput;
     plannerBlocks?: Prisma.PlannerBlockCreateNestedManyWithoutUserInput;
     pomodoroSessions?: Prisma.PomodoroSessionCreateNestedManyWithoutUserInput;
+    flashcards?: Prisma.FlashcardCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutSubjectsInput = {
     id?: string;
@@ -351,6 +371,7 @@ export type UserUncheckedCreateWithoutSubjectsInput = {
     activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput;
     plannerBlocks?: Prisma.PlannerBlockUncheckedCreateNestedManyWithoutUserInput;
     pomodoroSessions?: Prisma.PomodoroSessionUncheckedCreateNestedManyWithoutUserInput;
+    flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutSubjectsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -374,6 +395,7 @@ export type UserUpdateWithoutSubjectsInput = {
     activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput;
     plannerBlocks?: Prisma.PlannerBlockUpdateManyWithoutUserNestedInput;
     pomodoroSessions?: Prisma.PomodoroSessionUpdateManyWithoutUserNestedInput;
+    flashcards?: Prisma.FlashcardUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutSubjectsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -384,6 +406,7 @@ export type UserUncheckedUpdateWithoutSubjectsInput = {
     activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput;
     plannerBlocks?: Prisma.PlannerBlockUncheckedUpdateManyWithoutUserNestedInput;
     pomodoroSessions?: Prisma.PomodoroSessionUncheckedUpdateManyWithoutUserNestedInput;
+    flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutActivitiesInput = {
     id?: string;
@@ -394,6 +417,7 @@ export type UserCreateWithoutActivitiesInput = {
     subjects?: Prisma.SubjectCreateNestedManyWithoutUserInput;
     plannerBlocks?: Prisma.PlannerBlockCreateNestedManyWithoutUserInput;
     pomodoroSessions?: Prisma.PomodoroSessionCreateNestedManyWithoutUserInput;
+    flashcards?: Prisma.FlashcardCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutActivitiesInput = {
     id?: string;
@@ -404,6 +428,7 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
     subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutUserInput;
     plannerBlocks?: Prisma.PlannerBlockUncheckedCreateNestedManyWithoutUserInput;
     pomodoroSessions?: Prisma.PomodoroSessionUncheckedCreateNestedManyWithoutUserInput;
+    flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutActivitiesInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -427,6 +452,7 @@ export type UserUpdateWithoutActivitiesInput = {
     subjects?: Prisma.SubjectUpdateManyWithoutUserNestedInput;
     plannerBlocks?: Prisma.PlannerBlockUpdateManyWithoutUserNestedInput;
     pomodoroSessions?: Prisma.PomodoroSessionUpdateManyWithoutUserNestedInput;
+    flashcards?: Prisma.FlashcardUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutActivitiesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -437,6 +463,7 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
     subjects?: Prisma.SubjectUncheckedUpdateManyWithoutUserNestedInput;
     plannerBlocks?: Prisma.PlannerBlockUncheckedUpdateManyWithoutUserNestedInput;
     pomodoroSessions?: Prisma.PomodoroSessionUncheckedUpdateManyWithoutUserNestedInput;
+    flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutPlannerBlocksInput = {
     id?: string;
@@ -447,6 +474,7 @@ export type UserCreateWithoutPlannerBlocksInput = {
     subjects?: Prisma.SubjectCreateNestedManyWithoutUserInput;
     activities?: Prisma.ActivityCreateNestedManyWithoutUserInput;
     pomodoroSessions?: Prisma.PomodoroSessionCreateNestedManyWithoutUserInput;
+    flashcards?: Prisma.FlashcardCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutPlannerBlocksInput = {
     id?: string;
@@ -457,6 +485,7 @@ export type UserUncheckedCreateWithoutPlannerBlocksInput = {
     subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutUserInput;
     activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput;
     pomodoroSessions?: Prisma.PomodoroSessionUncheckedCreateNestedManyWithoutUserInput;
+    flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutPlannerBlocksInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -480,6 +509,7 @@ export type UserUpdateWithoutPlannerBlocksInput = {
     subjects?: Prisma.SubjectUpdateManyWithoutUserNestedInput;
     activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput;
     pomodoroSessions?: Prisma.PomodoroSessionUpdateManyWithoutUserNestedInput;
+    flashcards?: Prisma.FlashcardUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutPlannerBlocksInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -490,6 +520,7 @@ export type UserUncheckedUpdateWithoutPlannerBlocksInput = {
     subjects?: Prisma.SubjectUncheckedUpdateManyWithoutUserNestedInput;
     activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput;
     pomodoroSessions?: Prisma.PomodoroSessionUncheckedUpdateManyWithoutUserNestedInput;
+    flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutUserNestedInput;
 };
 export type UserCreateWithoutPomodoroSessionsInput = {
     id?: string;
@@ -500,6 +531,7 @@ export type UserCreateWithoutPomodoroSessionsInput = {
     subjects?: Prisma.SubjectCreateNestedManyWithoutUserInput;
     activities?: Prisma.ActivityCreateNestedManyWithoutUserInput;
     plannerBlocks?: Prisma.PlannerBlockCreateNestedManyWithoutUserInput;
+    flashcards?: Prisma.FlashcardCreateNestedManyWithoutUserInput;
 };
 export type UserUncheckedCreateWithoutPomodoroSessionsInput = {
     id?: string;
@@ -510,6 +542,7 @@ export type UserUncheckedCreateWithoutPomodoroSessionsInput = {
     subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutUserInput;
     activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput;
     plannerBlocks?: Prisma.PlannerBlockUncheckedCreateNestedManyWithoutUserInput;
+    flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutUserInput;
 };
 export type UserCreateOrConnectWithoutPomodoroSessionsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -533,6 +566,7 @@ export type UserUpdateWithoutPomodoroSessionsInput = {
     subjects?: Prisma.SubjectUpdateManyWithoutUserNestedInput;
     activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput;
     plannerBlocks?: Prisma.PlannerBlockUpdateManyWithoutUserNestedInput;
+    flashcards?: Prisma.FlashcardUpdateManyWithoutUserNestedInput;
 };
 export type UserUncheckedUpdateWithoutPomodoroSessionsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -543,6 +577,64 @@ export type UserUncheckedUpdateWithoutPomodoroSessionsInput = {
     subjects?: Prisma.SubjectUncheckedUpdateManyWithoutUserNestedInput;
     activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput;
     plannerBlocks?: Prisma.PlannerBlockUncheckedUpdateManyWithoutUserNestedInput;
+    flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutUserNestedInput;
+};
+export type UserCreateWithoutFlashcardsInput = {
+    id?: string;
+    name: string;
+    email: string;
+    passwordHash: string;
+    createdAt?: Date | string;
+    subjects?: Prisma.SubjectCreateNestedManyWithoutUserInput;
+    activities?: Prisma.ActivityCreateNestedManyWithoutUserInput;
+    plannerBlocks?: Prisma.PlannerBlockCreateNestedManyWithoutUserInput;
+    pomodoroSessions?: Prisma.PomodoroSessionCreateNestedManyWithoutUserInput;
+};
+export type UserUncheckedCreateWithoutFlashcardsInput = {
+    id?: string;
+    name: string;
+    email: string;
+    passwordHash: string;
+    createdAt?: Date | string;
+    subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutUserInput;
+    activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput;
+    plannerBlocks?: Prisma.PlannerBlockUncheckedCreateNestedManyWithoutUserInput;
+    pomodoroSessions?: Prisma.PomodoroSessionUncheckedCreateNestedManyWithoutUserInput;
+};
+export type UserCreateOrConnectWithoutFlashcardsInput = {
+    where: Prisma.UserWhereUniqueInput;
+    create: Prisma.XOR<Prisma.UserCreateWithoutFlashcardsInput, Prisma.UserUncheckedCreateWithoutFlashcardsInput>;
+};
+export type UserUpsertWithoutFlashcardsInput = {
+    update: Prisma.XOR<Prisma.UserUpdateWithoutFlashcardsInput, Prisma.UserUncheckedUpdateWithoutFlashcardsInput>;
+    create: Prisma.XOR<Prisma.UserCreateWithoutFlashcardsInput, Prisma.UserUncheckedCreateWithoutFlashcardsInput>;
+    where?: Prisma.UserWhereInput;
+};
+export type UserUpdateToOneWithWhereWithoutFlashcardsInput = {
+    where?: Prisma.UserWhereInput;
+    data: Prisma.XOR<Prisma.UserUpdateWithoutFlashcardsInput, Prisma.UserUncheckedUpdateWithoutFlashcardsInput>;
+};
+export type UserUpdateWithoutFlashcardsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    subjects?: Prisma.SubjectUpdateManyWithoutUserNestedInput;
+    activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput;
+    plannerBlocks?: Prisma.PlannerBlockUpdateManyWithoutUserNestedInput;
+    pomodoroSessions?: Prisma.PomodoroSessionUpdateManyWithoutUserNestedInput;
+};
+export type UserUncheckedUpdateWithoutFlashcardsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    subjects?: Prisma.SubjectUncheckedUpdateManyWithoutUserNestedInput;
+    activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput;
+    plannerBlocks?: Prisma.PlannerBlockUncheckedUpdateManyWithoutUserNestedInput;
+    pomodoroSessions?: Prisma.PomodoroSessionUncheckedUpdateManyWithoutUserNestedInput;
 };
 /**
  * Count Type UserCountOutputType
@@ -552,12 +644,14 @@ export type UserCountOutputType = {
     activities: number;
     plannerBlocks: number;
     pomodoroSessions: number;
+    flashcards: number;
 };
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     subjects?: boolean | UserCountOutputTypeCountSubjectsArgs;
     activities?: boolean | UserCountOutputTypeCountActivitiesArgs;
     plannerBlocks?: boolean | UserCountOutputTypeCountPlannerBlocksArgs;
     pomodoroSessions?: boolean | UserCountOutputTypeCountPomodoroSessionsArgs;
+    flashcards?: boolean | UserCountOutputTypeCountFlashcardsArgs;
 };
 /**
  * UserCountOutputType without action
@@ -592,6 +686,12 @@ export type UserCountOutputTypeCountPlannerBlocksArgs<ExtArgs extends runtime.Ty
 export type UserCountOutputTypeCountPomodoroSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.PomodoroSessionWhereInput;
 };
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFlashcardsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.FlashcardWhereInput;
+};
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     name?: boolean;
@@ -602,6 +702,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     activities?: boolean | Prisma.User$activitiesArgs<ExtArgs>;
     plannerBlocks?: boolean | Prisma.User$plannerBlocksArgs<ExtArgs>;
     pomodoroSessions?: boolean | Prisma.User$pomodoroSessionsArgs<ExtArgs>;
+    flashcards?: boolean | Prisma.User$flashcardsArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["user"]>;
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -631,6 +732,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     activities?: boolean | Prisma.User$activitiesArgs<ExtArgs>;
     plannerBlocks?: boolean | Prisma.User$plannerBlocksArgs<ExtArgs>;
     pomodoroSessions?: boolean | Prisma.User$pomodoroSessionsArgs<ExtArgs>;
+    flashcards?: boolean | Prisma.User$flashcardsArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {};
@@ -642,6 +744,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
         activities: Prisma.$ActivityPayload<ExtArgs>[];
         plannerBlocks: Prisma.$PlannerBlockPayload<ExtArgs>[];
         pomodoroSessions: Prisma.$PomodoroSessionPayload<ExtArgs>[];
+        flashcards: Prisma.$FlashcardPayload<ExtArgs>[];
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: string;
@@ -982,6 +1085,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
     activities<T extends Prisma.User$activitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     plannerBlocks<T extends Prisma.User$plannerBlocksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$plannerBlocksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlannerBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     pomodoroSessions<T extends Prisma.User$pomodoroSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pomodoroSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PomodoroSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    flashcards<T extends Prisma.User$flashcardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$flashcardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FlashcardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1478,6 +1582,29 @@ export type User$pomodoroSessionsArgs<ExtArgs extends runtime.Types.Extensions.I
     take?: number;
     skip?: number;
     distinct?: Prisma.PomodoroSessionScalarFieldEnum | Prisma.PomodoroSessionScalarFieldEnum[];
+};
+/**
+ * User.flashcards
+ */
+export type User$flashcardsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Flashcard
+     */
+    select?: Prisma.FlashcardSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Flashcard
+     */
+    omit?: Prisma.FlashcardOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.FlashcardInclude<ExtArgs> | null;
+    where?: Prisma.FlashcardWhereInput;
+    orderBy?: Prisma.FlashcardOrderByWithRelationInput | Prisma.FlashcardOrderByWithRelationInput[];
+    cursor?: Prisma.FlashcardWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.FlashcardScalarFieldEnum | Prisma.FlashcardScalarFieldEnum[];
 };
 /**
  * User without action

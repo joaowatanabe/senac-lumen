@@ -20,6 +20,7 @@ export interface DashboardData {
     color: string;
     durationMinutes: number;
   }[];
+  flashcardsDueToday: number;
 }
 
 export const dashboardService = {

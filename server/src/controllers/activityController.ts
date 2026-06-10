@@ -76,7 +76,7 @@ export async function createActivity(req: Request, res: Response): Promise<void>
  */
 export async function updateActivity(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     const { title, subjectId, dueDate, status, type, priority } = req.body;
 
     // Verifica ownership
@@ -127,7 +127,7 @@ export async function updateActivity(req: Request, res: Response): Promise<void>
  */
 export async function deleteActivity(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
 
     const existing = await prisma.activity.findUnique({ where: { id } });
     if (!existing || existing.userId !== req.userId) {

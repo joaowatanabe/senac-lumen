@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, type IRouter } from "express";
 import { authenticateToken } from "../middlewares/auth";
 import {
   listBlocks,
@@ -6,7 +6,7 @@ import {
   deleteBlock,
 } from "../controllers/plannerController";
 
-const router = Router();
+const router: IRouter = Router();
 
 router.use(authenticateToken);
 

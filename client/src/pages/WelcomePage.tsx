@@ -38,7 +38,7 @@ export default function WelcomePage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#121212] flex items-center justify-center">
-        <div className="w-8 h-8 border-3 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-3 border-zinc-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -62,7 +62,7 @@ export default function WelcomePage() {
       {/* 1. LADO ESQUERDO: Fixo e Escuro (Apenas Desktop) */}
       <div className="hidden lg:flex lg:w-[40%] bg-[#121212] text-white p-12 flex-col justify-between select-none relative overflow-hidden shrink-0">
         {/* Glow effect sutil */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-zinc-500/5 rounded-full blur-3xl pointer-events-none" />
 
         {/* Logo */}
         <div className="flex items-center gap-3 relative z-10">
@@ -108,7 +108,7 @@ export default function WelcomePage() {
 
         {/* Conteúdo Dinâmico */}
         <div key={step} className="my-auto max-w-xl w-full mx-auto space-y-6 animate-[fadeIn_0.25s_ease-out]">
-          <span className="text-xs font-bold uppercase tracking-widest text-indigo-650 block">
+          <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 block">
             {current.eyebrow}
           </span>
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight leading-tight select-none">

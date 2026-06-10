@@ -4,23 +4,11 @@ import { useAuth } from "../hooks/useAuth";
 import BottomNavBar from "./BottomNavBar";
 import GlobalCreateModal from "./GlobalCreateModal";
 
-// Icons as SVG components
-const HomeIcon = () => (
+// ─── Icon Components ───────────────────────────────────────────────
+const DashboardIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
     <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
     <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.432z" />
-  </svg>
-);
-
-const TasksIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-    <path fillRule="evenodd" d="M7.502 6h7.128A3.375 3.375 0 0118 9.375v9.375a3 3 0 003-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 00-8.583-.063c-1.476.106-2.633 1.27-2.74 2.715a31.568 31.568 0 00-.011.182zM3.75 21h7.5a3.75 3.75 0 003.75-3.75v-8.5A3.75 3.75 0 0011.25 5h-7.5A3.75 3.75 0 000 8.75v8.5A3.75 3.75 0 003.75 21zm1.5-12.5a.75.75 0 000 1.5h4.5a.75.75 0 000-1.5h-4.5zm0 3a.75.75 0 000 1.5h4.5a.75.75 0 000-1.5h-4.5zm0 3a.75.75 0 000 1.5h4.5a.75.75 0 000-1.5h-4.5z" clipRule="evenodd" />
-  </svg>
-);
-
-const PlannerIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-    <path fillRule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clipRule="evenodd" />
   </svg>
 );
 
@@ -30,174 +18,237 @@ const SubjectsIcon = () => (
   </svg>
 );
 
+const ActivitiesIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+    <path fillRule="evenodd" d="M7.502 6h7.128A3.375 3.375 0 0118 9.375v9.375a3 3 0 003-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 00-8.583-.063c-1.476.106-2.633 1.27-2.74 2.715a31.568 31.568 0 00-.011.182zM3.75 21h7.5a3.75 3.75 0 003.75-3.75v-8.5A3.75 3.75 0 0011.25 5h-7.5A3.75 3.75 0 000 8.75v8.5A3.75 3.75 0 003.75 21zm1.5-12.5a.75.75 0 000 1.5h4.5a.75.75 0 000-1.5h-4.5zm0 3a.75.75 0 000 1.5h4.5a.75.75 0 000-1.5h-4.5zm0 3a.75.75 0 000 1.5h4.5a.75.75 0 000-1.5h-4.5z" clipRule="evenodd" />
+  </svg>
+);
+
+const CalendarIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+    <path fillRule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clipRule="evenodd" />
+  </svg>
+);
+
+const PomodoroIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+    <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z" clipRule="evenodd" />
+  </svg>
+);
+
+const FlashcardIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+    <path d="M4.5 3.75a.75.75 0 00-1.5 0v16.5a.75.75 0 001.5 0V3.75zM7.9 3h8.2c.94 0 1.7.76 1.7 1.7v14.6c0 .94-.76 1.7-1.7 1.7H7.9c-.94 0-1.7-.76-1.7-1.7V4.7c0-.94.76-1.7 1.7-1.7z" />
+  </svg>
+);
+
+const PlusIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+  </svg>
+);
+
+const ChevronRightIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+    <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
+  </svg>
+);
+
+const ChevronLeftIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+    <path fillRule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clipRule="evenodd" />
+  </svg>
+);
+
+// ─── Page meta map ──────────────────────────────────────────────────
+const PAGE_META: Record<string, { title: string; subtitle: string }> = {
+  "/dashboard": { title: "Dashboard", subtitle: "Visão geral dos seus estudos" },
+  "/subjects": { title: "Disciplinas", subtitle: "Gerencie suas matérias" },
+  "/activities": { title: "Tarefas", subtitle: "Gerencie suas atividades acadêmicas" },
+  "/planner": { title: "Calendário", subtitle: "Planejamento semanal de estudos" },
+  "/pomodoro": { title: "Sessões de Estudo", subtitle: "Timer Pomodoro e blocos de estudo" },
+  "/flashcards": { title: "Flashcards", subtitle: "Revisão espaçada (SM-2)" },
+};
+
+// ─── Nav Items ──────────────────────────────────────────────────────
+const NAV_ITEMS = [
+  { to: "/dashboard", label: "Dashboard", icon: <DashboardIcon /> },
+  { to: "/subjects", label: "Disciplinas", icon: <SubjectsIcon /> },
+  { to: "/activities", label: "Tarefas", icon: <ActivitiesIcon /> },
+  { to: "/planner", label: "Calendário", icon: <CalendarIcon /> },
+  { to: "/pomodoro", label: "Sessões de Estudo", icon: <PomodoroIcon /> },
+  { to: "/flashcards", label: "Flashcards", icon: <FlashcardIcon /> },
+];
+
+// ─── Lúmen Logo SVG ─────────────────────────────────────────────────
+const LumenLogo = () => (
+  <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center shadow-sm shrink-0">
+    <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 3L12 7" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M9 5L12 3L15 5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <rect x="5" y="9" width="14" height="2.5" rx="1" fill="white" opacity="0.9"/>
+      <rect x="5" y="13" width="14" height="2.5" rx="1" fill="white" opacity="0.7"/>
+      <rect x="5" y="17" width="14" height="2.5" rx="1" fill="white" opacity="0.5"/>
+    </svg>
+  </div>
+);
+
 export default function AppLayout() {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const location = useLocation();
 
-  const [isFocusMode, setIsFocusMode] = useState(false);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
-  // Close dropdown on location change
+  // Close modal on location change
   useEffect(() => {
-    setIsProfileDropdownOpen(false);
     setIsCreateModalOpen(false);
   }, [location.pathname]);
 
-  const initials = user?.name
-    ? user.name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()
-    : "ES";
-
-  const firstName = user?.name ? user.name.split(" ")[0] : "Estudante";
-
-  const menuItems = [
-    { to: "/dashboard", label: "Início", icon: <HomeIcon /> },
-    { to: "/activities", label: "Tarefas", icon: <TasksIcon /> },
-    { to: "/planner", label: "Semana", icon: <PlannerIcon /> },
-    { to: "/subjects", label: "Matérias", icon: <SubjectsIcon /> },
-  ];
+  const pageMeta = PAGE_META[location.pathname] || { title: "Lúmen", subtitle: "" };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-indigo-900 to-violet-950 text-white font-sans overflow-x-hidden">
-      
-      {/* 1. SIDEBAR DESKTOP */}
-      {!isFocusMode && (
-        <aside className="hidden lg:flex fixed inset-y-0 left-0 w-64 bg-gradient-to-b from-indigo-950 to-[#1e1b4b] border-r border-indigo-900/30 flex-col justify-between p-6 z-30">
-          <div className="space-y-8">
-            {/* Logo */}
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-                <span className="text-xl">💡</span>
-              </div>
-              <span className="text-xl font-bold text-white tracking-tight">Lúmen</span>
-            </div>
+    <div className="flex h-screen bg-surface font-sans">
 
-            {/* Menu Navigation */}
-            <nav className="flex flex-col gap-1.5">
-              {menuItems.map((item) => {
-                const isActive = location.pathname === item.to;
-                return (
-                  <Link
-                    key={item.to}
-                    to={item.to}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer border-l-[3px] ${
-                      isActive
-                        ? "bg-white/10 text-white shadow-sm border-indigo-400 rounded-l-none"
-                        : "border-transparent text-indigo-200 hover:text-white hover:bg-white/5"
-                    }`}
-                  >
-                    <span className={isActive ? "text-indigo-300" : "text-indigo-300/80"}>
-                      {item.icon}
-                    </span>
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </nav>
+      {/* ── DESKTOP SIDEBAR ──────────────────────────────────────── */}
+      <aside
+        className={`hidden lg:flex flex-col bg-white border-r border-border transition-all duration-200 shrink-0 ${
+          isSidebarExpanded ? "w-56" : "w-14"
+        }`}
+      >
+        {/* Logo + Toggle */}
+        <div className={`flex items-center h-14 border-b border-border px-3 ${isSidebarExpanded ? "gap-3 justify-between" : "justify-center"}`}>
+          <div className="flex items-center gap-2 min-w-0">
+            <LumenLogo />
+            {isSidebarExpanded && (
+              <span className="text-base font-bold text-text-primary tracking-tight truncate">Lúmen</span>
+            )}
           </div>
+          <button
+            onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
+            className={`w-6 h-6 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all cursor-pointer shrink-0 ${isSidebarExpanded ? "" : "hidden"}`}
+            title={isSidebarExpanded ? "Colapsar sidebar" : "Expandir sidebar"}
+          >
+            <ChevronLeftIcon />
+          </button>
+        </div>
 
-          {/* User Profile Card */}
-          <div className="border-t border-indigo-900/40 pt-4.5 space-y-3">
-            <div className="flex items-center gap-3 px-1.5">
-              <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-white text-xs shadow-md shrink-0">
-                {initials}
-              </div>
-              <div className="min-w-0">
-                <p className="text-xs font-bold text-white truncate leading-tight">{firstName}</p>
-                <p className="text-[10px] text-indigo-300/70 truncate leading-none mt-0.5">{user?.email}</p>
-              </div>
-            </div>
-            <button
-              onClick={logout}
-              className="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-red-500/15 hover:text-red-300 hover:border-red-500/20 text-indigo-200 text-[10px] font-semibold border border-indigo-900/30 transition-all cursor-pointer text-center block"
-            >
-              Sair da conta
-            </button>
-          </div>
-        </aside>
-      )}
-
-      {/* 2. TOPBAR DESKTOP */}
-      {!isFocusMode && (
-        <header className="hidden lg:flex fixed top-0 right-0 left-64 h-16 bg-indigo-950 border-b border-indigo-900/20 z-20 items-center justify-between px-8 text-white">
-          {/* Spacer to push search box to center */}
-          <div className="w-48 shrink-0" />
-
-          {/* Search Box - Centralized */}
-          <div className="relative w-80">
-            <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-indigo-300">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-3.5 h-3.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.637 10.637z" />
-              </svg>
-            </span>
-            <input
-              type="text"
-              placeholder="Buscar tarefas, matérias..."
-              className="w-full bg-white/10 border border-indigo-900/30 rounded-xl py-2 pl-9 pr-4 text-xs text-white placeholder-indigo-300/50 outline-none transition-all focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/15"
-            />
-          </div>
-
-          {/* Right Action buttons */}
-          <div className="flex items-center gap-4 shrink-0">
-            {/* Create CTA Button (Black background) */}
+        {/* Nova Tarefa Button */}
+        <div className={`px-2 pt-3 pb-2`}>
+          {isSidebarExpanded ? (
             <button
               onClick={() => setIsCreateModalOpen(true)}
-              className="h-10 px-4 inline-flex items-center justify-center gap-2 rounded-xl bg-black hover:bg-neutral-900 text-white text-xs font-bold transition-all shadow-md shadow-black/10 active:scale-98 cursor-pointer border border-white/5"
+              className="flex items-center gap-2 w-full px-3 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-              </svg>
-              Novo item
+              <PlusIcon />
+              <span>Nova tarefa</span>
             </button>
-
-            {/* Avatar Profile Dropdown */}
-            <div className="relative">
+          ) : (
+            <div className="relative group flex justify-center">
               <button
-                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                className="w-8 h-8 rounded-full bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center font-bold text-indigo-200 text-[10px] shadow-inner cursor-pointer hover:border-indigo-400/50 hover:bg-indigo-600/35 transition-all"
+                onClick={() => setIsCreateModalOpen(true)}
+                className="mx-auto flex items-center justify-center w-9 h-9 bg-primary hover:bg-primary-hover text-white rounded-lg transition-all duration-200 cursor-pointer"
+                title="Nova tarefa"
               >
-                {initials}
+                <PlusIcon />
               </button>
-
-              {isProfileDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-indigo-950 border border-indigo-900/40 rounded-2xl shadow-xl p-2 z-50 backdrop-blur-lg animate-[fadeIn_0.15s_ease-out]">
-                  <p className="px-3.5 py-2 text-xs font-semibold text-indigo-300 border-b border-white/5 truncate">
-                    Olá, {firstName}
-                  </p>
-                  <Link
-                    to="/subjects"
-                    className="w-full text-left block px-3.5 py-2.5 rounded-xl hover:bg-white/5 text-xs font-medium text-white transition-colors cursor-pointer"
-                  >
-                    Configurações
-                  </Link>
-                  <button
-                    onClick={logout}
-                    className="w-full text-left block px-3.5 py-2.5 rounded-xl hover:bg-red-500/10 hover:text-red-400 text-xs font-medium text-indigo-350 transition-colors cursor-pointer"
-                  >
-                    Desconectar
-                  </button>
-                </div>
-              )}
+              <span className="absolute left-full ml-2 px-2 py-1 text-xs bg-gray-900 text-white rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                Nova tarefa
+              </span>
             </div>
+          )}
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex flex-col gap-0.5 px-2 flex-1">
+          {NAV_ITEMS.map((item) => {
+            const isActive = location.pathname === item.to;
+            return (
+              <Link
+                key={item.to}
+                to={item.to}
+                title={!isSidebarExpanded ? item.label : undefined}
+                className={`flex items-center gap-3 rounded-lg transition-all duration-200 relative group ${
+                  isSidebarExpanded ? "px-3 py-2.5" : "justify-center px-0 py-2.5 mx-0"
+                } ${
+                  isActive
+                    ? "bg-primary-light text-primary border-l-2 border-primary rounded-l-none"
+                    : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                <span className={`shrink-0 ${isActive ? "text-primary" : ""}`}>
+                  {item.icon}
+                </span>
+                {isSidebarExpanded && (
+                  <span className={`text-sm font-medium truncate ${isActive ? "text-primary" : ""}`}>
+                    {item.label}
+                  </span>
+                )}
+                {/* Tooltip for collapsed state */}
+                {!isSidebarExpanded && (
+                  <span className="absolute left-full ml-3 px-2 py-1 text-xs bg-gray-900 text-white rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                    {item.label}
+                  </span>
+                )}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Expand toggle (collapsed state) + Logout */}
+        <div className={`px-2 py-3 border-t border-border space-y-1`}>
+          {!isSidebarExpanded && (
+            <div className="flex justify-center mb-1">
+              <button
+                onClick={() => setIsSidebarExpanded(true)}
+                className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all cursor-pointer"
+                title="Expandir sidebar"
+              >
+                <ChevronRightIcon />
+              </button>
+            </div>
+          )}
+          <button
+            onClick={logout}
+            className={`flex items-center gap-2 w-full rounded-lg py-2 text-xs font-medium text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer ${
+              isSidebarExpanded ? "px-3" : "justify-center px-0"
+            }`}
+            title="Sair da conta"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 shrink-0">
+              <path fillRule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z" clipRule="evenodd" />
+              <path fillRule="evenodd" d="M6 10a.75.75 0 01.75-.75h9.546l-1.048-.943a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 11-1.004-1.114l1.048-.943H6.75A.75.75 0 016 10z" clipRule="evenodd" />
+            </svg>
+            {isSidebarExpanded && <span>Sair</span>}
+          </button>
+        </div>
+      </aside>
+
+      {/* ── MAIN CONTENT AREA ────────────────────────────────────── */}
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+
+        {/* ── DESKTOP TOPBAR ─────────────────────────────────────── */}
+        <header className="hidden lg:flex h-14 bg-white border-b border-gray-100 px-6 items-center shrink-0">
+          <div>
+            <h1 className="text-xl font-semibold text-gray-900 leading-tight">{pageMeta.title}</h1>
+            {pageMeta.subtitle && (
+              <p className="text-sm text-gray-500 leading-tight">{pageMeta.subtitle}</p>
+            )}
           </div>
         </header>
-      )}
 
-      {/* 3. MAIN CONTENT WINDOW */}
-      <div className={`transition-all duration-300 min-h-screen bg-[#f8fafc] text-gray-900 ${
-        !isFocusMode ? "lg:pl-64 lg:pt-16" : ""
-      }`}>
-        <Outlet context={{ isFocusMode, setIsFocusMode }} />
+        {/* ── PAGE CONTENT ───────────────────────────────────────── */}
+        <main className="flex-1 overflow-y-auto">
+          <Outlet />
+        </main>
       </div>
 
-      {/* 4. MOBILE BOTTOM NAVBAR */}
-      {!isFocusMode && (
-        <div className="lg:hidden">
-          <BottomNavBar onOpenCreateModal={() => setIsCreateModalOpen(true)} />
-        </div>
-      )}
+      {/* ── MOBILE BOTTOM NAVBAR ───────────────────────────────────── */}
+      <div className="lg:hidden">
+        <BottomNavBar onOpenCreateModal={() => setIsCreateModalOpen(true)} />
+      </div>
 
-      {/* 5. GLOBAL CREATION SHEET/MODAL */}
+      {/* ── GLOBAL CREATE MODAL ────────────────────────────────────── */}
       <GlobalCreateModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}

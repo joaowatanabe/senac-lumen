@@ -46,4 +46,9 @@ export type PlannerBlock = Prisma.PlannerBlockModel;
  *
  */
 export type PomodoroSession = Prisma.PomodoroSessionModel;
+/**
+ * Model Flashcard
+ *
+ */
+export type Flashcard = Prisma.FlashcardModel;
 //# sourceMappingURL=client.d.ts.map

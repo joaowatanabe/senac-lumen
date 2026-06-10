@@ -64,7 +64,7 @@ export async function createSubject(req: Request, res: Response): Promise<void> 
  */
 export async function updateSubject(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     const { name, color, category, icon } = req.body;
 
     // Verifica ownership
@@ -105,7 +105,7 @@ export async function updateSubject(req: Request, res: Response): Promise<void> 
  */
 export async function deleteSubject(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
 
     // Verifica ownership
     const existing = await prisma.subject.findUnique({ where: { id } });
