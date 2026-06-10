@@ -150,6 +150,7 @@ exports.PlannerBlockScalarFieldEnum = {
     id: 'id',
     dayOfWeek: 'dayOfWeek',
     durationMinutes: 'durationMinutes',
+    startTime: 'startTime',
     subjectId: 'subjectId',
     userId: 'userId'
 };

@@ -24,6 +24,7 @@ export type PlannerBlockMinAggregateOutputType = {
     id: string | null;
     dayOfWeek: number | null;
     durationMinutes: number | null;
+    startTime: string | null;
     subjectId: string | null;
     userId: string | null;
 };
@@ -31,6 +32,7 @@ export type PlannerBlockMaxAggregateOutputType = {
     id: string | null;
     dayOfWeek: number | null;
     durationMinutes: number | null;
+    startTime: string | null;
     subjectId: string | null;
     userId: string | null;
 };
@@ -38,6 +40,7 @@ export type PlannerBlockCountAggregateOutputType = {
     id: number;
     dayOfWeek: number;
     durationMinutes: number;
+    startTime: number;
     subjectId: number;
     userId: number;
     _all: number;
@@ -54,6 +57,7 @@ export type PlannerBlockMinAggregateInputType = {
     id?: true;
     dayOfWeek?: true;
     durationMinutes?: true;
+    startTime?: true;
     subjectId?: true;
     userId?: true;
 };
@@ -61,6 +65,7 @@ export type PlannerBlockMaxAggregateInputType = {
     id?: true;
     dayOfWeek?: true;
     durationMinutes?: true;
+    startTime?: true;
     subjectId?: true;
     userId?: true;
 };
@@ -68,6 +73,7 @@ export type PlannerBlockCountAggregateInputType = {
     id?: true;
     dayOfWeek?: true;
     durationMinutes?: true;
+    startTime?: true;
     subjectId?: true;
     userId?: true;
     _all?: true;
@@ -152,6 +158,7 @@ export type PlannerBlockGroupByOutputType = {
     id: string;
     dayOfWeek: number;
     durationMinutes: number;
+    startTime: string;
     subjectId: string;
     userId: string;
     _count: PlannerBlockCountAggregateOutputType | null;
@@ -170,6 +177,7 @@ export type PlannerBlockWhereInput = {
     id?: Prisma.StringFilter<"PlannerBlock"> | string;
     dayOfWeek?: Prisma.IntFilter<"PlannerBlock"> | number;
     durationMinutes?: Prisma.IntFilter<"PlannerBlock"> | number;
+    startTime?: Prisma.StringFilter<"PlannerBlock"> | string;
     subjectId?: Prisma.StringFilter<"PlannerBlock"> | string;
     userId?: Prisma.StringFilter<"PlannerBlock"> | string;
     subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>;
@@ -179,6 +187,7 @@ export type PlannerBlockOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
     dayOfWeek?: Prisma.SortOrder;
     durationMinutes?: Prisma.SortOrder;
+    startTime?: Prisma.SortOrder;
     subjectId?: Prisma.SortOrder;
     userId?: Prisma.SortOrder;
     subject?: Prisma.SubjectOrderByWithRelationInput;
@@ -191,6 +200,7 @@ export type PlannerBlockWhereUniqueInput = Prisma.AtLeast<{
     NOT?: Prisma.PlannerBlockWhereInput | Prisma.PlannerBlockWhereInput[];
     dayOfWeek?: Prisma.IntFilter<"PlannerBlock"> | number;
     durationMinutes?: Prisma.IntFilter<"PlannerBlock"> | number;
+    startTime?: Prisma.StringFilter<"PlannerBlock"> | string;
     subjectId?: Prisma.StringFilter<"PlannerBlock"> | string;
     userId?: Prisma.StringFilter<"PlannerBlock"> | string;
     subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>;
@@ -200,6 +210,7 @@ export type PlannerBlockOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
     dayOfWeek?: Prisma.SortOrder;
     durationMinutes?: Prisma.SortOrder;
+    startTime?: Prisma.SortOrder;
     subjectId?: Prisma.SortOrder;
     userId?: Prisma.SortOrder;
     _count?: Prisma.PlannerBlockCountOrderByAggregateInput;
@@ -215,6 +226,7 @@ export type PlannerBlockScalarWhereWithAggregatesInput = {
     id?: Prisma.StringWithAggregatesFilter<"PlannerBlock"> | string;
     dayOfWeek?: Prisma.IntWithAggregatesFilter<"PlannerBlock"> | number;
     durationMinutes?: Prisma.IntWithAggregatesFilter<"PlannerBlock"> | number;
+    startTime?: Prisma.StringWithAggregatesFilter<"PlannerBlock"> | string;
     subjectId?: Prisma.StringWithAggregatesFilter<"PlannerBlock"> | string;
     userId?: Prisma.StringWithAggregatesFilter<"PlannerBlock"> | string;
 };
@@ -222,6 +234,7 @@ export type PlannerBlockCreateInput = {
     id?: string;
     dayOfWeek: number;
     durationMinutes: number;
+    startTime?: string;
     subject: Prisma.SubjectCreateNestedOneWithoutPlannerBlocksInput;
     user: Prisma.UserCreateNestedOneWithoutPlannerBlocksInput;
 };
@@ -229,6 +242,7 @@ export type PlannerBlockUncheckedCreateInput = {
     id?: string;
     dayOfWeek: number;
     durationMinutes: number;
+    startTime?: string;
     subjectId: string;
     userId: string;
 };
@@ -236,6 +250,7 @@ export type PlannerBlockUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     dayOfWeek?: Prisma.IntFieldUpdateOperationsInput | number;
     durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number;
+    startTime?: Prisma.StringFieldUpdateOperationsInput | string;
     subject?: Prisma.SubjectUpdateOneRequiredWithoutPlannerBlocksNestedInput;
     user?: Prisma.UserUpdateOneRequiredWithoutPlannerBlocksNestedInput;
 };
@@ -243,6 +258,7 @@ export type PlannerBlockUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     dayOfWeek?: Prisma.IntFieldUpdateOperationsInput | number;
     durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number;
+    startTime?: Prisma.StringFieldUpdateOperationsInput | string;
     subjectId?: Prisma.StringFieldUpdateOperationsInput | string;
     userId?: Prisma.StringFieldUpdateOperationsInput | string;
 };
@@ -250,6 +266,7 @@ export type PlannerBlockCreateManyInput = {
     id?: string;
     dayOfWeek: number;
     durationMinutes: number;
+    startTime?: string;
     subjectId: string;
     userId: string;
 };
@@ -257,11 +274,13 @@ export type PlannerBlockUpdateManyMutationInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     dayOfWeek?: Prisma.IntFieldUpdateOperationsInput | number;
     durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number;
+    startTime?: Prisma.StringFieldUpdateOperationsInput | string;
 };
 export type PlannerBlockUncheckedUpdateManyInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     dayOfWeek?: Prisma.IntFieldUpdateOperationsInput | number;
     durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number;
+    startTime?: Prisma.StringFieldUpdateOperationsInput | string;
     subjectId?: Prisma.StringFieldUpdateOperationsInput | string;
     userId?: Prisma.StringFieldUpdateOperationsInput | string;
 };
@@ -277,6 +296,7 @@ export type PlannerBlockCountOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     dayOfWeek?: Prisma.SortOrder;
     durationMinutes?: Prisma.SortOrder;
+    startTime?: Prisma.SortOrder;
     subjectId?: Prisma.SortOrder;
     userId?: Prisma.SortOrder;
 };
@@ -288,6 +308,7 @@ export type PlannerBlockMaxOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     dayOfWeek?: Prisma.SortOrder;
     durationMinutes?: Prisma.SortOrder;
+    startTime?: Prisma.SortOrder;
     subjectId?: Prisma.SortOrder;
     userId?: Prisma.SortOrder;
 };
@@ -295,6 +316,7 @@ export type PlannerBlockMinOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     dayOfWeek?: Prisma.SortOrder;
     durationMinutes?: Prisma.SortOrder;
+    startTime?: Prisma.SortOrder;
     subjectId?: Prisma.SortOrder;
     userId?: Prisma.SortOrder;
 };
@@ -389,12 +411,14 @@ export type PlannerBlockCreateWithoutUserInput = {
     id?: string;
     dayOfWeek: number;
     durationMinutes: number;
+    startTime?: string;
     subject: Prisma.SubjectCreateNestedOneWithoutPlannerBlocksInput;
 };
 export type PlannerBlockUncheckedCreateWithoutUserInput = {
     id?: string;
     dayOfWeek: number;
     durationMinutes: number;
+    startTime?: string;
     subjectId: string;
 };
 export type PlannerBlockCreateOrConnectWithoutUserInput = {
@@ -425,6 +449,7 @@ export type PlannerBlockScalarWhereInput = {
     id?: Prisma.StringFilter<"PlannerBlock"> | string;
     dayOfWeek?: Prisma.IntFilter<"PlannerBlock"> | number;
     durationMinutes?: Prisma.IntFilter<"PlannerBlock"> | number;
+    startTime?: Prisma.StringFilter<"PlannerBlock"> | string;
     subjectId?: Prisma.StringFilter<"PlannerBlock"> | string;
     userId?: Prisma.StringFilter<"PlannerBlock"> | string;
 };
@@ -432,12 +457,14 @@ export type PlannerBlockCreateWithoutSubjectInput = {
     id?: string;
     dayOfWeek: number;
     durationMinutes: number;
+    startTime?: string;
     user: Prisma.UserCreateNestedOneWithoutPlannerBlocksInput;
 };
 export type PlannerBlockUncheckedCreateWithoutSubjectInput = {
     id?: string;
     dayOfWeek: number;
     durationMinutes: number;
+    startTime?: string;
     userId: string;
 };
 export type PlannerBlockCreateOrConnectWithoutSubjectInput = {
@@ -465,54 +492,63 @@ export type PlannerBlockCreateManyUserInput = {
     id?: string;
     dayOfWeek: number;
     durationMinutes: number;
+    startTime?: string;
     subjectId: string;
 };
 export type PlannerBlockUpdateWithoutUserInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     dayOfWeek?: Prisma.IntFieldUpdateOperationsInput | number;
     durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number;
+    startTime?: Prisma.StringFieldUpdateOperationsInput | string;
     subject?: Prisma.SubjectUpdateOneRequiredWithoutPlannerBlocksNestedInput;
 };
 export type PlannerBlockUncheckedUpdateWithoutUserInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     dayOfWeek?: Prisma.IntFieldUpdateOperationsInput | number;
     durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number;
+    startTime?: Prisma.StringFieldUpdateOperationsInput | string;
     subjectId?: Prisma.StringFieldUpdateOperationsInput | string;
 };
 export type PlannerBlockUncheckedUpdateManyWithoutUserInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     dayOfWeek?: Prisma.IntFieldUpdateOperationsInput | number;
     durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number;
+    startTime?: Prisma.StringFieldUpdateOperationsInput | string;
     subjectId?: Prisma.StringFieldUpdateOperationsInput | string;
 };
 export type PlannerBlockCreateManySubjectInput = {
     id?: string;
     dayOfWeek: number;
     durationMinutes: number;
+    startTime?: string;
     userId: string;
 };
 export type PlannerBlockUpdateWithoutSubjectInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     dayOfWeek?: Prisma.IntFieldUpdateOperationsInput | number;
     durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number;
+    startTime?: Prisma.StringFieldUpdateOperationsInput | string;
     user?: Prisma.UserUpdateOneRequiredWithoutPlannerBlocksNestedInput;
 };
 export type PlannerBlockUncheckedUpdateWithoutSubjectInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     dayOfWeek?: Prisma.IntFieldUpdateOperationsInput | number;
     durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number;
+    startTime?: Prisma.StringFieldUpdateOperationsInput | string;
     userId?: Prisma.StringFieldUpdateOperationsInput | string;
 };
 export type PlannerBlockUncheckedUpdateManyWithoutSubjectInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     dayOfWeek?: Prisma.IntFieldUpdateOperationsInput | number;
     durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number;
+    startTime?: Prisma.StringFieldUpdateOperationsInput | string;
     userId?: Prisma.StringFieldUpdateOperationsInput | string;
 };
 export type PlannerBlockSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     dayOfWeek?: boolean;
     durationMinutes?: boolean;
+    startTime?: boolean;
     subjectId?: boolean;
     userId?: boolean;
     subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>;
@@ -522,6 +558,7 @@ export type PlannerBlockSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
     id?: boolean;
     dayOfWeek?: boolean;
     durationMinutes?: boolean;
+    startTime?: boolean;
     subjectId?: boolean;
     userId?: boolean;
     subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>;
@@ -531,6 +568,7 @@ export type PlannerBlockSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
     id?: boolean;
     dayOfWeek?: boolean;
     durationMinutes?: boolean;
+    startTime?: boolean;
     subjectId?: boolean;
     userId?: boolean;
     subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>;
@@ -540,10 +578,11 @@ export type PlannerBlockSelectScalar = {
     id?: boolean;
     dayOfWeek?: boolean;
     durationMinutes?: boolean;
+    startTime?: boolean;
     subjectId?: boolean;
     userId?: boolean;
 };
-export type PlannerBlockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dayOfWeek" | "durationMinutes" | "subjectId" | "userId", ExtArgs["result"]["plannerBlock"]>;
+export type PlannerBlockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dayOfWeek" | "durationMinutes" | "startTime" | "subjectId" | "userId", ExtArgs["result"]["plannerBlock"]>;
 export type PlannerBlockInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>;
     user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
@@ -566,6 +605,7 @@ export type $PlannerBlockPayload<ExtArgs extends runtime.Types.Extensions.Intern
         id: string;
         dayOfWeek: number;
         durationMinutes: number;
+        startTime: string;
         subjectId: string;
         userId: string;
     }, ExtArgs["result"]["plannerBlock"]>;
@@ -927,6 +967,7 @@ export interface PlannerBlockFieldRefs {
     readonly id: Prisma.FieldRef<"PlannerBlock", 'String'>;
     readonly dayOfWeek: Prisma.FieldRef<"PlannerBlock", 'Int'>;
     readonly durationMinutes: Prisma.FieldRef<"PlannerBlock", 'Int'>;
+    readonly startTime: Prisma.FieldRef<"PlannerBlock", 'String'>;
     readonly subjectId: Prisma.FieldRef<"PlannerBlock", 'String'>;
     readonly userId: Prisma.FieldRef<"PlannerBlock", 'String'>;
 }

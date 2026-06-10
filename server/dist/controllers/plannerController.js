@@ -33,7 +33,7 @@ async function listBlocks(req, res) {
  */
 async function createBlock(req, res) {
     try {
-        const { subjectId, dayOfWeek, durationMinutes } = req.body;
+        const { subjectId, dayOfWeek, durationMinutes, startTime } = req.body;
         // Valida campos obrigatórios
         if (subjectId === undefined || dayOfWeek === undefined || durationMinutes === undefined) {
             res.status(400).json({ message: "Todos os campos são obrigatórios: subjectId, dayOfWeek e durationMinutes." });
@@ -49,6 +49,11 @@ async function createBlock(req, res) {
             res.status(400).json({ message: "A duração deve ser um número entre 15 e 480 minutos." });
             return;
         }
+        // Valida horário de início se fornecido
+        if (startTime !== undefined && (typeof startTime !== "string" || !/^\d{2}:\d{2}$/.test(startTime))) {
+            res.status(400).json({ message: "O horário de início deve estar no formato HH:MM (ex: 09:30)." });
+            return;
+        }
         // Verifica se a matéria pertence ao usuário
         const subject = await prisma_1.default.subject.findUnique({ where: { id: subjectId } });
         if (!subject || subject.userId !== req.userId) {
@@ -61,6 +66,7 @@ async function createBlock(req, res) {
                 subjectId,
                 dayOfWeek,
                 durationMinutes,
+                startTime: startTime || "07:00",
             },
             include: { subject: true },
         });

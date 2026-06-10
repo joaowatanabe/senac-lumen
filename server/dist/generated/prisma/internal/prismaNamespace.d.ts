@@ -765,6 +765,7 @@ export declare const PlannerBlockScalarFieldEnum: {
     readonly id: "id";
     readonly dayOfWeek: "dayOfWeek";
     readonly durationMinutes: "durationMinutes";
+    readonly startTime: "startTime";
     readonly subjectId: "subjectId";
     readonly userId: "userId";
 };
