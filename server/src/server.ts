@@ -11,11 +11,10 @@ import flashcardRoutes from "./routes/flashcardRoutes";
 
 const app: Application = express();
 
-// Middlewares globais
+
 app.use(cors({ origin: "http://localhost:5173" }));
 app.use(express.json());
 
-// Rotas
 app.use("/api/auth", authRoutes);
 app.use("/api/subjects", subjectRoutes);
 app.use("/api/activities", activityRoutes);
@@ -24,12 +23,10 @@ app.use("/api/planner", plannerRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api", flashcardRoutes);
 
-// Rota de health-check
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-// Porta do servidor
 const PORT = process.env.PORT || 3333;
 
 app.listen(PORT, () => {
