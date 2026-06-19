@@ -176,4 +176,5 @@ O projeto encontra-se **Funcional e Finalizado** como MVP para a entrega acadêm
 ## 👥 Autores
 
 - **João Watanabe** — [GitHub](https://github.com/joaowatanabe)
+- **Guilherme Lambrecht** — [GitHub](https://github.com/GuilhermeLambrecht)
 
