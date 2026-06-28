@@ -146,8 +146,8 @@ export default function FlashcardsPage() {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-zinc-900">Estudo por Flashcards</h2>
-            <p className="text-sm text-zinc-500 mt-0.5">Use repetição espaçada para memorizar conceitos chave</p>
+            <h2 className="text-2xl font-bold text-black dark:!text-[#E6E6E6]">Estudo por Flashcards</h2>
+            <p className="text-sm text-black dark:!text-[#E6E6E6] mt-0.5">Use repetição espaçada para memorizar conceitos chave</p>
           </div>
 
           {/* Segmented Tab Selector */}
@@ -157,7 +157,7 @@ export default function FlashcardsPage() {
               className={`px-4 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all cursor-pointer ${
                 activeTab === "review"
                   ? "bg-white text-zinc-950 shadow-sm"
-                  : "text-zinc-500 hover:text-zinc-950"
+                  : "text-[#E6E6E6] hover:text-zinc-950"
               }`}
             >
               Revisar hoje
@@ -167,7 +167,7 @@ export default function FlashcardsPage() {
               className={`px-4 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all cursor-pointer ${
                 activeTab === "manage"
                   ? "bg-white text-zinc-950 shadow-sm"
-                  : "text-zinc-500 hover:text-zinc-950"
+                  : "text-[#E6E6E6] hover:text-zinc-950"
               }`}
             >
               Gerenciar
@@ -180,7 +180,7 @@ export default function FlashcardsPage() {
           <div className="space-y-6">
             {isLoadingReview ? (
               <div className="h-64 bg-white border border-zinc-200 rounded-2xl animate-pulse flex items-center justify-center">
-                <span className="text-sm text-zinc-400">Carregando revisões...</span>
+                <span className="text-sm text-[#E6E6E6]">Carregando revisões...</span>
               </div>
             ) : reviewError ? (
               <div className="p-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl text-center">
@@ -193,7 +193,7 @@ export default function FlashcardsPage() {
                 </div>
                 <div>
                   <h3 className="text-base font-semibold text-zinc-900">Tudo em dia!</h3>
-                  <p className="text-sm text-zinc-500 mt-1">Nenhum card pendente para revisão hoje.</p>
+                  <p className="text-sm text-[#E6E6E6] mt-1">Nenhum card pendente para revisão hoje.</p>
                 </div>
                 <button
                   onClick={() => setActiveTab("manage")}
@@ -204,7 +204,7 @@ export default function FlashcardsPage() {
               </div>
             ) : currentReviewIndex < reviewCards.length ? (
               <div className="space-y-4">
-                <div className="flex justify-between items-center text-xs text-zinc-400 font-medium px-1">
+                <div className="flex justify-between items-center text-xs text-[#E6E6E6] font-medium px-1">
                   <span>Revisando hoje</span>
                   <span>
                     Card {currentReviewIndex + 1} de {reviewCards.length}
@@ -232,7 +232,7 @@ export default function FlashcardsPage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-zinc-900">Sessão Finalizada!</h3>
-                  <p className="text-sm text-zinc-500 mt-1">
+                  <p className="text-sm text-[#E6E6E6] mt-1">
                     Você revisou com sucesso <span className="font-semibold text-zinc-850">{revisionsCount} flashcards</span>.
                   </p>
                 </div>
@@ -261,13 +261,13 @@ export default function FlashcardsPage() {
             {/* Subject Selector */}
             <div className="bg-white border border-zinc-200 rounded-2xl p-5 shadow-sm space-y-4">
               <div className="flex flex-col gap-2">
-                <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wide">
+                <label className="text-xs font-semibold text-[#E6E6E6] uppercase tracking-wide">
                   Matéria selecionada
                 </label>
                 {isLoadingSubjects ? (
                   <div className="h-10 bg-zinc-100 rounded-xl animate-pulse" />
                 ) : subjects.length === 0 ? (
-                  <div className="text-sm text-zinc-500 py-2">
+                  <div className="text-sm text-[#E6E6E6] py-2">
                     Nenhuma matéria encontrada.{" "}
                     <Link to="/subjects" className="text-zinc-950 font-semibold hover:underline">
                       Crie uma matéria primeiro
@@ -340,7 +340,7 @@ export default function FlashcardsPage() {
                     {manageError}
                   </div>
                 ) : manageCards.length === 0 ? (
-                  <div className="bg-white border border-zinc-200 rounded-xl p-8 text-center text-sm text-zinc-400">
+                  <div className="bg-white border border-zinc-200 rounded-xl p-8 text-center text-sm text-[#E6E6E6]">
                     Nenhum flashcard cadastrado para esta matéria ainda.
                   </div>
                 ) : (
@@ -352,14 +352,14 @@ export default function FlashcardsPage() {
                       >
                         <div className="min-w-0 flex-1 space-y-1">
                           <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-bold text-zinc-400 uppercase">Frente:</span>
+                            <span className="text-[10px] font-bold text-[#E6E6E6] uppercase">Frente:</span>
                             <p className="text-sm font-semibold text-zinc-800 truncate">{card.front}</p>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-bold text-zinc-400 uppercase">Verso:</span>
-                            <p className="text-sm text-zinc-500 truncate">{card.back}</p>
+                            <span className="text-[10px] font-bold text-[#E6E6E6] uppercase">Verso:</span>
+                            <p className="text-sm text-[#E6E6E6] truncate">{card.back}</p>
                           </div>
-                          <div className="text-[9px] text-zinc-400 flex items-center gap-2 pt-0.5">
+                          <div className="text-[9px] text-[#E6E6E6] flex items-center gap-2 pt-0.5">
                             <span>Próxima revisão: {new Date(card.nextReview).toLocaleDateString()}</span>
                             <span>·</span>
                             <span>Repetições: {card.repetitions}</span>
@@ -368,7 +368,7 @@ export default function FlashcardsPage() {
 
                         <button
                           onClick={() => handleDeleteCard(card.id)}
-                          className="w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer shrink-0"
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-[#E6E6E6] hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer shrink-0"
                           title="Excluir card"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
@@ -387,3 +387,4 @@ export default function FlashcardsPage() {
     </div>
   );
 }
+

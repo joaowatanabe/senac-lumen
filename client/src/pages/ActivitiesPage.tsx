@@ -7,6 +7,8 @@ import ActivityModal from "../components/ActivityModal";
 import { colorMap } from "../components/SubjectCard";
 import type { Activity } from "../types";
 
+const FILTERS_STORAGE_KEY = "lumen_activity_filters";
+
 function formatDate(dateStr: string | null): string | null {
   if (!dateStr) return null;
   const parts = dateStr.split("T")[0].split("-");
@@ -38,6 +40,40 @@ export default function ActivitiesPage() {
   const [sortBy, setSortBy] = useState<"dueDate" | "priority" | "subject" | "status">("dueDate");
   const [activeDropdownId, setActiveDropdownId] = useState<string | null>(null);
 
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(FILTERS_STORAGE_KEY);
+      if (!saved) return;
+
+      const parsed = JSON.parse(saved);
+      if (typeof parsed.searchQuery === "string") setSearchQuery(parsed.searchQuery);
+      if (parsed.statusFilter === "all" || parsed.statusFilter === "pending" || parsed.statusFilter === "completed") {
+        setStatusFilter(parsed.statusFilter);
+      }
+      if (parsed.priorityFilter === "all" || parsed.priorityFilter === "Alta" || parsed.priorityFilter === "Média" || parsed.priorityFilter === "Baixa") {
+        setPriorityFilter(parsed.priorityFilter);
+      }
+      if (typeof parsed.subjectFilter === "string") setSubjectFilter(parsed.subjectFilter);
+      if (parsed.viewMode === "list" || parsed.viewMode === "board") setViewMode(parsed.viewMode);
+      if (parsed.sortBy === "dueDate" || parsed.sortBy === "priority" || parsed.sortBy === "subject" || parsed.sortBy === "status") {
+        setSortBy(parsed.sortBy);
+      }
+    } catch {
+      localStorage.removeItem(FILTERS_STORAGE_KEY);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        FILTERS_STORAGE_KEY,
+        JSON.stringify({ searchQuery, statusFilter, priorityFilter, subjectFilter, viewMode, sortBy })
+      );
+    } catch {
+      // Ignora erro de armazenamento
+    }
+  }, [searchQuery, statusFilter, priorityFilter, subjectFilter, viewMode, sortBy]);
+
   function handleOpenCreate() {
     setEditingActivity(null);
     setIsModalOpen(true);
@@ -46,6 +82,15 @@ export default function ActivitiesPage() {
   function handleOpenEdit(activity: Activity) {
     setEditingActivity(activity);
     setIsModalOpen(true);
+  }
+
+  function handleResetFilters() {
+    setSearchQuery("");
+    setStatusFilter("all");
+    setPriorityFilter("all");
+    setSubjectFilter("all");
+    setViewMode("list");
+    setSortBy("dueDate");
   }
 
   useEffect(() => {
@@ -225,7 +270,7 @@ export default function ActivitiesPage() {
   }
 
   return (
-    <div className="min-h-full bg-[#F8F8FA]">
+    <div className="min-h-full bg-surface">
       {/* Mobile header */}
       <header className="border-b border-gray-200 bg-white sticky top-0 z-10 lg:hidden">
         <div className="max-w-md mx-auto px-4 py-3">
@@ -234,6 +279,23 @@ export default function ActivitiesPage() {
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-6 pb-24 lg:pb-8">
+
+        {!isLoading && !error && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+            <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Pendentes</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">{pending.length}</p>
+            </div>
+            <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Concluídas</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">{completed.length}</p>
+            </div>
+            <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Urgentes</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">{pending.filter(isActivityUrgent).length}</p>
+            </div>
+          </div>
+        )}
 
         {/* Desktop Header */}
         {!isLoading && !error && subjects.length > 0 && (
@@ -297,6 +359,13 @@ export default function ActivitiesPage() {
               </div>
 
               {/* Toggle Lista/Quadro */}
+              <button
+                onClick={handleResetFilters}
+                className="h-8 px-3 rounded-full border border-gray-200 bg-white text-xs font-medium text-gray-600 cursor-pointer hover:border-gray-300 hover:bg-gray-50 outline-none"
+              >
+                Limpar filtros
+              </button>
+
               <div className="flex bg-white border border-gray-200 rounded-lg p-0.5 shadow-xs">
                 <button
                   onClick={() => setViewMode("list")}

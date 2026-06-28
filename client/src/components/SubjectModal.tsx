@@ -143,7 +143,7 @@ export default function SubjectModal({ isOpen, subject, onClose, onSave }: Subje
                     className={`flex items-center justify-center h-11 rounded-xl border text-xl transition-all duration-150 cursor-pointer ${
                       isSelected
                         ? "bg-indigo-50 border-indigo-200 text-indigo-700 ring-2 ring-indigo-500/15 font-bold"
-                        : "bg-gray-50 border border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-100"
+                        : "bg-white border border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50"
                     }`}
                   >
                     {i}
@@ -168,7 +168,7 @@ export default function SubjectModal({ isOpen, subject, onClose, onSave }: Subje
                     className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-xs font-semibold transition-all duration-150 cursor-pointer ${
                       isSelected
                         ? "bg-indigo-50 border-indigo-200 text-indigo-700 ring-2 ring-indigo-500/15 font-bold"
-                        : "bg-gray-50 border border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-100"
+                        : "bg-white border border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50"
                     }`}
                   >
                     <div className={`w-3 h-3 rounded-full ${chipColor} shrink-0`} />

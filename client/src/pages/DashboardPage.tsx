@@ -4,12 +4,29 @@ import { useDashboard } from "../hooks/useDashboard";
 import { useActivities } from "../hooks/useActivities";
 import { usePlanner } from "../hooks/usePlanner";
 import { useSubjects } from "../hooks/useSubjects";
+import { useTheme } from "../hooks/useTheme";
 
 function getGreeting() {
   const hr = new Date().getHours();
   if (hr < 12) return "Bom dia";
   if (hr < 18) return "Boa tarde";
   return "Boa noite";
+}
+
+function getDailyTip(hour: number, pendingCount: number, plannedBlocksCount: number) {
+  if (pendingCount === 0 && plannedBlocksCount === 0) {
+    return "Seu planejamento está em dia. Aproveite para revisar conteúdos leves ou descansar um pouco.";
+  }
+
+  if (hour < 12) {
+    return "Comece pelo item mais importante do dia e use um bloco de foco curto para ganhar impulso.";
+  }
+
+  if (hour < 18) {
+    return "A melhor hora para seguir é organizar a próxima tarefa e finalizar uma entrega sem distrações.";
+  }
+
+  return "O fim do dia é ótimo para revisar o que ficou pendente e fechar o que ainda falta.";
 }
 
 const DAYS_CONFIG = [
@@ -125,6 +142,20 @@ function PriorityBadge({ priority }: { priority?: string | null }) {
   );
 }
 
+// Theme toggle button
+function ThemeToggle() {
+  const { theme, toggle } = useTheme();
+  return (
+    <button
+      onClick={toggle}
+      className="ml-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm border border-gray-200 bg-white hover:bg-gray-50 transition"
+      title={theme === "dark" ? "Desativar modo escuro" : "Ativar modo escuro"}
+    >
+      {theme === "dark" ? "🌙 Escuro" : "☀️ Claro"}
+    </button>
+  );
+}
+
 // ─── Deadline Badge ────────────────────────────────────────────────
 function DeadlineBadge({ dueDate, isDone }: { dueDate?: string | null; isDone?: boolean }) {
   if (!dueDate) return null;
@@ -176,6 +207,24 @@ export default function DashboardPage() {
 
   const totalWeeklyMinutes = data?.weeklyMinutesBySubject?.reduce((sum, s) => sum + s.totalMinutes, 0) || 0;
   const totalWeeklyHours = (totalWeeklyMinutes / 60).toFixed(1);
+  const todayKey = new Date().toISOString().slice(0, 10);
+  const todayPendingTasks = activities.filter(
+    (act) => act.status === "pending" && act.dueDate && act.dueDate.startsWith(todayKey)
+  );
+  const completedTasksCount = activities.filter((act) => act.status === "completed").length;
+  const progressPercent = activities.length > 0 ? Math.round((completedTasksCount / activities.length) * 100) : 0;
+  const todayPlannedBlocks = plannerBlocks.filter((block) => block.dayOfWeek === todayDayOfWeek);
+  const nextDeadlineTask = [...activities]
+    .filter((act) => act.status === "pending" && act.dueDate)
+    .sort((a, b) => new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime())[0];
+  const upcomingTasks = [...activities]
+    .filter((act) => act.status === "pending" && act.dueDate)
+    .sort((a, b) => new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime())
+    .slice(0, 3);
+  const dailyTip = getDailyTip(new Date().getHours(), todayPendingTasks.length, todayPlannedBlocks.length);
+  const summaryLabel = todayPendingTasks.length > 0 || todayPlannedBlocks.length > 0
+    ? `Hoje você tem ${todayPendingTasks.length} tarefa${todayPendingTasks.length === 1 ? "" : "s"} para entregar e ${todayPlannedBlocks.length} bloco${todayPlannedBlocks.length === 1 ? "" : "s"} de estudo planejado${todayPlannedBlocks.length === 1 ? "" : "s"}.`
+    : "Seu dia está livre até o momento. Aproveite para revisar ou descansar sem culpa.";
 
   const handleToggleActivity = async (activity: any) => {
     await toggleStatus(activity);
@@ -264,6 +313,7 @@ export default function DashboardPage() {
                     >
                       Abrir calendário
                     </Link>
+                    <ThemeToggle />
                   </div>
                 </div>
                 <div className="flex flex-col gap-3 lg:items-end lg:min-w-48">
@@ -290,6 +340,63 @@ export default function DashboardPage() {
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Resumo rápido */}
+            <div className="grid grid-cols-1 xl:grid-cols-[1.15fr_0.85fr] gap-4">
+              <div className="rounded-xl border border-primary/10 bg-primary/5 p-4 shadow-sm">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-lg">🗓️</span>
+                  <p className="text-sm font-semibold text-gray-900">Resumo do dia</p>
+                </div>
+                <p className="text-sm text-gray-700">{summaryLabel}</p>
+                <p className="text-xs text-gray-500 mt-2">
+                  {nextDeadlineTask
+                    ? `Próxima entrega: ${nextDeadlineTask.title}`
+                    : "Nenhuma entrega próxima no momento."}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 shadow-sm">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-lg">💡</span>
+                  <p className="text-sm font-semibold text-gray-900">Dica do dia</p>
+                </div>
+                <p className="text-sm text-gray-700">{dailyTip}</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-4">
+              <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm font-semibold text-gray-900">Progresso do seu dia</p>
+                  <span className="text-sm font-semibold text-primary">{progressPercent}%</span>
+                </div>
+                <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
+                  <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${progressPercent}%` }} />
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  {completedTasksCount} de {activities.length} tarefas concluídas
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                <p className="text-sm font-semibold text-gray-900">Próximos prazos</p>
+                <div className="mt-3 space-y-2">
+                  {upcomingTasks.length > 0 ? (
+                    upcomingTasks.map((task) => (
+                      <div key={task.id} className="flex items-center justify-between text-sm">
+                        <span className="text-gray-700 truncate pr-2">{task.title}</span>
+                        <span className="text-xs text-gray-500 whitespace-nowrap">
+                          {new Date(task.dueDate!).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-500">Nenhuma entrega próxima no momento.</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -334,6 +441,8 @@ export default function DashboardPage() {
                 to="/subjects"
               />
             </div>
+
+            
 
             {/* Main 2-column area */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">

@@ -76,3 +76,62 @@ body {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Dark theme overrides applied when `document.documentElement` has class `dark` */
+.dark {
+  --color-primary: #4B5563;
+  --color-primary-hover: #6B7280;
+  --color-primary-light: #1F2937;
+
+  --color-surface: #0B1220;
+  --color-card: #0F1724;
+  --color-border: #1F2937;
+
+  --color-text-primary: #E5E7EB;
+  --color-text-secondary: #9CA3AF;
+  --color-text-tertiary: #6B7280;
+}
+
+.dark .bg-primary {
+  background-color: var(--color-primary) !important;
+}
+
+.dark .hover\:bg-primary-hover:hover {
+  background-color: var(--color-primary-hover) !important;
+}
+
+.dark .bg-primary-light {
+  background-color: var(--color-primary-light) !important;
+}
+
+.dark .bg-gray-100 {
+  background-color: #111827 !important;
+}
+
+.dark .bg-gray-50 {
+  background-color: #0F1724 !important;
+}
+
+.dark .bg-gray-150 {
+  background-color: #111827 !important;
+}
+
+.dark .border-gray-200 {
+  border-color: rgba(255,255,255,0.10) !important;
+}
+
+.dark .text-gray-900 {
+  color: #E5E7EB !important;
+}
+
+.dark .text-gray-700,
+.dark .text-gray-600,
+.dark .text-gray-500,
+.dark .text-gray-400 {
+  color: #9CA3AF !important;
+}
+
+.dark .placeholder-gray-400::placeholder,
+.dark .placeholder-gray-500::placeholder {
+  color: #6B7280 !important;
+}

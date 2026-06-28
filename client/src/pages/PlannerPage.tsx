@@ -166,7 +166,7 @@ export default function PlannerPage() {
   const currentDayTasks = getActivitiesForDay(activeDay, activities);
 
   return (
-    <div className="min-h-full bg-[#F8F8FA] text-gray-900 w-full font-sans antialiased">
+    <div className="min-h-full bg-surface text-gray-900 w-full font-sans antialiased">
       {/* Header (Móvel apenas) */}
       <header className="border-b border-gray-200 bg-white sticky top-0 z-10 lg:hidden px-4 py-3">
         <div className="max-w-md mx-auto">

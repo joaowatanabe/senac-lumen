@@ -176,7 +176,7 @@ export default function ActivityModal({ isOpen, activity, subjects, onClose, onS
                     className={`h-11 rounded-xl border text-xs font-semibold transition-all duration-150 cursor-pointer ${
                       isSelected
                         ? `${activeColor} font-bold`
-                        : "bg-gray-50 border border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-100"
+                        : "bg-white border border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50"
                     }`}
                   >
                     {p}
